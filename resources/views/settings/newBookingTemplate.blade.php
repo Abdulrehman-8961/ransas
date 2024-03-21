@@ -27,6 +27,7 @@
             <div class="card-body">
                 <form action="{{ url('/Message-Template/Save') }}" method="post">
                     @csrf
+                    <input type="hidden" value="{{ $template->id }}" name="template_id">
                     <div class="row">
                         <div class="col-md-6 col-12 mb-3">
                             <label for="name" class="form-label">Subject</label>

@@ -86,11 +86,19 @@
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">
                             <li class="sidebar-item">
-                                <a href="{{ url('/Message-Template') }}" class="sidebar-link">
+                                <a href="{{ url('/Message-Template') }}?temp=1" class="sidebar-link">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
                                     <span class="hide-menu">Message Template</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ url('/Message-Template') }}?temp=2" class="sidebar-link">
+                                    <div class="round-16 d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-circle"></i>
+                                    </div>
+                                    <span class="hide-menu">New Booking Template</span>
                                 </a>
                             </li>
                         </ul>
