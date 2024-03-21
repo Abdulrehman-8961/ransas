@@ -52,7 +52,7 @@ Route::get('/check-availablity', [AddEventController::class, 'checkAvailability'
 Route::get('/Calendar', [CalendarController::class, 'index'])->middleware('pool');
 Route::get('/get-events', [CalendarController::class, 'getEvents'])->middleware('isAdminAndPool');
 Route::post('/Event-update/{id}', [CalendarController::class, 'updateEvents'])->middleware('pool');
-Route::post('/update-event-time', [CalendarController::class, 'changeEventTime'])->middleware('pool');
+Route::post('/update-event-time', [CalendarController::class, 'changeEventTime'])->middleware('isAdminAndPool');
 
 // log and history
 

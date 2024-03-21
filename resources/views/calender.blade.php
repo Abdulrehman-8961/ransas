@@ -62,7 +62,7 @@
                             </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div class="modal-body" style="overflow-y: auto;">
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="">
@@ -161,7 +161,7 @@
                                 <div class="col-md-12 d-none percentage-field">
                                     <div class="">
                                         <label class="form-label">Percentage Value</label>
-                                        <select class="form-control" name="percentage_value" id="percentage_value">
+                                        <select class="form-control percentage_value" name="percentage_value" id="percentage_value">
                                             <option value="">Select value</option>
                                             <option value="25">25%</option>
                                             <option value="50">50%</option>
@@ -398,7 +398,7 @@
             var calendarEventClick = function(info) {
                 var eventObj = info.event;
 
-                var update_id = eventObj.extendedProps.id,
+                var update_id = eventObj.extendedProps.bookid,
                     date = eventObj.extendedProps.date_start,
                     end_date = eventObj.extendedProps.date_end,
                     start_time = eventObj.extendedProps.start_time,
@@ -421,7 +421,8 @@
                     info.jsEvent.preventDefault();
                 } else {
                     var eventId = info.event.id;
-                    document.getElementById("event-form").action = 'Event-update/' + eventId;
+                    console.log(update_id);
+                    document.getElementById("event-form").action = 'Event-update/' + update_id;
                     var getModalEventId = eventObj._def.publicId;
                     var getModalEventLevel = eventObj._def.extendedProps["calendar"];
                     var getModalCheckedRadioBtnEl = document.querySelector(
@@ -443,9 +444,10 @@
                     $('#payment_method').val(payment_method);
                     $('#total_payment').val(total_payment);
                     $('#parent_id').val(eventId);
+                    console.log(percentage_value);
                     if (percentage_value != null) {
                         $('.percentage-field').removeClass('d-none');
-                        $('.percentage_value').addClass(percentage_value);
+                        $('.percentage_value').val(percentage_value);
                     }
                     var parts = date.split('-');
                     var formattedDate = `${parts[1]}/${parts[2]}/${parts[0]}`;

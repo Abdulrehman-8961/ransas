@@ -35,9 +35,9 @@ class CalendarController extends Controller
 
         }
 
-        // dd($events);
         $formattedEvents = [];
         foreach ($events as $event) {
+        // dd($event->id);
             $start_date = $event->start_date;
             $start_time = $event->start_time;
             $end_date = $event->end_date;

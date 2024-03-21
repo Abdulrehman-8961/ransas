@@ -39,7 +39,7 @@ class HomeController extends Controller
         $book_type = $request->input('book_type');
         $book_id = $request->input('book_id');
 
-        $base_url = "http://localhost/ransas";
+        $base_url = "http://huzmark.com/ransas";
 
         $response = Http::withHeaders([
             'accept' => 'text/plain',
@@ -68,6 +68,7 @@ class HomeController extends Controller
 
         // Handle the response
         $responseData = $response->json();
+        // dd($responseData);
         if (isset($responseData['Data']['RedirectURL'])) {
             return redirect($responseData['Data']['RedirectURL']);
         } else {

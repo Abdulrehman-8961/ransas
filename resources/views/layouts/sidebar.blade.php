@@ -67,7 +67,6 @@
                             <span class="hide-menu">Pools</span>
                         </a>
                     </li>
-                @endif
                 <li class="sidebar-item">
                     <a class="sidebar-link  " href="{{ url('/Users') }}" aria-expanded="false">
                         <span>
@@ -76,6 +75,7 @@
                         <span class="hide-menu">Users</span>
                     </a>
                 </li>
+                @endif
                 @if (Auth::user()->role == 'Admin')
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow" href="#" aria-expanded="false">
