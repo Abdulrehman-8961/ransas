@@ -14,9 +14,9 @@ class SettingsController extends Controller
     {
         $this->middleware('auth');
     }
-    public function messageView()
+    public function messageView(Request $request)
     {
-        $template = DB::table('message_template')->where('id',1)->first();
+        $template = DB::table('message_template')->where('id',@$request['temp'])->first();
         return view('settings.messageTemplate',compact("template"));
     }
 
@@ -25,16 +25,19 @@ class SettingsController extends Controller
             'name' => ['required'],
             'content' => ['required'],
         ]);
-        DB::table('message_template')
-        ->where('id', 1)
-        ->update([
-            'subject' => $request->name,
-            'content' => $request->content,
-            'status' => $request->status,
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
-
-        return redirect()->back()->with('success','Template Updated successfully');
+        $template_id = $request->input('template_id');
+        if(isset($template_id)){
+            DB::table('message_template')
+            ->where('id', $template_id)
+            ->update([
+                'subject' => $request->name,
+                'content' => $request->content,
+                'status' => $request->status,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+            return redirect()->back()->with('success','Template Updated successfully');
+        }
+        return redirect()->back()->with('error','Template not found');
     }
 
 }

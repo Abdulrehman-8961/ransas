@@ -27,16 +27,17 @@
             <div class="card-body">
                 <form action="{{ url('/Message-Template/Save') }}" method="post">
                     @csrf
+                    <input type="hidden" name="template_id" value="{{ @$_GET['temp'] }}">
                     <div class="row">
                         <div class="col-md-6 col-12 mb-3">
                             <label for="name" class="form-label">Subject</label>
-                            <input type="text" class="form-control" value="{{ $template->subject }}" name="name" id="name">
+                            <input type="text" class="form-control" value="{{ @$template->subject }}" name="name" id="name">
                         </div>
                         <div class="col-md-6 col-12 mb-3">
                             <label for="status" class="form-label">Status</label>
                             <select class="form-control" name="status" id="status">
-                                <option value="Send" {{ $template->status == "Send" ? "selected" : "" }}>Send</option>
-                                <option value="Stop" {{ $template->status == "Stop" ? "selected" : "" }}>Stop</option>
+                                <option value="Send" {{ @$template->status == "Send" ? "selected" : "" }}>Send</option>
+                                <option value="Stop" {{ @$template->status == "Stop" ? "selected" : "" }}>Stop</option>
                             </select>
                         </div>
                     </div>
@@ -52,7 +53,7 @@
                                 <li>Total Amount : {total_amount}</li>
                             </ul>
                         </label>
-                        <textarea rows="6" class="form-control" name="content" id="content" rows="3">{!! $template->content !!}</textarea>
+                        <textarea rows="6" class="form-control" name="content" id="content" rows="3">{!! @$template->content !!}</textarea>
                     </div>
                     <div>
                         <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
