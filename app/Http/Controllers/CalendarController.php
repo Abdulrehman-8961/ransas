@@ -28,10 +28,32 @@ class CalendarController extends Controller
 
         // $events = Event::whereBetween('start_date', [$start, $end])->get();
         if (Auth::user()->role == "Admin") {
-            $events = DB::table('events')->where('is_deleted',0)->whereBetween('start_date', [$start, $end])->get();
-            # code...
+            $events = DB::table('events')
+            ->where('is_deleted', 0)
+            ->where(function ($query) use ($start, $end) {
+                $query->whereBetween('start_date', [$start, $end])
+                    ->orWhereBetween('end_date', [$start, $end])
+                    ->orWhere(function ($query) use ($start, $end) {
+                        $query->where('start_date', '<', $start)
+                                ->where('end_date', '>', $end);
+                    });
+            })
+            ->get();
         } else {
-            $events = DB::table('events')->where('pool_id',Auth::user()->id)->where('is_deleted',0)->whereBetween('start_date', [$start, $end])->get();
+            $events = DB::table('events')
+            ->where('pool_id', Auth::user()->id)
+            ->where('is_deleted', 0)
+            ->where(function ($query) use ($start, $end) {
+                $query->whereBetween('start_date', [$start, $end])
+                    ->orWhereBetween('end_date', [$start, $end])
+                    ->orWhere(function ($query) use ($start, $end) {
+                        $query->where('start_date', '<', $start)
+                                ->where('end_date', '>', $end);
+                    });
+            })
+            ->get();
+
+
 
         }
 

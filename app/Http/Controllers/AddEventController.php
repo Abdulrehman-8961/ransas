@@ -23,7 +23,7 @@ class AddEventController extends Controller
     }
     public function save(Request $request)
         {
-            $validated = $request->validate([
+            $request->validate([
                 "type" => 'required',
                 "customer_name" => 'required',
                 "start_date" => 'required',
@@ -36,6 +36,12 @@ class AddEventController extends Controller
                 "payment_method" => 'required',
                 "payment_status" => 'required',
             ]);
+            if (@$request->input('repeat')) {
+                $request->validate([
+                    'repeat_cycle' => 'required',
+                    'repeat_count' => 'required',
+                ]);
+            }
             $startdate = date('Y-m-d', strtotime($request->input('start_date')));
             $enddate = date('Y-m-d', strtotime($request->input('end_date')));
 
@@ -43,7 +49,6 @@ class AddEventController extends Controller
             $starttime = date('H:i:s', strtotime($request->input('start_time')));
             $endtime = date('H:i:s', strtotime($request->input('end_time')));
 
-            if($validated) {
                $save = DB::table('events')->insert([
                     "pool_id" => Auth::user()->id,
                     "booking_type" => $request->input('type'),
@@ -61,6 +66,44 @@ class AddEventController extends Controller
                     "percentage_value" => $request->input('percentage_value'),
                     "created_by" => Auth::user()->id
                 ]);
+                if (@$request->input('repeat')) {
+                    $data = [];
+                    $newStartDate = $startdate;
+                    $newEndDate = $enddate;
+                    $repeat_cycle = $request->input('repeat_cycle');
+                    $repeat_count = $request->input('repeat_count');
+
+                    for($i = 1 ; $i <= $repeat_count ; $i++){
+                        if ($repeat_cycle == "Monthly") {
+                            $newStartDate = date("Y-m-d", strtotime($newStartDate . " +30 days"));
+                            $newEndDate = date("Y-m-d", strtotime($newEndDate . " +30 days"));
+                        } elseif ($repeat_cycle == "Weekly") {
+                            $newStartDate = date("Y-m-d", strtotime($newStartDate . " +7 days"));
+                            $newEndDate = date("Y-m-d", strtotime($newEndDate . " +7 days"));
+                        } else {
+                            $newStartDate = date("Y-m-d", strtotime($newStartDate . " +1 days"));
+                            $newEndDate = date("Y-m-d", strtotime($newEndDate . " +1 days"));
+                        }
+                        $data[] = [
+                            "pool_id" => Auth::user()->id,
+                            "booking_type" => $request->input('type'),
+                            "customer_name" => $request->input('customer_name'),
+                            "start_date" => $newStartDate,
+                            "start_time" => $starttime,
+                            "end_date" => $newEndDate,
+                            "end_time" => $endtime,
+                            "customer_email" => $request->input('customer_email'),
+                            "customer_phone" => $request->input('customer_phone'),
+                            "total_payment" => $request->input('total_payment'),
+                            "payment_method" => $request->input('payment_method'),
+                            "payment_status" => $request->input('payment_status'),
+                            "color" => $request->input('event_level'),
+                            "percentage_value" => $request->input('percentage_value'),
+                            "created_by" => Auth::user()->id
+                        ];
+                    }
+                    DB::table('events')->insert($data);
+                }
                 if($save){
                     DB::table('log_history')->insert([
                         'user_id' => Auth::user()->id,
@@ -120,7 +163,6 @@ class AddEventController extends Controller
 
 
                 return redirect()->back()->with('success', "Event added");
-            }
         }
 
 

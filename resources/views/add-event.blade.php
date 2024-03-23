@@ -29,7 +29,7 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-4">Add Event</h5>
-                <form class="form" action="Event/save" method="POST">
+                <form class="form" action="{{ url('Event/save') }}" method="POST">
                     @csrf
                     <input type="hidden" id="parent_id" name="parent_id" value="0">
                     <div class="mb-3 row">
@@ -213,32 +213,64 @@
                             <div class="n-chk">
                                 <div class="form-check form-check-primary form-check-inline">
                                     <input class="form-check-input danger check-light-danger" type="radio"
-                                        name="event_level" value="Danger" id="modalDanger" />
+                                        name="event_level" value="Danger" id="modalDanger" {{ old('event_level') == "Danger" ? 'checked' : '' }}/>
                                     <label class="form-check-label" for="modalDanger">Danger</label>
                                 </div>
                             </div>
                             <div class="n-chk">
                                 <div class="form-check form-check-warning form-check-inline">
                                     <input class="form-check-input success check-light-success" type="radio"
-                                        name="event_level" value="Success" id="modalSuccess" />
+                                        name="event_level" value="Success" id="modalSuccess" {{ old('event_level') == "Success" ? 'checked' : '' }}/>
                                     <label class="form-check-label" for="modalSuccess">Success</label>
                                 </div>
                             </div>
                             <div class="n-chk">
                                 <div class="form-check form-check-success form-check-inline">
                                     <input class="form-check-input primary check-light-primary" type="radio"
-                                        name="event_level" value="Primary" id="modalPrimary" />
+                                        name="event_level" value="Primary" id="modalPrimary" {{ old('event_level') == "Primary" ? 'checked' : '' }}/>
                                     <label class="form-check-label" for="modalPrimary">Primary</label>
                                 </div>
                             </div>
                             <div class="n-chk">
                                 <div class="form-check form-check-danger form-check-inline">
                                     <input class="form-check-input warning check-light-warning" type="radio"
-                                        name="event_level" value="Warning" id="modalWarning" />
+                                        name="event_level" value="Warning" id="modalWarning" {{ old('event_level') == "Warning" ? 'checked' : '' }}/>
                                     <label class="form-check-label" for="modalWarning">Warning</label>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="d-flex col-md-10">
+                            <div class="n-chk">
+                                <div class="form-check form-check-success form-check-inline">
+                                    <input class="form-check-input primary check-light-primary" type="checkbox"
+                                        name="repeat" value="repeat" id="repeat" {{ old('repeat') == "repeat" ? 'checked' : '' }} />
+                                    <label class="form-check-label" for="modalPrimary">Repeat</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3 row d-none repeat-fields">
+                        <label for="example-text-input" class="col-md-2 col-form-label">Repeat Cycle & Count</label>
+                        <div class="col-md-7">
+                            <select class="form-control @error('repeat_cycle') is-invalid @enderror"
+                                name="repeat_cycle" id="example-text-input">
+                                <option value="">Select Repeat Cycle</option>
+                                <option value="Daily" {{ old('repeat_cycle') == 'Daily' ? 'selected' : '' }}>Daily
+                                </option>
+                                <option value="Weekly" {{ old('repeat_cycle') == 'Weekly' ? 'selected' : '' }}>Weekly</option>
+                                <option value="Monthly" {{ old('repeat_cycle') == 'Monthly' ? 'selected' : '' }}>Monthly</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control @error('repeat_count') is-invalid @enderror" name="repeat_count" id="repeat_count" placeholder="Repeat Count">
+                        </div>
+                        @error('repeat_cycle')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                     </div>
                     <div class="row">
                         <div class="col-lg-12 text-end mt-3">
@@ -264,6 +296,14 @@
 
 @section('javascript')
     <script>
+        $('#repeat').on('change', function(){
+            if($(this).prop('checked')){
+                $('.repeat-fields').removeClass('d-none');
+            } else {
+                $('.repeat-fields').addClass('d-none');
+            }
+        })
+        $('#repeat').change();
         // Date Picker
         jQuery(".mydatepicker, #datepicker, .input-group.date").datepicker();
         jQuery(".datepicker-autoclose").datepicker({

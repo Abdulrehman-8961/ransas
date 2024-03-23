@@ -340,7 +340,7 @@
                 }
             };
             var calendarHeaderToolbar = {
-                left: "prev next addEventButton ExportCsv",
+                left: "prev next ExportCsv",
                 center: "title",
                 right: "dayGridMonth,timeGridWeek,timeGridDay",
             };
@@ -529,10 +529,6 @@
                 eventResizableFromStart: true,
                 eventResizable: true,
                 customButtons: {
-                    addEventButton: {
-                        text: "Add Event",
-                        click: calendarAddEvent,
-                    },
                     ExportCsv: {
                         text: "Export Csv",
                         click: function() {
@@ -658,6 +654,29 @@
                 }
             }
 
+            function timeFormat(time24) {
+                var timeSplit = time24.split(':');
+                var hours = parseInt(timeSplit[0], 10);
+                var minutes = timeSplit[1];
+
+                var period = hours >= 12 ? 'PM' : 'AM';
+
+                hours = hours % 12 || 12;
+
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+
+                return hours + ':' + minutes + ' ' + period;
+            }
+
+            function dateFormat(date) {
+                var Split = date.split('-');
+                var year = Split[0];
+                var month = Split[1];
+                var day = Split[2];
+
+                return day + '.' + month + '.' + year;
+            }
+
             function exportCalendarEventsToCsv(calendar) {
                 var events = calendar.getEvents();
                 var csvContent = "data:text/csv;charset=utf-8,";
@@ -667,10 +686,10 @@
                     var start = event.start ? event.start.toLocaleString() : "";
                     var end = event.end ? event.end.toLocaleString() : "";
                     var update_id = event.extendedProps.id,
-                        date = event.extendedProps.date_start,
-                        end_date = event.extendedProps.date_end,
-                        start_time = event.extendedProps.start_time,
-                        end_time = event.extendedProps.end_time,
+                        date = dateFormat(event.extendedProps.date_start),
+                        end_date = dateFormat(event.extendedProps.date_end),
+                        start_time = timeFormat(event.extendedProps.start_time),
+                        end_time = timeFormat(event.extendedProps.end_time),
                         customer_name = event.extendedProps.customer_name,
                         customer_email = event.extendedProps.customer_email,
                         customer_phone = event.extendedProps.customer_phone,
