@@ -509,7 +509,7 @@
                             if (selectedTitle === "" || event.title === selectedTitle) {
                                 event.setProp('display', 'block');
                             } else {
-                                event.setProp('display', 'none');
+                                event.setProp('display', 'background');
                             }
                         });
                     });
