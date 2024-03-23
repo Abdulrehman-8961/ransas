@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mb-4">
                                         <a class="fw-medium"
-                                            href="#">Forgot Password ?</a>
+                                            href="{{ route('password.request') }}">Forgot Password ?</a>
                                     </div>
                                     <button type="submit" name="submit"
                                         class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign In</button>

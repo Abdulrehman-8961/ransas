@@ -45,6 +45,7 @@
                         <label for="content" class="form-label">
                             Content
                             <ul class="text-danger mb-0 fs-2 ps-1">
+                                <li>Booking Type : {booking_type}</li>
                                 <li>Customer Name : {customer_name}</li>
                                 <li>Booking Date : {date}</li>
                                 <li>Booking Time : {time}</li>

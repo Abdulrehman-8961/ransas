@@ -20,15 +20,16 @@ class CoronController extends Controller
             ->where('reminder',0)
             ->get();
         $message_template = DB::table('message_template')->where('id',1)->first();
-        if ($message_template == "Send") {
+        if ($message_template->status == "Send") {
             foreach ($events as $row) {
                 $replacements = [
                     '{customer_name}' => $row->stylist_name,
-                    '{date}' => date("d/m/Y", strtotime($row->start_date)).' - '.date("d/m/Y", strtotime($row->end_date)),
-                    '{time}' => $row->start_time.' - '.$row->end_time,
+                    '{date}' => date("d.m.Y", strtotime($row->start_date)).' - '.date("d.m.Y", strtotime($row->end_date)),
+                    '{time}' => date("h:i a",strtotime($row->start_time)).' - '.date("h:i a",strtotime($row->end_time)),
                     '{payment_status}' => $row->payment_status,
                     '{total_amount}' => $row->total_payment,
                     '{booking_method}' => $row->payment_method,
+                    '{booking_type}' => $row->booking_type,
                   ];
                 $templateContent = $message_template->content;
                 $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);

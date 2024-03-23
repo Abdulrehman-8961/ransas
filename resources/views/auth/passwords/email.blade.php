@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="rtl">
 
 <head>
     <!--  Title -->
-    <title>Kleen-air Filters</title>
+    <title>Forgot Password - Ransas</title>
     <!--  Required Meta Tag -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,6 +18,16 @@
     @yield('css')
     <!-- Core Css -->
     <link id="themeColors" rel="stylesheet" href="{{ asset('public') }}/dist/css/style.min.css" />
+    <style>
+        .btn-primary {
+            background-color: #3CB6C1 !important;
+            border-color: #3CB6C1 !important;
+        }
+
+        a {
+            color: #d2691e !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -38,7 +48,7 @@
                     <div class="col-xl-7 col-xxl-8">
                         <a href="./index.html" class="text-nowrap logo-img d-block px-4 py-9 w-100">
                             {{-- <img src="{{asset('public')}}/dist/images/logos/dark-logo.svg" width="180" alt=""> --}}
-                            <h3 class="text-dark fw-bolder">Marketing Center Inc.</h3>
+                            <h4>RANSAS</h4>
                         </a>
                         <div class="d-none d-xl-flex align-items-center justify-content-center"
                             style="height: calc(100vh - 80px);">

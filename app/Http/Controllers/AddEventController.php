@@ -40,8 +40,8 @@ class AddEventController extends Controller
             $enddate = date('Y-m-d', strtotime($request->input('end_date')));
 
 
-            $starttime = date('H:i', strtotime($request->input('start_time')));
-            $endtime = date('H:i', strtotime($request->input('end_time')));
+            $starttime = date('H:i:s', strtotime($request->input('start_time')));
+            $endtime = date('H:i:s', strtotime($request->input('end_time')));
 
             if($validated) {
                $save = DB::table('events')->insert([
@@ -71,35 +71,52 @@ class AddEventController extends Controller
                 $start_date = date('d.m.Y', strtotime($request->input('start_date')));
                 $end_date = date('d.m.Y', strtotime($request->input('end_date')));
 
+                $message_template = DB::table('message_template')->where('id',2)->first();
+                if ($message_template->status == "Send") {
+                    $replacements = [
+                        '{customer_name}' => $request->input('customer_name'),
+                        '{date}' => $start_date.' - '.$end_date,
+                        '{time}' => date("h:i a",strtotime($starttime)).' - '.date("h:i a",strtotime($endtime)),
+                        '{payment_status}' => $request->input('payment_status'),
+                        '{total_amount}' => $request->input('total_payment'),
+                        '{booking_method}' => $request->input('payment_method'),
+                        '{booking_type}' => $request->input('type'),
+                      ];
+                    $templateContent = $message_template->content;
+                    $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);
 
-                $message = <<<EOT
-                New event added:
-                Type: {$request->input('type')}.
-                Customer: {$request->input('customer_name')}
-                Date: $start_date - $end_date
-                Time: $request->input('start_time') - $request->input('end_time')
-                EOT;
+                    // $message = <<<EOT
+                    // New event added:
+                    // Type: {$request->input('type')}.
+                    // Customer: {$request->input('customer_name')}
+                    // Date: $start_date - $end_date
+                    // Time: $request->input('start_time') - $request->input('end_time')
+                    // EOT;
 
-                try {
-                    // $response = Http::withHeaders([
-                    //     'Content-Type' => 'application/json',
-                    //     'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
-                    // ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
-                    //     "Data" => [
-                    //         "Message" => $message,
-                    //         "Recipients" => [
-                    //             [
-                    //                 "Phone" => "0542165091"
-                    //             ]
-                    //         ],
-                    //         "Settings" => [
-                    //             "Sender" => "Ransas"
-                    //         ]
-                    //     ]
-                    // ]);
-                } catch (\Throwable $th) {
-                    //throw $th;
+                    try {
+                        // $response = Http::withHeaders([
+                        //     'Content-Type' => 'application/json',
+                        //     'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
+                        // ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
+                        //     "Data" => [
+                        //         "Message" => $message,
+                        //         "Recipients" => [
+                        //             [
+                        //                 "Phone" => "0542165091"
+                        //             ]
+                        //         ],
+                        //         "Settings" => [
+                        //             "Sender" => "Ransas"
+                        //         ]
+                        //     ]
+                        // ]);
+                    } catch (\Throwable $th) {
+                        //throw $th;
+                    }
                 }
+
+
+
 
 
                 return redirect()->back()->with('success', "Event added");
