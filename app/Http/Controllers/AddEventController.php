@@ -48,121 +48,118 @@ class AddEventController extends Controller
 
             $starttime = date('H:i:s', strtotime($request->input('start_time')));
             $endtime = date('H:i:s', strtotime($request->input('end_time')));
+            if ($startdate >= date('Y-m-d')) {
+                $save = DB::table('events')->insert([
+                     "pool_id" => Auth::user()->id,
+                     "booking_type" => $request->input('type'),
+                     "customer_name" => $request->input('customer_name'),
+                     "start_date" => $startdate,
+                     "start_time" => $starttime,
+                     "end_date" => $enddate,
+                     "end_time" => $endtime,
+                     "customer_email" => $request->input('customer_email'),
+                     "customer_phone" => $request->input('customer_phone'),
+                     "total_payment" => $request->input('total_payment'),
+                     "payment_method" => $request->input('payment_method'),
+                     "payment_status" => $request->input('payment_status'),
+                     "color" => $request->input('event_level'),
+                     "percentage_value" => $request->input('percentage_value'),
+                     "created_by" => Auth::user()->id
+                 ]);
+                 if (@$request->input('repeat')) {
+                     $data = [];
+                     $newStartDate = $startdate;
+                     $newEndDate = $enddate;
+                     $repeat_cycle = $request->input('repeat_cycle');
+                     $repeat_count = $request->input('repeat_count');
 
-               $save = DB::table('events')->insert([
-                    "pool_id" => Auth::user()->id,
-                    "booking_type" => $request->input('type'),
-                    "customer_name" => $request->input('customer_name'),
-                    "start_date" => $startdate,
-                    "start_time" => $starttime,
-                    "end_date" => $enddate,
-                    "end_time" => $endtime,
-                    "customer_email" => $request->input('customer_email'),
-                    "customer_phone" => $request->input('customer_phone'),
-                    "total_payment" => $request->input('total_payment'),
-                    "payment_method" => $request->input('payment_method'),
-                    "payment_status" => $request->input('payment_status'),
-                    "color" => $request->input('event_level'),
-                    "percentage_value" => $request->input('percentage_value'),
-                    "created_by" => Auth::user()->id
-                ]);
-                if (@$request->input('repeat')) {
-                    $data = [];
-                    $newStartDate = $startdate;
-                    $newEndDate = $enddate;
-                    $repeat_cycle = $request->input('repeat_cycle');
-                    $repeat_count = $request->input('repeat_count');
+                     for($i = 1 ; $i <= $repeat_count ; $i++){
+                         if ($repeat_cycle == "Monthly") {
+                             $newStartDate = date("Y-m-d", strtotime($newStartDate . " +30 days"));
+                             $newEndDate = date("Y-m-d", strtotime($newEndDate . " +30 days"));
+                         } elseif ($repeat_cycle == "Weekly") {
+                             $newStartDate = date("Y-m-d", strtotime($newStartDate . " +7 days"));
+                             $newEndDate = date("Y-m-d", strtotime($newEndDate . " +7 days"));
+                         } else {
+                             $newStartDate = date("Y-m-d", strtotime($newStartDate . " +1 days"));
+                             $newEndDate = date("Y-m-d", strtotime($newEndDate . " +1 days"));
+                         }
+                         $data[] = [
+                             "pool_id" => Auth::user()->id,
+                             "booking_type" => $request->input('type'),
+                             "customer_name" => $request->input('customer_name'),
+                             "start_date" => $newStartDate,
+                             "start_time" => $starttime,
+                             "end_date" => $newEndDate,
+                             "end_time" => $endtime,
+                             "customer_email" => $request->input('customer_email'),
+                             "customer_phone" => $request->input('customer_phone'),
+                             "total_payment" => $request->input('total_payment'),
+                             "payment_method" => $request->input('payment_method'),
+                             "payment_status" => $request->input('payment_status'),
+                             "color" => $request->input('event_level'),
+                             "percentage_value" => $request->input('percentage_value'),
+                             "created_by" => Auth::user()->id
+                         ];
+                     }
+                     DB::table('events')->insert($data);
+                 }
+                 if($save){
+                     DB::table('log_history')->insert([
+                         'user_id' => Auth::user()->id,
+                         'description' => "Added New Event ".$request->input('type')." For Client: ".ucFirst($request->input('customer_name'))."",
+                         'page' => 'Add Event'
+                     ]);
+                 }
+                 $start_date = date('d.m.Y', strtotime($request->input('start_date')));
+                 $end_date = date('d.m.Y', strtotime($request->input('end_date')));
 
-                    for($i = 1 ; $i <= $repeat_count ; $i++){
-                        if ($repeat_cycle == "Monthly") {
-                            $newStartDate = date("Y-m-d", strtotime($newStartDate . " +30 days"));
-                            $newEndDate = date("Y-m-d", strtotime($newEndDate . " +30 days"));
-                        } elseif ($repeat_cycle == "Weekly") {
-                            $newStartDate = date("Y-m-d", strtotime($newStartDate . " +7 days"));
-                            $newEndDate = date("Y-m-d", strtotime($newEndDate . " +7 days"));
-                        } else {
-                            $newStartDate = date("Y-m-d", strtotime($newStartDate . " +1 days"));
-                            $newEndDate = date("Y-m-d", strtotime($newEndDate . " +1 days"));
-                        }
-                        $data[] = [
-                            "pool_id" => Auth::user()->id,
-                            "booking_type" => $request->input('type'),
-                            "customer_name" => $request->input('customer_name'),
-                            "start_date" => $newStartDate,
-                            "start_time" => $starttime,
-                            "end_date" => $newEndDate,
-                            "end_time" => $endtime,
-                            "customer_email" => $request->input('customer_email'),
-                            "customer_phone" => $request->input('customer_phone'),
-                            "total_payment" => $request->input('total_payment'),
-                            "payment_method" => $request->input('payment_method'),
-                            "payment_status" => $request->input('payment_status'),
-                            "color" => $request->input('event_level'),
-                            "percentage_value" => $request->input('percentage_value'),
-                            "created_by" => Auth::user()->id
-                        ];
-                    }
-                    DB::table('events')->insert($data);
-                }
-                if($save){
-                    DB::table('log_history')->insert([
-                        'user_id' => Auth::user()->id,
-                        'description' => "Added New Event ".$request->input('type')." For Client: ".ucFirst($request->input('customer_name'))."",
-                        'page' => 'Add Event'
-                    ]);
-                }
-                $start_date = date('d.m.Y', strtotime($request->input('start_date')));
-                $end_date = date('d.m.Y', strtotime($request->input('end_date')));
+                 $message_template = DB::table('message_template')->where('id',2)->first();
+                 if ($message_template->status == "Send") {
+                     $replacements = [
+                         '{customer_name}' => $request->input('customer_name'),
+                         '{date}' => $start_date.' - '.$end_date,
+                         '{time}' => date("h:i a",strtotime($starttime)).' - '.date("h:i a",strtotime($endtime)),
+                         '{payment_status}' => $request->input('payment_status'),
+                         '{total_amount}' => $request->input('total_payment'),
+                         '{booking_method}' => $request->input('payment_method'),
+                         '{booking_type}' => $request->input('type'),
+                       ];
+                     $templateContent = $message_template->content;
+                     $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);
 
-                $message_template = DB::table('message_template')->where('id',2)->first();
-                if ($message_template->status == "Send") {
-                    $replacements = [
-                        '{customer_name}' => $request->input('customer_name'),
-                        '{date}' => $start_date.' - '.$end_date,
-                        '{time}' => date("h:i a",strtotime($starttime)).' - '.date("h:i a",strtotime($endtime)),
-                        '{payment_status}' => $request->input('payment_status'),
-                        '{total_amount}' => $request->input('total_payment'),
-                        '{booking_method}' => $request->input('payment_method'),
-                        '{booking_type}' => $request->input('type'),
-                      ];
-                    $templateContent = $message_template->content;
-                    $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);
+                     // $message = <<<EOT
+                     // New event added:
+                     // Type: {$request->input('type')}.
+                     // Customer: {$request->input('customer_name')}
+                     // Date: $start_date - $end_date
+                     // Time: $request->input('start_time') - $request->input('end_time')
+                     // EOT;
 
-                    // $message = <<<EOT
-                    // New event added:
-                    // Type: {$request->input('type')}.
-                    // Customer: {$request->input('customer_name')}
-                    // Date: $start_date - $end_date
-                    // Time: $request->input('start_time') - $request->input('end_time')
-                    // EOT;
-
-                    try {
-                        // $response = Http::withHeaders([
-                        //     'Content-Type' => 'application/json',
-                        //     'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
-                        // ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
-                        //     "Data" => [
-                        //         "Message" => $message,
-                        //         "Recipients" => [
-                        //             [
-                        //                 "Phone" => "0542165091"
-                        //             ]
-                        //         ],
-                        //         "Settings" => [
-                        //             "Sender" => "Ransas"
-                        //         ]
-                        //     ]
-                        // ]);
-                    } catch (\Throwable $th) {
-                        //throw $th;
-                    }
-                }
-
-
-
-
-
-                return redirect()->back()->with('success', "Event added");
+                     try {
+                         // $response = Http::withHeaders([
+                         //     'Content-Type' => 'application/json',
+                         //     'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
+                         // ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
+                         //     "Data" => [
+                         //         "Message" => $message,
+                         //         "Recipients" => [
+                         //             [
+                         //                 "Phone" => "0542165091"
+                         //             ]
+                         //         ],
+                         //         "Settings" => [
+                         //             "Sender" => "Ransas"
+                         //         ]
+                         //     ]
+                         // ]);
+                     } catch (\Throwable $th) {
+                         //throw $th;
+                     }
+                 }
+                 return redirect()->back()->with('success', "Event added");
+            }
+            return redirect()->back()->with('error', "Previous date not allowed");
         }
 
 

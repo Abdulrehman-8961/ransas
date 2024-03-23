@@ -320,6 +320,7 @@
         jQuery(".datepicker-autoclose").datepicker({
             autoclose: true,
             todayHighlight: true,
+            startDate: new Date()
         });
         jQuery("#date-range").datepicker({
             toggleActive: true,
