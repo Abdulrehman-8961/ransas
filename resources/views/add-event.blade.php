@@ -170,15 +170,26 @@
                             @enderror
                         </div>
                     </div>
+                    @php
+                        @$data = DB::table('pool')
+                            ->where('user_id', Auth::user()->id)
+                            ->first();
+                        if (@$data) {
+                            $payment = $data->payments;
+                            $paymentOptions = explode(', ', $payment);
+                        } else {
+                            $paymentOptions = '';
+                        }
+                    @endphp
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">Payment Method</label>
                         <div class="col-md-10">
                             <select class="form-control @error('payment_method') is-invalid @enderror"
                                 value="{{ old('payment_method') }}" name="payment_method" id="example-text-input">
                                 <option value="">Select Payment Method</option>
-                                <option value="Bank transfer">Bank transfer</option>
-                                <option value="Card">Credit Card</option>
-                                <option value="Cash">Cash</option>
+                                @foreach ($paymentOptions as $value)
+                                    <option value="{{ $value }}">{{ $value }}</option>
+                                @endforeach
                             </select>
                             @error('payment_method')
                                 <span class="invalid-feedback" role="alert">
