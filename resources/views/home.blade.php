@@ -330,10 +330,10 @@
                     var start = event.start ? event.start.toLocaleString() : "";
                     var end = event.end ? event.end.toLocaleString() : "";
                     var update_id = event.extendedProps.id,
-                        date = event.extendedProps.date_start,
-                        end_date = event.extendedProps.date_end,
-                        start_time = event.extendedProps.start_time,
-                        end_time = event.extendedProps.end_time,
+                        date = dateFormat(event.extendedProps.date_start),
+                        end_date = dateFormat(event.extendedProps.date_end),
+                        start_time = timeFormat(event.extendedProps.start_time),
+                        end_time = timeFormat(event.extendedProps.end_time),
                         customer_name = event.extendedProps.customer_name,
                         customer_email = event.extendedProps.customer_email,
                         customer_phone = event.extendedProps.customer_phone,
