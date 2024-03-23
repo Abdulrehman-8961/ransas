@@ -10,7 +10,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-muted " href="{{ url('/home') }}">Dashboard</a>
+                                    <a class="text-muted " href="{{ url('/Home') }}">Dashboard</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">Profile</li>
                             </ol>
@@ -40,22 +40,11 @@
                     <div class="row">
                         <div class="col-md-4 col-12">
                             <div class="mb-3">
-                                <label for="exampleInputEmail1" class="form-label">First Name</label>
+                                <label for="exampleInputEmail1" class="form-label">Name</label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror"
                                     value="{{ $user->name }}" name="name" id="exampleInputEmail1"
                                     aria-describedby="emailHelp">
                                 @error('name')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-12">
-                            <div class="mb-3">
-                                <label for="exampleInputEmail1" class="form-label">Last Name</label>
-                                <input type="text" class="form-control @error('last_name') is-invalid @enderror"
-                                    value="{{ $user->last_name }}" name="last_name" id="exampleInputEmail1"
-                                    aria-describedby="emailHelp">
-                                @error('last_name')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -82,20 +71,9 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-md-4 col-12">
-                            <div class="mb-3">
-                                <label for="exampleInputEmail1" class="form-label">Address</label>
-                                <textarea class="form-control" name="address" id="address" rows="">{{ $user->address }}</textarea>
-                                @error('phone')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
 
                         <div class="col-md-12 mb-4">
                             <button type="submit" class="btn btn-primary py-8  rounded-2">Save Changes</button>
-                            <button type="button" onclick="window.location.reload();"
-                                class="btn btn-warning py-8  rounded-2 ms-2">Discard</button>
                         </div>
                     </div>
                 </form>
@@ -135,8 +113,6 @@
                         </div>
                         <div class="col-md-12 mb-4">
                             <button type="submit" class="btn btn-primary py-8  rounded-2">Save Changes</button>
-                            <button type="button" onclick="window.location.reload();"
-                                class="btn btn-warning py-8  rounded-2 ms-2">Discard</button>
                         </div>
                     </div>
                 </form>

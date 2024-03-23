@@ -33,10 +33,8 @@ class ProfileSettings extends Controller
         {
             DB::table('users')->where('id', Auth::user()->id)->update([
                 "name" => $request->input('name'),
-                "last_name" => $request->input('last_name'),
                 "email" => $request->input('email'),
                 "phone" => $request->input('phone'),
-                "address" => $request->input('address'),
             ]);
             return redirect()->back()->with('success', "Profile Updated");
         }

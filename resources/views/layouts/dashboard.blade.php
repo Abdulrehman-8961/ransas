@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="rtl">
+<html lang="en" >
 
 <head>
     <meta charset="utf-8">
@@ -189,7 +189,7 @@
                                                 </div>
                                             </div>
                                             <div class="message-body">
-                                                <a href="profile.php"
+                                                <a href="{{ url('/profile-settings') }}"
                                                     class="py-8 px-7 mt-8 d-flex align-items-center">
                                                     <span
                                                         class="d-flex align-items-center justify-content-center bg-light rounded-1 p-6">

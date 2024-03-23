@@ -8,6 +8,7 @@ use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\LogHistoryController;
 use App\Http\Controllers\PoolController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ProfileSettings;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,3 +83,9 @@ Route::get('/Message-Template', [SettingsController::class, 'messageView'])->mid
 Route::post('/Message-Template/Save', [SettingsController::class, 'saveTemplate'])->middleware('auth','isAdmin');
 
 Route::get('/Pool-Setting', [SettingsController::class, 'poolView'])->middleware('auth','isAdmin');
+
+
+//profile setting
+Route::get('/profile-settings', [ProfileSettings::class, 'settings']);
+Route::post('/profile-settings/update', [ProfileSettings::class, 'update_profile']);
+Route::post('/profile-settings/update-password', [ProfileSettings::class, 'update_password']);
