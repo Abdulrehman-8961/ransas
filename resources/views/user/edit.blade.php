@@ -8,7 +8,8 @@
                         <h4 class="fw-semibold mb-8">Edit User</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a class="text-muted text-decoration-none" href="{{ url('/Users') }}">
+                                <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
+                                        href="{{ url('/Users') }}">
                                         Users</a></li>
                                 <li class="breadcrumb-item" aria-current="page">Edit User</li>
                             </ol>
@@ -63,17 +64,37 @@
 
                                     </select>
                                 </div>
-                                    <div class="col-lg-6 form-group @if ($user->role == 'Admin') d-none @endif">
-                                        <label>Permissions</label>
-                                        <select type="" placeholder="Enter Role" id="permission" name="permission"
-                                            class="form-control">
-                                            <option value="Readonly" {{ $user->permission == 'Readonly' ? 'selected' : '' }}>
-                                                Readonly
-                                            </option>
-                                            <option value="Edit" {{ $user->permission == 'Edit' ? 'selected' : '' }}>Edit
-                                            </option>
-                                        </select>
-                                    </div>
+                                <div class="col-lg-6 form-group @if ($user->role == 'Admin') d-none @endif">
+                                    <label>Permissions</label>
+                                    <select type="" placeholder="Enter Role" id="permission" name="permission"
+                                        class="form-control">
+                                        <option value="Readonly" {{ $user->permission == 'Readonly' ? 'selected' : '' }}>
+                                            Readonly
+                                        </option>
+                                        <option value="Edit" {{ $user->permission == 'Edit' ? 'selected' : '' }}>Edit
+                                        </option>
+                                    </select>
+                                </div>
+                                @php
+                                    $pool = DB::table('users')->where('role','Pool')->get();
+                                    $pool_ids = explode(', ', $user->pool_id);
+                                @endphp
+                                <div class="col-lg-6 form-group">
+                                    <label>Pool</label>
+                                    <select id="pool" name="pool"
+                                        class="form-control select2 @error('pool') is-invalid @enderror" multiple="multiple">
+                                        <option value=""></option>
+                                        @foreach ($pool as $p)
+                                        <option value="{{ $p->id }}" {{ in_array($p->id, $pool_ids) ? 'selected' : '' }}>
+                                            {{ $p->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('pool')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
 
 
 
@@ -121,14 +142,14 @@
     </div>
 @endsection
 @section('javascript')
-<script>
-    $(document).on('change', '#role', function(){
-        var role = $('#role option:selected').val();
-        if(role == 'Admin'){
-            $('#permission').parent().addClass('d-none');
-        } else {
-            $('#permission').parent().removeClass('d-none');
-        }
-    })
-</script>
+    <script>
+        $(document).on('change', '#role', function() {
+            var role = $('#role option:selected').val();
+            if (role == 'Admin') {
+                $('#permission').parent().addClass('d-none');
+            } else {
+                $('#permission').parent().removeClass('d-none');
+            }
+        })
+    </script>
 @endsection

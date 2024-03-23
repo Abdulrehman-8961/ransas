@@ -100,9 +100,9 @@
                                 @endphp
                                 <div class="col-lg-4 form-group">
                                     <label>Pool</label>
-                                    <select id="pool" name="pool"
-                                        class="form-control @error('pool') is-invalid @enderror">
-                                        <option value=""></option>
+                                    <select id="pool" name="pool[]"
+                                        class="form-control select2 @error('pool') is-invalid @enderror" multiple="multiple">
+                                        <option value="" disabled>Select Pool</option>
                                         @foreach ($pool as $p)
                                         <option value="{{ $p->id }}" {{ old('pool') == $p->id ? 'selected' : '' }}>
                                             {{ $p->name }}</option>

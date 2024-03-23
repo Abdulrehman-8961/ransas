@@ -180,7 +180,6 @@
                         } else {
                             $paymentOptions = '';
                         }
-                        
                     @endphp
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">Payment Method</label>

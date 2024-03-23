@@ -49,6 +49,7 @@ class UserController extends Controller
     }
     public function save(Request $request)
     {
+        $pool_ids = '';
         $request->validate([
             "name" => 'required',
             "permission" => 'required',
@@ -61,12 +62,17 @@ class UserController extends Controller
                 "pool" => 'required',
             ]);
         }
+        if(@$request->input('pool')){
+            $data = $request->input('pool');
+            $pool_ids = implode(', ', $data);
+            // dd($pool_ids);
+        }
         DB::table('users')->insert([
             "name" => $request->input('name'),
             "email" => $request->input('email'),
             "phone" => $request->input('phone'),
             "permission" => $request->input('permission'),
-            "pool_id" => $request->input('pool'),
+            "pool_id" => $pool_ids,
             "password" => Hash::make($request->input('password')),
             "role" => $request->input('role')
         ]);
@@ -94,6 +100,7 @@ class UserController extends Controller
                 "name" => $request->input('name'),
                 "email" => $request->input('email'),
                 "phone" => $request->input('phone'),
+                "pool_id" => $request->input('pool'),
                 "permission" => $request->input('permission'),
                 "role" => $request->input('role'),
                 "updated_at" => date("Y-m-d H:i:s")
