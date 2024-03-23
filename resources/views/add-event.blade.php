@@ -35,8 +35,7 @@
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">Type</label>
                         <div class="col-md-10">
-                            <select class="form-control @error('type') is-invalid @enderror" type="text" name="type"
-                                id="type">
+                            <select class="form-control @error('type') is-invalid @enderror" type="text" name="type" id="type">
                                 <option value="">Select Type</option>
                                 <option value="Swimming Course" {{ old('type') == 'Swimming Course' ? 'selected' : '' }}>
                                     Swimming Course</option>
@@ -145,14 +144,10 @@
                         <div class="col-md-10">
                             <select class="form-control" name="percentage_value" id="percentage_value">
                                 <option value="">Select value</option>
-                                <option value="25" {{ old('percentage_value') == '25' ? 'selected' : '' }}>25%
-                                </option>
-                                <option value="50" {{ old('percentage_value') == '50' ? 'selected' : '' }}>50%
-                                </option>
-                                <option value="75" {{ old('percentage_value') == '75' ? 'selected' : '' }}>75%
-                                </option>
-                                <option value="100" {{ old('percentage_value') == '100' ? 'selected' : '' }}>100%
-                                </option>
+                                <option value="25" {{ old('percentage_value') == '25' ? 'selected' : '' }}>25%</option>
+                                <option value="50" {{ old('percentage_value') == '50' ? 'selected' : '' }}>50%</option>
+                                <option value="75" {{ old('percentage_value') == '75' ? 'selected' : '' }}>75%</option>
+                                <option value="100" {{ old('percentage_value') == '100' ? 'selected' : '' }}>100%</option>
                             </select>
                             @error('percentage_value')
                                 <span class="invalid-feedback" role="alert">
@@ -175,26 +170,15 @@
                             @enderror
                         </div>
                     </div>
-                    @php
-                        @$data = DB::table('pool')
-                            ->where('user_id', Auth::user()->id)
-                            ->first();
-                        if (@$data) {
-                            $payment = $data->payments;
-                            $paymentOptions = explode(', ', $payment);
-                        } else {
-                            $paymentOptions = '';
-                        }
-                    @endphp
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">Payment Method</label>
                         <div class="col-md-10">
                             <select class="form-control @error('payment_method') is-invalid @enderror"
                                 value="{{ old('payment_method') }}" name="payment_method" id="example-text-input">
                                 <option value="">Select Payment Method</option>
-                                @foreach ($paymentOptions as $value)
-                                    <option value="{{ $value }}">{{ $value }}</option>
-                                @endforeach
+                                <option value="Bank transfer">Bank transfer</option>
+                                <option value="Card">Credit Card</option>
+                                <option value="Cash">Cash</option>
                             </select>
                             @error('payment_method')
                                 <span class="invalid-feedback" role="alert">
@@ -356,9 +340,9 @@
 
             }
         })
-        $(document).on('change', '#type', function() {
+        $(document).on('change', '#type', function(){
             var event_type = $('#type option:selected').val();
-            if (event_type == "Swimming Course") {
+            if(event_type == "Swimming Course"){
                 $('.percentage-field').removeClass('d-none');
             } else {
                 $('.percentage-field').addClass('d-none');

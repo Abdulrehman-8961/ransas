@@ -14,9 +14,9 @@ class SettingsController extends Controller
     {
         $this->middleware('auth');
     }
-    public function messageView(Request $request)
+    public function messageView()
     {
-        $template = DB::table('message_template')->where('id',@$request['temp'])->first();
+        $template = DB::table('message_template')->where('id',1)->first();
         return view('settings.messageTemplate',compact("template"));
     }
 
@@ -25,7 +25,6 @@ class SettingsController extends Controller
             'name' => ['required'],
             'content' => ['required'],
         ]);
-        $template_id = 
         DB::table('message_template')
         ->where('id', 1)
         ->update([
