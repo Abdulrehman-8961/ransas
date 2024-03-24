@@ -48,21 +48,13 @@
                 </div>
             </div>
         </div>
-
         <!-- BEGIN MODAL -->
-        <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+        <div id="eventModal" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
-                    <form id="event-form" method="POST">
-                        @csrf
-                        <input type="hidden" id="parent_id" name="parent_id" value="0">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="eventModalLabel">
-                                Edit Event
-                            </h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" style="overflow-y: auto;">
+                    <div class="modal-body">
+                        <form id="event-form" method="POST">
+                            @csrf
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="">
@@ -161,7 +153,8 @@
                                 <div class="col-md-12 d-none percentage-field">
                                     <div class="">
                                         <label class="form-label">Percentage Value</label>
-                                        <select class="form-control percentage_value" name="percentage_value" id="percentage_value">
+                                        <select class="form-control percentage_value" name="percentage_value"
+                                            id="percentage_value">
                                             <option value="">Select value</option>
                                             <option value="25">25%</option>
                                             <option value="50">50%</option>
@@ -239,21 +232,26 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn" data-bs-dismiss="modal">
-                                Close
-                            </button>
-                            <button type="submit" class="btn btn-success btn-update-event" data-fc-event-public-id="">
-                                Update changes
-                            </button>
-                            <button type="button" class="btn btn-primary btn-add-event">
-                                Add Event
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-success btn-update-event" data-fc-event-public-id="">
+                            Update changes
+                        </button>
+                        <a class="btn btn-primary btn-duplicate-event">
+                            Duplicate Event
+                        </a>
+                        <button type="button" class="btn btn-primary btn-add-event">
+                            Add Event
+                        </button>
+                    </div>
                 </div>
+                <!-- /.modal-content -->
             </div>
+            <!-- /.modal-dialog -->
         </div>
         <!-- END MODAL -->
     </div>
@@ -425,6 +423,7 @@
                     var eventId = info.event.id;
                     console.log(update_id);
                     document.getElementById("event-form").action = 'Event-update/' + update_id;
+                    $('.btn-duplicate-event').attr('href', '{{ url('/Add-Event') }}?event=' + update_id);
                     var getModalEventId = eventObj._def.publicId;
                     var getModalEventLevel = eventObj._def.extendedProps["calendar"];
                     var getModalCheckedRadioBtnEl = document.querySelector(
@@ -446,7 +445,6 @@
                     $('#payment_method').val(payment_method);
                     $('#total_payment').val(total_payment);
                     $('#parent_id').val(eventId);
-                    console.log(percentage_value);
                     if (percentage_value != null) {
                         $('.percentage-field').removeClass('d-none');
                         $('.percentage_value').val(percentage_value);
@@ -570,7 +568,7 @@
                     var newEnd = getTime(event.end);
                     var bokkingId = event.extendedProps.bookid;
 
-                    console.log(bokkingId,newStart,newEnd);
+                    console.log(bokkingId, newStart, newEnd);
                     $.ajax({
                         url: 'update-event-time',
                         type: 'POST',
@@ -584,42 +582,42 @@
                         },
                         success: function(response) {
                             if (response.success) {
-                                    console.log('Event time updated successfully');
-                                    Swal.fire({
-                                        title: 'Success!',
-                                        text: 'Event time updated successfully',
-                                        icon: 'success',
-                                        customClass: {
-                                            confirmButton: 'btn btn-primary'
-                                        },
-                                        buttonsStyling: false
-                                    });
-                                } else {
-                                    console.error('Failed to update event time');
-                                    Swal.fire({
-                                        title: 'Error!',
-                                        text: 'Failed to update event time',
-                                        icon: 'error',
-                                        customClass: {
-                                            confirmButton: 'btn btn-primary'
-                                        },
-                                        buttonsStyling: false
-                                    });
-                                }
+                                console.log('Event time updated successfully');
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Event time updated successfully',
+                                    icon: 'success',
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary'
+                                    },
+                                    buttonsStyling: false
+                                });
+                            } else {
+                                console.error('Failed to update event time');
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Failed to update event time',
+                                    icon: 'error',
+                                    customClass: {
+                                        confirmButton: 'btn btn-primary'
+                                    },
+                                    buttonsStyling: false
+                                });
+                            }
                         },
                         error: function(xhr, status, error) {
                             console.error('Failed to update event time:', error);
                             event.setDates(info.oldStart, info
-                            .oldEnd);
+                                .oldEnd);
                             Swal.fire({
-                                        title: 'Error!',
-                                        text: 'Failed to update event time',
-                                        icon: 'error',
-                                        customClass: {
-                                            confirmButton: 'btn btn-primary'
-                                        },
-                                        buttonsStyling: false
-                                    });
+                                title: 'Error!',
+                                text: 'Failed to update event time',
+                                icon: 'error',
+                                customClass: {
+                                    confirmButton: 'btn btn-primary'
+                                },
+                                buttonsStyling: false
+                            });
                         }
                     });
                 },

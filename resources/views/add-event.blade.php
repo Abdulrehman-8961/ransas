@@ -1,6 +1,13 @@
 @extends('layouts.dashboard')
 
 @section('content')
+    @php
+        $event = DB::table('events')
+            ->where('id', @$_GET['event'])
+            ->where('pool_id', Auth::user()->id)
+            ->where('is_deleted', 0)
+            ->first();
+    @endphp
     <div class="container-fluid">
         <div class="card bg-light-info shadow-none position-relative overflow-hidden">
             <div class="card-body px-4 py-3">
@@ -35,14 +42,19 @@
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">Type</label>
                         <div class="col-md-10">
-                            <select class="form-control @error('type') is-invalid @enderror" type="text" name="type" id="type">
+                            <select class="form-control @error('type') is-invalid @enderror" type="text" name="type"
+                                id="type">
                                 <option value="">Select Type</option>
-                                <option value="Swimming Course" {{ old('type') == 'Swimming Course' ? 'selected' : '' }}>
+                                <option value="Swimming Course"
+                                    {{ @$event->booking_type || old('type') == 'Swimming Course' ? 'selected' : '' }}>
                                     Swimming Course</option>
-                                <option value="Birthday" {{ old('type') == 'Birthday' ? 'selected' : '' }}>Birthday</option>
+                                <option value="Birthday"
+                                    {{ @$event->booking_type || old('type') == 'Birthday' ? 'selected' : '' }}>Birthday
+                                </option>
                                 <option value="Private event" {{ old('type') == 'Private event' ? 'selected' : '' }}>Private
                                     event</option>
-                                <option value="Other" {{ old('type') == 'Other' ? 'selected' : '' }}>Other</option>
+                                <option value="Other"
+                                    {{ @$event->booking_type || old('type') == 'Other' ? 'selected' : '' }}>Other</option>
                             </select>
                             @error('type')
                                 <span class="invalid-feedback" role="alert">
@@ -56,7 +68,8 @@
                         <label for="example-search-input" class="col-md-2 col-form-label">Customer Name</label>
                         <div class="col-md-10">
                             <input class="form-control  @error('customer_name') is-invalid @enderror" name="customer_name"
-                                type="" id="example-search-input" value="{{ old('customer_name') }}">
+                                type="" id="example-search-input"
+                                value="{{ $event ? $event->customer_name : old('customer_name') }}">
                             @error('customer_name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -70,7 +83,7 @@
                         <div class="col-md-10">
                             <input class="form-control  @error('customer_email') is-invalid @enderror" type="email"
                                 name="customer_email" placeholder="example@example.com" id="example-email-input"
-                                value="{{ old('customer_email') }}">
+                                value="{{ $event ? $event->customer_email : old('customer_email') }}">
                             @error('customer_email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -82,7 +95,8 @@
                         <label for="example-search-input" class="col-md-2 col-form-label">Phone</label>
                         <div class="col-md-10">
                             <input class="form-control @error('customer_phone') is-invalid @enderror" type="number"
-                                name="customer_phone" id="example-search-input" value="{{ old('customer_phone') }}">
+                                name="customer_phone" id="example-search-input"
+                                value="{{ $event ? $event->customer_phone : old('customer_phone') }}">
                             @error('customer_phone')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -118,7 +132,7 @@
                         <label for="example-datetime-local-input" class="col-md-2 col-form-label">End Date and
                             time</label>
                         <div class="col-md-5">
-                            <input type="text" class="form-control datepicker-autoclose" id="end_date"
+                            <input type="text" class="form-control datepicker-autoclose2" id="end_date"
                                 placeholder="mm/dd/yyyy" name="end_date" value="{{ old('end_date') }}" />
                             <span class="invalid-feedback time-slot d-none" role="alert"><strong>This time slot is
                                     booked.</strong></span>
@@ -144,10 +158,22 @@
                         <div class="col-md-10">
                             <select class="form-control" name="percentage_value" id="percentage_value">
                                 <option value="">Select value</option>
-                                <option value="25" {{ old('percentage_value') == '25' ? 'selected' : '' }}>25%</option>
-                                <option value="50" {{ old('percentage_value') == '50' ? 'selected' : '' }}>50%</option>
-                                <option value="75" {{ old('percentage_value') == '75' ? 'selected' : '' }}>75%</option>
-                                <option value="100" {{ old('percentage_value') == '100' ? 'selected' : '' }}>100%</option>
+                                <option value="25"
+                                    {{ @$event->percentage_value || old('percentage_value') == '25' ? 'selected' : '' }}>
+                                    25%
+                                </option>
+                                <option value="50"
+                                    {{ @$event->percentage_value || old('percentage_value') == '50' ? 'selected' : '' }}>
+                                    50%
+                                </option>
+                                <option value="75"
+                                    {{ @$event->percentage_value || old('percentage_value') == '75' ? 'selected' : '' }}>
+                                    75%
+                                </option>
+                                <option value="100"
+                                    {{ @$event->percentage_value || old('percentage_value') == '100' ? 'selected' : '' }}>
+                                    100%
+                                </option>
                             </select>
                             @error('percentage_value')
                                 <span class="invalid-feedback" role="alert">
@@ -161,7 +187,7 @@
                         <label for="example-datetime-local-input" class="col-md-2 col-form-label">Total Payment</label>
                         <div class="col-md-10">
                             <input class="form-control  @error('total_payment') is-invalid @enderror" type="number"
-                                value="{{ old('total_payment') }}" name="total_payment"
+                                value="{{ $event ? $event->total_payment : old('total_payment') }}" name="total_payment"
                                 id="example-datetime-local-input">
                             @error('total_payment')
                                 <span class="invalid-feedback" role="alert">
@@ -188,7 +214,9 @@
                                 value="{{ old('payment_method') }}" name="payment_method" id="example-text-input">
                                 <option value="">Select Payment Method</option>
                                 @foreach ($paymentOptions as $value)
-                                    <option value="{{ $value }}">{{ $value }}</option>
+                                    <option value="{{ $value }}"
+                                        {{ @$event->payment_method || old('payment_method') == $value ? 'selected' : '' }}>
+                                        {{ $value }}</option>
                                 @endforeach
                             </select>
                             @error('payment_method')
@@ -204,11 +232,16 @@
                             <select class="form-control @error('payment_status') is-invalid @enderror"
                                 name="payment_status" id="example-text-input">
                                 <option value="">Select Payment Status</option>
-                                <option value="Paid" {{ old('payment_status') == 'Paid' ? 'selected' : '' }}>Paid
+                                <option value="Paid"
+                                    {{ @$event->payment_status || old('payment_status') == 'Paid' ? 'selected' : '' }}>Paid
                                 </option>
-                                <option value="Not Paid" {{ old('payment_status') == 'Not Paid' ? 'selected' : '' }}>Not
+                                <option value="Not Paid"
+                                    {{ @$event->payment_status || old('payment_status') == 'Not Paid' ? 'selected' : '' }}>
+                                    Not
                                     Paid</option>
-                                <option value="On Hold" {{ old('payment_status') == 'On Hold' ? 'selected' : '' }}>On Hold
+                                <option value="On Hold"
+                                    {{ @$event->payment_status || old('payment_status') == 'On Hold' ? 'selected' : '' }}>
+                                    On Hold
                                 </option>
                             </select>
                             @error('payment_status')
@@ -224,28 +257,32 @@
                             <div class="n-chk">
                                 <div class="form-check form-check-primary form-check-inline">
                                     <input class="form-check-input danger check-light-danger" type="radio"
-                                        name="event_level" value="Danger" id="modalDanger" {{ old('event_level') == "Danger" ? 'checked' : '' }}/>
+                                        name="event_level" value="Danger" id="modalDanger"
+                                        {{ @$event->color || old('event_level') == 'Danger' ? 'checked' : '' }} />
                                     <label class="form-check-label" for="modalDanger">Danger</label>
                                 </div>
                             </div>
                             <div class="n-chk">
                                 <div class="form-check form-check-warning form-check-inline">
                                     <input class="form-check-input success check-light-success" type="radio"
-                                        name="event_level" value="Success" id="modalSuccess" {{ old('event_level') == "Success" ? 'checked' : '' }}/>
+                                        name="event_level" value="Success" id="modalSuccess"
+                                        {{ @$event->color || old('event_level') == 'Success' ? 'checked' : '' }} />
                                     <label class="form-check-label" for="modalSuccess">Success</label>
                                 </div>
                             </div>
                             <div class="n-chk">
                                 <div class="form-check form-check-success form-check-inline">
                                     <input class="form-check-input primary check-light-primary" type="radio"
-                                        name="event_level" value="Primary" id="modalPrimary" {{ old('event_level') == "Primary" ? 'checked' : '' }}/>
+                                        name="event_level" value="Primary" id="modalPrimary"
+                                        {{ @$event->color || old('event_level') == 'Primary' ? 'checked' : '' }} />
                                     <label class="form-check-label" for="modalPrimary">Primary</label>
                                 </div>
                             </div>
                             <div class="n-chk">
                                 <div class="form-check form-check-danger form-check-inline">
                                     <input class="form-check-input warning check-light-warning" type="radio"
-                                        name="event_level" value="Warning" id="modalWarning" {{ old('event_level') == "Warning" ? 'checked' : '' }}/>
+                                        name="event_level" value="Warning" id="modalWarning"
+                                        {{ @$event->color || old('event_level') == 'Warning' ? 'checked' : '' }} />
                                     <label class="form-check-label" for="modalWarning">Warning</label>
                                 </div>
                             </div>
@@ -255,8 +292,9 @@
                         <div class="d-flex col-md-10">
                             <div class="n-chk">
                                 <div class="form-check form-check-success form-check-inline">
-                                    <input class="form-check-input primary check-light-primary" type="checkbox"
-                                        name="repeat" value="repeat" id="repeat" {{ old('repeat') == "repeat" ? 'checked' : '' }} />
+                                    <input class="form-check-input primary check-light-primary repeat" type="checkbox"
+                                        name="repeat" value="repeat" id="repeat"
+                                        {{ old('repeat') == 'repeat' ? 'checked' : '' }} />
                                     <label class="form-check-label" for="modalPrimary">Repeat</label>
                                 </div>
                             </div>
@@ -265,23 +303,26 @@
                     <div class="mb-3 row d-none repeat-fields">
                         <label for="example-text-input" class="col-md-2 col-form-label">Repeat Cycle & Count</label>
                         <div class="col-md-7">
-                            <select class="form-control @error('repeat_cycle') is-invalid @enderror"
-                                name="repeat_cycle" id="example-text-input">
+                            <select class="form-control @error('repeat_cycle') is-invalid @enderror" name="repeat_cycle"
+                                id="example-text-input">
                                 <option value="">Select Repeat Cycle</option>
                                 <option value="Daily" {{ old('repeat_cycle') == 'Daily' ? 'selected' : '' }}>Daily
                                 </option>
-                                <option value="Weekly" {{ old('repeat_cycle') == 'Weekly' ? 'selected' : '' }}>Weekly</option>
-                                <option value="Monthly" {{ old('repeat_cycle') == 'Monthly' ? 'selected' : '' }}>Monthly</option>
+                                <option value="Weekly" {{ old('repeat_cycle') == 'Weekly' ? 'selected' : '' }}>Weekly
+                                </option>
+                                <option value="Monthly" {{ old('repeat_cycle') == 'Monthly' ? 'selected' : '' }}>Monthly
+                                </option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control @error('repeat_count') is-invalid @enderror" name="repeat_count" id="repeat_count" placeholder="Repeat Count">
+                            <input type="text" class="form-control @error('repeat_count') is-invalid @enderror"
+                                name="repeat_count" id="repeat_count" placeholder="Repeat Count">
                         </div>
                         @error('repeat_cycle')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <div class="row">
                         <div class="col-lg-12 text-end mt-3">
@@ -298,50 +339,89 @@
                 </form>
             </div>
         </div>
-
-
+    </div>
+    <div>
 
 
     </div>
+    <input type="hidden" id="hidden_start_date" value="{{ @$event->start_date }}">
+    <input type="hidden" id="hidden_end_date" value="{{ @$event->end_date }}">
+    <input type="hidden" id="hidden_start_time" value="{{ @$event->start_time }}">
+    <input type="hidden" id="hidden_end_time" value="{{ @$event->end_time }}">
 @endsection
 
 @section('javascript')
     <script>
-        $('#repeat').on('change', function(){
-            if($(this).prop('checked')){
+        var start_date = $('#hidden_start_date').val();
+        if (start_date) {
+            var startDateParts = start_date.split('-');
+            var formattedDateStart = `${startDateParts[1]}/${startDateParts[2]}/${startDateParts[0]}`;
+            jQuery(".datepicker-autoclose").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            }).datepicker('setDate', formattedDateStart);
+            $(".pickatime-formatTime-display").pickatime({
+                format: "h:i a",
+                formatLabel: "<b>h</b>:i <!i>a</!i>",
+                formatSubmit: "HH:i",
+                hiddenPrefix: "prefix__",
+                hiddenSuffix: "__suffix",
+            }).pickatime('picker').set('select', '{{ date('h:i a', strtotime(@$event->start_time)) }}');
+        } else {
+            jQuery(".datepicker-autoclose").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            });
+            $(".pickatime-formatTime-display").pickatime({
+                format: "h:i a",
+                formatLabel: "<b>h</b>:i <!i>a</!i>",
+                formatSubmit: "HH:i",
+                hiddenPrefix: "prefix__",
+                hiddenSuffix: "__suffix",
+            });
+        }
+        var end_date = $('#hidden_end_date').val();
+        if (end_date) {
+            var endDateParts = end_date.split('-');
+            var formattedDateEnd = `${endDateParts[1]}/${endDateParts[2]}/${endDateParts[0]}`;
+            jQuery(".datepicker-autoclose2").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            }).datepicker('setDate', formattedDateEnd);
+            $(".pickatime-formatTime-display2").pickatime({
+                format: "h:i a",
+                formatLabel: "<b>h</b>:i <!i>a</!i>",
+                formatSubmit: "HH:i",
+                hiddenPrefix: "prefix__",
+                hiddenSuffix: "__suffix",
+            }).pickatime('picker').set('select', '{{ date('h:i a', strtotime(@$event->end_time)) }}');
+        } else {
+            jQuery(".datepicker-autoclose2").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            });
+            $(".pickatime-formatTime-display2").pickatime({
+                format: "h:i a",
+                formatLabel: "<b>h</b>:i <!i>a</!i>",
+                formatSubmit: "HH:i",
+                hiddenPrefix: "prefix__",
+                hiddenSuffix: "__suffix",
+            });
+        }
+        $(document).on('change', '.repeat', function() {
+            if ($(this).prop('checked')) {
                 $('.repeat-fields').removeClass('d-none');
             } else {
                 $('.repeat-fields').addClass('d-none');
             }
         })
         $('#repeat').change();
-        // Date Picker
-        jQuery(".mydatepicker, #datepicker, .input-group.date").datepicker();
-        jQuery(".datepicker-autoclose").datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            startDate: new Date()
-        });
-        jQuery("#date-range").datepicker({
-            toggleActive: true,
-        });
-        jQuery("#datepicker-inline").datepicker({
-            todayHighlight: true,
-        });
-        $(".pickatime-formatTime-display").pickatime({
-            format: "h:i a",
-            formatLabel: "<b>h</b>:i <!i>a</!i>",
-            formatSubmit: "HH:i",
-            hiddenPrefix: "prefix__",
-            hiddenSuffix: "__suffix",
-        });
-        $(".pickatime-formatTime-display2").pickatime({
-            format: "h:i a",
-            formatLabel: "<b>h</b>:i <!i>a</!i>",
-            formatSubmit: "HH:i",
-            hiddenPrefix: "prefix__",
-            hiddenSuffix: "__suffix",
-        });
+
+
         $(document).on('change', '#end_time', function() {
             var parent_id = $('#parent_id').val();
             var start_date = $('#start_date').val();
@@ -392,9 +472,9 @@
 
             }
         })
-        $(document).on('change', '#type', function(){
+        $(document).on('change', '#type', function() {
             var event_type = $('#type option:selected').val();
-            if(event_type == "Swimming Course"){
+            if (event_type == "Swimming Course") {
                 $('.percentage-field').removeClass('d-none');
             } else {
                 $('.percentage-field').addClass('d-none');
