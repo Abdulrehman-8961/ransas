@@ -96,7 +96,7 @@
                                     @enderror
                                 </div>
                                 @php
-                                    $pool = DB::table('users')->where('role','Pool')->get();
+                                    $pool = DB::table('pool')->where('is_deleted',0)->get();
                                 @endphp
                                 <div class="col-lg-4 form-group">
                                     <label>Pool</label>

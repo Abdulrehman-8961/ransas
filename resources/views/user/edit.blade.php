@@ -76,12 +76,12 @@
                                     </select>
                                 </div>
                                 @php
-                                    $pool = DB::table('users')->where('role','Pool')->get();
+                                    $pool = DB::table('pool')->where('is_deleted',0)->get();
                                     $pool_ids = explode(', ', $user->pool_id);
                                 @endphp
                                 <div class="col-lg-6 form-group">
                                     <label>Pool</label>
-                                    <select id="pool" name="pool"
+                                    <select id="pool" name="pool[]"
                                         class="form-control select2 @error('pool') is-invalid @enderror" multiple="multiple">
                                         <option value=""></option>
                                         @foreach ($pool as $p)

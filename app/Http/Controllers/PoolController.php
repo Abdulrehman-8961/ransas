@@ -121,7 +121,9 @@ class PoolController extends Controller
     }
     public function delete($id)
     {
-        DB::table('users')->where('role', '!=', 'Amdin')->where('id', $id)->delete();
+        DB::table('pool')->where('id', $id)->update([
+            'is_deleted' => 1
+        ]);
         return redirect()->back()->with('success', 'Pool deleted');
     }
 

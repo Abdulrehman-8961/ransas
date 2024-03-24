@@ -7,6 +7,10 @@
             ->where('pool_id', Auth::user()->id)
             ->where('is_deleted', 0)
             ->first();
+        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $poolIDs = explode(', ', $user->pool_id);
+        $pool_option = DB::table('pool')->wherein('id',$poolIDs)->where('is_deleted',0)->get();
+        dd($pool_option);
     @endphp
     <div class="container-fluid">
         <div class="card bg-light-info shadow-none position-relative overflow-hidden">
@@ -36,6 +40,25 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-4">Add Event</h5>
+                <div class="mb-3 row">
+                    <label for="example-text-input" class="col-md-2 col-form-label">Type</label>
+                    <div class="col-md-10">
+                        <select class="form-control @error('type') is-invalid @enderror" type="text" name="type"
+                            id="type">
+                            <option value="">Select Pool</option>
+
+                            @php
+
+                            @endphp
+                                <option value="{{ $pool_option->id }}">{{ $pool_option->name }}</option>
+                        </select>
+                        @error('type')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
                 <form class="form" action="{{ url('Event/save') }}" method="POST">
                     @csrf
                     <input type="hidden" id="parent_id" name="parent_id" value="0">
@@ -196,28 +219,12 @@
                             @enderror
                         </div>
                     </div>
-                    @php
-                        @$data = DB::table('pool')
-                            ->where('user_id', Auth::user()->id)
-                            ->first();
-                        if (@$data) {
-                            $payment = $data->payments;
-                            $paymentOptions = explode(', ', $payment);
-                        } else {
-                            $paymentOptions = '';
-                        }
-                    @endphp
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">Payment Method</label>
                         <div class="col-md-10">
                             <select class="form-control @error('payment_method') is-invalid @enderror"
-                                value="{{ old('payment_method') }}" name="payment_method" id="example-text-input">
+                                value="" name="payment_method" id="example-text-input">
                                 <option value="">Select Payment Method</option>
-                                @foreach ($paymentOptions as $value)
-                                    <option value="{{ $value }}"
-                                        {{ @$event->payment_method || old('payment_method') == $value ? 'selected' : '' }}>
-                                        {{ $value }}</option>
-                                @endforeach
                             </select>
                             @error('payment_method')
                                 <span class="invalid-feedback" role="alert">
@@ -326,7 +333,7 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 text-end mt-3">
-                            <button type="submit" class="btn btn-info font-medium rounded-pill px-4 btn-submit">
+                            <button type="submit" class="btn btn-info font-medium rounded-pill px-4 btn-submit" disabled>
                                 <div class="d-flex align-items-center">
                                     <i class="ti ti-send me-2 fs-4"></i>
                                     Submit

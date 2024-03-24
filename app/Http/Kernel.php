@@ -54,7 +54,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'isAdmin' => \App\Http\Middleware\CheckRole::class,
-        'pool' => \App\Http\Middleware\CheckRolePool::class,
+        'user' => \App\Http\Middleware\CheckRoleUser::class,
         'isAdminAndPool' => \App\Http\Middleware\AdminPool::class,
         'auth' => \App\Http\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,

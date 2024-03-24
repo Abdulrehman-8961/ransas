@@ -30,7 +30,7 @@
                         <span class="hide-menu">Dashboard</span>
                     </a>
                 </li>
-                @if (Auth::user()->role == 'Pool')
+                @if (Auth::user()->role == 'Staff')
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ url('/Add-Event') }}" aria-expanded="false">
                             <span>
@@ -48,7 +48,7 @@
                         </a>
                     </li>
                 @endif
-                @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Pool')
+                @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Staff')
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ url('/Log-History') }}" aria-expanded="false">
                             <span>

@@ -32,32 +32,32 @@ Route::post('/payment', [App\Http\Controllers\HomeController::class, 'payment'])
 Route::get('/payment_success', [App\Http\Controllers\HomeController::class, 'successFunction']);
 
 // Employee
-Route::get('/Users', [UserController::class, 'view'])->middleware('isAdminAndPool');
-Route::get('/User/add', [UserController::class, 'add'])->middleware('isAdminAndPool');
-Route::post('/User/save', [UserController::class, 'save'])->middleware('isAdminAndPool');
-Route::get('/User/edit/{id}', [UserController::class, 'edit'])->middleware('isAdminAndPool');
-Route::post('/User/update/{id}', [UserController::class, 'update'])->middleware('isAdminAndPool');
-Route::post('/User/update-password/{id}', [UserController::class, 'update_password'])->middleware('isAdminAndPool');
-Route::get('/User/delete/{id}', [UserController::class, 'delete'])->middleware('isAdminAndPool');
+Route::get('/Users', [UserController::class, 'view'])->middleware('isAdmin');
+Route::get('/User/add', [UserController::class, 'add'])->middleware('isAdmin');
+Route::post('/User/save', [UserController::class, 'save'])->middleware('isAdmin');
+Route::get('/User/edit/{id}', [UserController::class, 'edit'])->middleware('isAdmin');
+Route::post('/User/update/{id}', [UserController::class, 'update'])->middleware('isAdmin');
+Route::post('/User/update-password/{id}', [UserController::class, 'update_password'])->middleware('isAdmin');
+Route::get('/User/delete/{id}', [UserController::class, 'delete'])->middleware('isAdmin');
 
 // Add event
 
-Route::get('/Add-Event', [AddEventController::class, 'index'])->middleware('pool');
-Route::post('/Event/save', [AddEventController::class, 'save'])->middleware('pool');
-Route::get('/check-availablity', [AddEventController::class, 'checkAvailability'])->middleware('pool');
+Route::get('/Add-Event', [AddEventController::class, 'index'])->middleware('user');
+Route::post('/Event/save', [AddEventController::class, 'save'])->middleware('user');
+Route::get('/check-availablity', [AddEventController::class, 'checkAvailability'])->middleware('user');
 
 
 
 // Calendar
 
-Route::get('/Calendar', [CalendarController::class, 'index'])->middleware('pool');
-Route::get('/get-events', [CalendarController::class, 'getEvents'])->middleware('isAdminAndPool');
-Route::post('/Event-update/{id}', [CalendarController::class, 'updateEvents'])->middleware('pool');
-Route::post('/update-event-time', [CalendarController::class, 'changeEventTime'])->middleware('isAdminAndPool');
+Route::get('/Calendar', [CalendarController::class, 'index'])->middleware('user');
+Route::get('/get-events', [CalendarController::class, 'getEvents'])->middleware('user');
+Route::post('/Event-update/{id}', [CalendarController::class, 'updateEvents'])->middleware('user');
+Route::post('/update-event-time', [CalendarController::class, 'changeEventTime'])->middleware('user');
 
 // log and history
 
-Route::get('/Log-History', [LogHistoryController::class, 'index'])->middleware('isAdminAndPool');
+Route::get('/Log-History', [LogHistoryController::class, 'index'])->middleware('isAdmin');
 
 // Coron
 

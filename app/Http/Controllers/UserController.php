@@ -65,7 +65,6 @@ class UserController extends Controller
         if(@$request->input('pool')){
             $data = $request->input('pool');
             $pool_ids = implode(', ', $data);
-            // dd($pool_ids);
         }
         DB::table('users')->insert([
             "name" => $request->input('name'),
@@ -95,12 +94,21 @@ class UserController extends Controller
                 Rule::unique('users', 'email')->ignore($id)
             ]
         ]);
+        if ($request->input('role') == "Staff") {
+            $request->validate([
+                "pool" => 'required',
+            ]);
+        }
+        if(@$request->input('pool')){
+            $data = $request->input('pool');
+            $pool_ids = implode(', ', $data);
+        }
         if($validated) {
             DB::table('users')->where('id', $id)->update([
                 "name" => $request->input('name'),
                 "email" => $request->input('email'),
                 "phone" => $request->input('phone'),
-                "pool_id" => $request->input('pool'),
+                "pool_id" => $pool_ids,
                 "permission" => $request->input('permission'),
                 "role" => $request->input('role'),
                 "updated_at" => date("Y-m-d H:i:s")
