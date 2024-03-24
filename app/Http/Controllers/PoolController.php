@@ -20,15 +20,12 @@ class PoolController extends Controller
     public function view(Request $request)
     {
         $search = @$request->get('search');
-        $users = DB::table('users')
-        ->where('role','Pool')
+        $users = DB::table('pool')
         ->where(function ($query) use ($search) {
             if(!empty($search)) {
                 $query->where('name', 'LIKE', '%'.$search.'%')
                 ->orWhere('email', 'LIKE', '%'.$search.'%')
-                ->orWhere('role', 'LIKE', '%'.$search.'%')
-                ->orWhere('phone', 'LIKE', '%'.$search.'%')
-                ->orWhere('permission', 'LIKE', '%'.$search.'%');
+                ->orWhere('phone', 'LIKE', '%'.$search.'%');
             }
         })
         ->orderBy('id', 'desc')->paginate(20);
@@ -45,19 +42,14 @@ class PoolController extends Controller
     public function save(Request $request)
     {
         $validated = $request->validate([
-            "name" => 'required',
-            "email" => 'required|email|unique:users',
-            "password" => 'required|min:6',
-            "confirm_password" => 'required|same:password'
+            "name" => 'required|unique:pool',
+            "email" => 'required|email',
+            "start_time" => 'required',
+            "end_time" => 'required',
+            "payment_options" => 'required',
+            "sms" => 'required',
         ]);
         if($validated) {
-            $insertId = DB::table('users')->insertGetId([
-                "name" => $request->input('name'),
-                "email" => $request->input('email'),
-                "phone" => $request->input('phone'),
-                "password" => Hash::make($request->input('password')),
-                "role" => 'Pool'
-            ]);
             $start_time = date('H:i:s', strtotime($request->input('start_time')));
             $end_time = date('H:i:s', strtotime($request->input('end_time')));
 
@@ -66,7 +58,9 @@ class PoolController extends Controller
 
             DB::table('pool')
             ->insert([
-                'user_id' => $insertId,
+                "name" => $request->input('name'),
+                "email" => $request->input('email'),
+                "phone" => $request->input('phone'),
                 'start_time' => $start_time,
                 'end_time' => $end_time,
                 'payments' => $payment_options,
@@ -77,42 +71,37 @@ class PoolController extends Controller
     }
     public function edit($id)
     {
-        $user = DB::table('users')
-        ->where('id', $id)
-        ->first();
-        $pool_data = DB::table('pool')->where('user_id', $id)->first();
-            return view("pool.edit", compact("user","pool_data"));
+        $pool_data = DB::table('pool')->where('id', $id)->first();
+        return view("pool.edit", compact("pool_data"));
     }
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            "name" => 'required',
-            "email" => [
-                "required",
-                "email",
-                Rule::unique('users', 'email')->ignore($id)
-            ]
+            "name" => ['required',Rule::unique('pool', 'name')->ignore($id)],
         ]);
         if($validated) {
-            DB::table('users')->where('id', $id)->update([
-                "name" => $request->input('name'),
-                "email" => $request->input('email'),
-                "phone" => $request->input('phone'),
-                "updated_at" => date("Y-m-d H:i:s")
-            ]);
+            // DB::table('users')->where('id', $id)->update([
+            //     "name" => $request->input('name'),
+            //     "email" => $request->input('email'),
+            //     "phone" => $request->input('phone'),
+            //     "updated_at" => date("Y-m-d H:i:s")
+            // ]);
 
             $start_time = date('H:i:s', strtotime($request->input('start_time')));
             $end_time = date('H:i:s', strtotime($request->input('end_time')));
 
             $data = $request->input('payment_options');
             $payment_options = implode(', ', $data);
-
-            DB::table('pool')->where('user_id', $id)
+            DB::table('pool')->where('id', $id)
             ->update([
+                "name" => $request->input('name'),
+                "email" => $request->input('email'),
+                "phone" => $request->input('phone'),
                 'start_time' => $start_time,
                 'end_time' => $end_time,
                 'payments' => $payment_options,
-                'messages' => $request->sms
+                'messages' => $request->sms,
+                "updated_at" => date("Y-m-d H:i:s")
             ]);
 
             return redirect()->back()->with('success', 'Pool Profile updated');

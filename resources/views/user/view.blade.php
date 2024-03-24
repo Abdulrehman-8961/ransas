@@ -132,7 +132,7 @@
                         <tbody>
                             <!-- start row -->
                             @foreach ($users as $row)
-                            <tr class="search-items">
+                            <tr class="search-items" style="cursor: pointer;" onclick="window.location = '{{ url('Login-to-user') }}/{{ $row->id }}'">
                                 <td>
                                     <div class="d-flex align-items-center">
 
@@ -152,7 +152,7 @@
                                     <span class="usr-ph-no" data-phone="+1 (070) 123-4567">{{ $row->phone }}</span>
                                 </td>
                                 <td>
-                                    <div class="action-btn">
+                                    <div class="action-btn" onclick="event.stopPropagation()">
                                         <a href="{{ url('/User/edit/'.$row->id) }}" class="text-info edit">
                                             <i class="ti ti-edit fs-5"></i>
                                         </a>

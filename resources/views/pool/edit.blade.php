@@ -24,29 +24,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-12">
                 <div class="card">
                     <div class="px-4 py-3 border-bottom">
                         <h5 class="card-title fw-semibold mb-0">Edit Pool</h5>
                     </div>
                     <div class="card-body">
-                        <form action="{{ url('/Pool/update/' . $user->id) }}" id="jquery-val-form" method="POST"
+                        <form action="{{ url('/Pool/update/' . $pool_data->id) }}" id="jquery-val-form" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="col-lg-4 form-group">
                                     <label>Name</label>
-                                    <input type="" placeholder="Enter Name" value="{{ $user->name }}"
+                                    <input type="" placeholder="Enter Name" value="{{ $pool_data->name }}"
                                         name="name" class="form-control">
                                 </div>
                                 <div class="col-lg-4 form-group">
                                     <label>Telephone</label>
-                                    <input type="" placeholder="Enter Telephone" value="{{ $user->phone }}"
+                                    <input type="" placeholder="Enter Telephone" value="{{ $pool_data->phone }}"
                                         name="phone" class="form-control">
                                 </div>
                                 <div class="col-lg-4 form-group">
                                     <label>Email</label>
-                                    <input type="email" placeholder="Enter Email" value="{{ $user->email }}"
+                                    <input type="email" placeholder="Enter Email" value="{{ $pool_data->email }}"
                                     name="email" class="form-control">
                                 </div>
                                 <div class="col-lg-12"></div>
@@ -121,40 +121,6 @@
                                 <div class="col-lg-12"></div>
                                 <div class="col-lg-4">
                                     <button class="btn btn-primary" name="submit" type="submit">Save</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="px-4 py-3 border-bottom">
-                        <h5 class="card-title fw-semibold mb-0">Change Password</h5>
-                    </div>
-                    <div class="card-body">
-                        <form action="{{ url('/Pool/update-password/' . $user->id) }}" id="jquery-val-form"
-                            method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="row">
-                                <div class="col-lg-12 form-group">
-                                    <label>Password</label>
-                                    <input type="password" placeholder="Enter Password" id="password" name="password"
-                                        class="form-control @error('password') is-invalid @enderror">
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="col-lg-12 form-group">
-                                    <label>Confirm Password</label>
-                                    <input type="password" placeholder="Enter Confirm Password" name="confirm_password"
-                                        class="form-control">
-                                </div>
-                                <div class="col-lg-12"></div>
-                                <div class="col-lg-4">
-                                    <button class="btn btn-primary" name="submit1" type="submit">Change</button>
                                 </div>
                             </div>
                         </form>

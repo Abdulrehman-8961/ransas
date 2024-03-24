@@ -65,14 +65,13 @@
                         <tbody>
                             <!-- start row -->
                             @foreach ($users as $row)
-                            <tr class="search-items" style="cursor: pointer;" onclick="window.location = '{{ url('Login-to-pool') }}/{{ $row->id }}'">
+                            <tr class="search-items">
                                 <td>
                                     <div class="d-flex align-items-center">
 
                                         <div class="ms-3">
                                             <div class="user-meta-info">
                                                 <h6 class="user-name mb-0" data-name="Emma Adams">{{ $row->name }}</h6>
-                                                <span class="user-work fs-3" data-occupation="Admin">{{ $row->role }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -85,7 +84,7 @@
                                     <span class="usr-ph-no" data-phone="+1 (070) 123-4567">{{ $row->phone }}</span>
                                 </td>
                                 <td>
-                                    <div class="action-btn"  onclick="event.stopPropagation()">
+                                    <div class="action-btn">
                                         <a href="{{ url('/Pool/edit/'.$row->id) }}" class="text-info edit">
                                             <i class="ti ti-edit fs-5"></i>
                                         </a>

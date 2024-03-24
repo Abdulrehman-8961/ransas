@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="col-lg-3 form-group">
                                     <label>Telephone</label>
-                                    <input type="" placeholder="Enter Telephone Name" value="{{ old('phone') }}"
+                                    <input type="number" placeholder="Enter Telephone Name" value="{{ old('phone') }}"
                                         name="phone" class="form-control @error('phone') is-invalid @enderror">
                                     @error('phone')
                                         <span class="invalid-feedback" role="alert">
@@ -97,20 +97,20 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input primary check-outline outline-primary"
                                                 type="checkbox" name="payment_options[]" id="primary-outline-check"
-                                                value="Bank transfer">
+                                                value="Bank transfer" {{ old('payment_options') == "Bank transfer" ? "checked" : "" }}>
                                             <label class="form-check-label" for="primary-outline-check">Bank
                                                 transfer</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input primary check-outline outline-primary"
                                                 type="checkbox" name="payment_options[]" id="primary2-outline-check"
-                                                value="Credit Card">
+                                                value="Credit Card" {{ old('payment_options') == "Credit Card" ? "checked" : "" }}>
                                             <label class="form-check-label" for="primary2-outline-check">Credit Card</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input primary check-outline outline-primary"
                                                 type="checkbox" name="payment_options[]" id="primary3-outline-check"
-                                                value="Cash">
+                                                value="Cash" {{ old('payment_options') == "Cash" ? "checked" : "" }}>
                                             <label class="form-check-label" for="primary3-outline-check">Cash</label>
                                         </div>
                                     </div>
@@ -121,33 +121,16 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input primary check-outline outline-primary"
                                                 type="radio" name="sms" id="primary-outline-radio"
-                                                value="Turn on">
+                                                value="Turn on" {{ old('sms') == "Turn on" ? "checked" : "" }}>
                                             <label class="form-check-label" for="primary-outline-radio">Turn on</label>
                                         </div>
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input primary check-outline outline-primary"
                                                 type="radio" name="sms" id="primary2-outline-radio"
-                                                value="Turn off">
+                                                value="Turn off" {{ old('sms') == "Turn off" ? "checked" : "" }}>
                                             <label class="form-check-label" for="primary2-outline-radio">Turn off</label>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-lg-3 form-group">
-                                    <label>Password</label>
-                                    <input type="password" placeholder="Enter Password" id="password" name="password"
-                                        class="form-control @error('password') is-invalid @enderror">
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="col-lg-3 form-group">
-                                    <label>Confirm Password</label>
-                                    <input type="password" placeholder="Enter Confirm Password" name="confirm_password"
-                                        class="form-control">
                                 </div>
                             </div>
                             <div class="row">

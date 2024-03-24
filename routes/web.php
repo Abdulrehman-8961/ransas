@@ -74,8 +74,8 @@ Route::post('/Pool/update/{id}', [PoolController::class, 'update'])->middleware(
 Route::post('/Pool/update-password/{id}', [PoolController::class, 'update_password'])->middleware('isAdmin');
 Route::get('/Pool/delete/{id}', [PoolController::class, 'delete'])->middleware('isAdmin');
 
-// Login to pool
-Route::get('/Login-to-pool/{id}', [PoolController::class, 'loginToPool'])->middleware('auth','isAdmin');
+// Login to user
+Route::get('/Login-to-user/{id}', [PoolController::class, 'loginToPool'])->middleware('auth','isAdmin');
 Route::get('/Back-to-Admin/{id}', [PoolController::class, 'loginToAdmin'])->middleware('auth');
 
 // Message Template
