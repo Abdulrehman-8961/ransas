@@ -213,13 +213,33 @@ class AddEventController extends Controller
                 $options = explode(', ', $pool->payments);
                 $html = '<option value="">Select Payment Method</option>';
                 foreach ($options as $option) {
-                        $html .= '<option value="' . $option . '">' . $option . '</option>';
+                    $html .= '<option value="' . $option . '">' . $option . '</option>';
                 }
-                return response()->json(['success' => true, 'options' => $html]);
+
+                // Create a mapping of days to numbers
+                $dayNumberMapping = [
+                    'Sunday' => 0,
+                    'Monday' => 1,
+                    'Tuesday' => 2,
+                    'Wednesday' => 3,
+                    'Thursday' => 4,
+                    'Friday' => 5,
+                    'Saturday' => 6
+                ];
+
+                // Fetch the available days and convert them to numbers
+                $days = explode(', ', $pool->availble_days);
+                $days = array_filter($days); // Remove empty strings
+                $days = array_map(function($day) use ($dayNumberMapping) {
+                    return $dayNumberMapping[$day];
+                }, $days);
+
+                return response()->json(['success' => true, 'options' => $html, 'days' => $days]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Pool not found']);
             }
         }
+
 
 
 }

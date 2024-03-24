@@ -25,10 +25,9 @@ class CalendarController extends Controller
     public function getEvents(Request $request) {
         $start = $request->input('start');
         $end = $request->input('end');
-        $user = DB::table('users')->where('id',Auth::user()->id)->first();
-        $poolIDs = explode(', ', $user->pool_id);
+        $pool_select = $request->input('pool_select');
         $events = DB::table('events')
-        ->wherein('pool_id', $poolIDs)
+        ->where('pool_id', $pool_select)
         ->where('is_deleted', 0)
         ->where(function ($query) use ($start, $end) {
             $query->whereBetween('start_date', [$start, $end])
@@ -39,6 +38,23 @@ class CalendarController extends Controller
                 });
         })
         ->get();
+
+        $pool_available_days = DB::table('pool')->where('id', $pool_select)->first();
+        $available_days = explode(', ', $pool_available_days->availble_days);
+
+        // Construct business hours array
+        $businessHours = [];
+
+        foreach ($available_days as $day) {
+            $day_lower = strtolower(substr($day, 0, 3));
+            $start_time_column = $day_lower . '_start_time';
+            $end_time_column = $day_lower . '_end_time';
+
+            $businessHours[$day] = [
+                'startTime' => $pool_available_days->$start_time_column,
+                'endTime' => $pool_available_days->$end_time_column
+            ];
+        }
 
         $formattedEvents = [];
         foreach ($events as $event) {
@@ -92,7 +108,7 @@ class CalendarController extends Controller
             ];
         }
 
-        return response()->json(['events' => $formattedEvents]);
+        return response()->json(['events' => $formattedEvents, 'businessHours' => $businessHours]);
     }
 
     public function updateEvents(Request $request, $id) {

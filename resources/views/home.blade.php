@@ -66,18 +66,36 @@
             </div>
 
         </div>
-        @if(Auth::user()->role != "Admin")
-        <div class="card">
-            <div>
-                <div class="row gx-0">
-                    <div class="col-lg-12">
-                        <div class="p-4 calender-sidebar app-calendar">
-                            <div id="calendar"></div>
+        @if (Auth::user()->role != 'Admin')
+            @php
+                $user = DB::table('users')
+                    ->where('id', Auth::user()->id)
+                    ->first();
+                $poolIDs = explode(', ', $user->pool_id);
+                $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
+            @endphp
+            <div class="row container mb-5">
+                <div class="col-md-4 col-12">
+                    <label for="">Select Pool</label>
+                    <select class="form-control" name="pool_select" id="pool_select">
+                        @foreach ($pool_option as $row)
+                            <option value="{{ $row->id }}">
+                                {{ $row->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="card">
+                <div>
+                    <div class="row gx-0">
+                        <div class="col-lg-12">
+                            <div class="p-4 calender-sidebar app-calendar">
+                                <div id="calendar"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         @endif
 
         <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
@@ -144,7 +162,8 @@
                         <button type="button" class="btn" data-bs-dismiss="modal">
                             Close
                         </button>
-                        <button type="button" class="btn btn-success  d-none btn-update-event" data-fc-event-public-id="">
+                        <button type="button" class="btn btn-success  d-none btn-update-event"
+                            data-fc-event-public-id="">
                             Update changes
                         </button>
                         <button type="button" class="btn btn-primary d-none btn-add-event">
@@ -358,102 +377,107 @@
             /*=====================*/
             // Active Calender
             /*=====================*/
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                selectable: true,
-                height: checkWidowWidth() ? 900 : 1052,
-                initialView: "timeGridDay",
-                // initialDate: `${newDate.getFullYear()}-${getDynamicMonth()}`,
-                headerToolbar: calendarHeaderToolbar,
-                // events: calendarEventsList,
-                events: function(info, successCallback, failureCallback) {
-                    var start = info.start;
-                    var end = info.end;
-                    var url = '{{ asset('') }}get-events';
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        data: {
-                            start: start.toISOString(),
-                            end: end.toISOString()
-                        },
-                        success: function(response) {
-                            // console.log(response);
-                            response.events.forEach(function(event) {
-                                var startDate = new Date(event.date_start + ' ' +
-                                    event.start_time);
-                                var endDate = new Date(event.date_end + ' ' + event
-                                    .end_time);
-                                event.start = startDate;
-                                event.end = endDate;
-                            });
-                            successCallback(response.events);
-                            createTitleFilter(response.events);
-                        },
-                        error: function(xhr, status, error) {
-                            failureCallback(error);
-                        }
-                    });
-                },
-                editable: true,
-                eventResizableFromStart: true,
-                eventResizable: true,
-                customButtons: {
-                    ExportCsv: {
-                        text: "Export Csv",
-                        click: function() {
-                            exportCalendarEventsToCsv(calendar);
+            function initializeCalendar() {
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    selectable: true,
+                    height: checkWidowWidth() ? 900 : 1052,
+                    initialView: "timeGridDay",
+                    // initialDate: `${newDate.getFullYear()}-${getDynamicMonth()}`,
+                    headerToolbar: calendarHeaderToolbar,
+                    // events: calendarEventsList,
+                    events: function(info, successCallback, failureCallback) {
+                        var start = info.start;
+                        var end = info.end;
+                        var pool_select = $('#pool_select option:selected').val();
+                        var url = '{{ asset('') }}get-events';
+                        $.ajax({
+                            url: url,
+                            type: 'GET',
+                            data: {
+                                pool_select: pool_select,
+                                start: start.toISOString(),
+                                end: end.toISOString()
+                            },
+                            success: function(response) {
+                                // console.log(response);
+                                response.events.forEach(function(event) {
+                                    var startDate = new Date(event.date_start +
+                                        ' ' +
+                                        event.start_time);
+                                    var endDate = new Date(event.date_end + ' ' +
+                                        event
+                                        .end_time);
+                                    event.start = startDate;
+                                    event.end = endDate;
+                                });
+                                successCallback(response.events);
+                                createTitleFilter(response.events);
+                            },
+                            error: function(xhr, status, error) {
+                                failureCallback(error);
+                            }
+                        });
+                    },
+                    editable: true,
+                    eventResizableFromStart: true,
+                    eventResizable: true,
+                    customButtons: {
+                        ExportCsv: {
+                            text: "Export Csv",
+                            click: function() {
+                                exportCalendarEventsToCsv(calendar);
+                            },
                         },
                     },
-                },
-                select: calendarSelect,
-                unselect: function() {
-                    console.log("unselected");
-                },
+                    select: calendarSelect,
+                    unselect: function() {
+                        console.log("unselected");
+                    },
 
-                eventClassNames: function({
-                    event: calendarEvent
-                }) {
-                    const getColorValue =
-                        calendarsEvents[calendarEvent._def.extendedProps.calendar];
-                    return [
-                        "event-fc-color fc-bg-" + getColorValue,
-                    ];
-                },
+                    eventClassNames: function({
+                        event: calendarEvent
+                    }) {
+                        const getColorValue =
+                            calendarsEvents[calendarEvent._def.extendedProps.calendar];
+                        return [
+                            "event-fc-color fc-bg-" + getColorValue,
+                        ];
+                    },
 
-                eventClick: calendarEventClick,
-                eventDrop: function(info) {
-                    // Handle event drop
-                    var event = info.event;
+                    eventClick: calendarEventClick,
+                    eventDrop: function(info) {
+                        // Handle event drop
+                        var event = info.event;
 
-                    var getTime = function(date) {
-                        var hours = date.getHours();
-                        var minutes = date.getMinutes();
-                        var seconds = date.getSeconds();
+                        var getTime = function(date) {
+                            var hours = date.getHours();
+                            var minutes = date.getMinutes();
+                            var seconds = date.getSeconds();
 
-                        hours = (hours < 10 ? '0' : '') + hours;
-                        minutes = (minutes < 10 ? '0' : '') + minutes;
-                        seconds = (seconds < 10 ? '0' : '') + seconds;
+                            hours = (hours < 10 ? '0' : '') + hours;
+                            minutes = (minutes < 10 ? '0' : '') + minutes;
+                            seconds = (seconds < 10 ? '0' : '') + seconds;
 
-                        return hours + ':' + minutes + ':' + seconds;
-                    };
-                    var newStart = getTime(event.start);
-                    var newEnd = getTime(event.end);
-                    var bokkingId = event.extendedProps.bookid;
+                            return hours + ':' + minutes + ':' + seconds;
+                        };
+                        var newStart = getTime(event.start);
+                        var newEnd = getTime(event.end);
+                        var bokkingId = event.extendedProps.bookid;
 
-                    console.log(bokkingId,newStart,newEnd);
-                    $.ajax({
-                        url: 'update-event-time',
-                        type: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        data: {
-                            eventId: bokkingId,
-                            newStart: newStart,
-                            newEnd: newEnd
-                        },
-                        success: function(response) {
-                            if (response.success) {
+                        console.log(bokkingId, newStart, newEnd);
+                        $.ajax({
+                            url: 'update-event-time',
+                            type: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            data: {
+                                eventId: bokkingId,
+                                newStart: newStart,
+                                newEnd: newEnd
+                            },
+                            success: function(response) {
+                                if (response.success) {
                                     console.log('Event time updated successfully');
                                     Swal.fire({
                                         title: 'Success!',
@@ -476,24 +500,30 @@
                                         buttonsStyling: false
                                     });
                                 }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error('Failed to update event time:', error);
-                            event.setDates(info.oldStart, info
-                            .oldEnd);
-                        }
-                    });
-                },
-                // windowResize: function(arg) {
-                //     if (checkWidowWidth()) {
-                //         calendar.changeView("listWeek");
-                //         calendar.setOption("height", 900);
-                //     } else {
-                //         calendar.changeView("dayGridMonth");
-                //         calendar.setOption("height", 1052);
-                //     }
-                // },
+                            },
+                            error: function(xhr, status, error) {
+                                console.error('Failed to update event time:', error);
+                                event.setDates(info.oldStart, info
+                                    .oldEnd);
+                            }
+                        });
+                    },
+                    // windowResize: function(arg) {
+                    //     if (checkWidowWidth()) {
+                    //         calendar.changeView("listWeek");
+                    //         calendar.setOption("height", 900);
+                    //     } else {
+                    //         calendar.changeView("dayGridMonth");
+                    //         calendar.setOption("height", 1052);
+                    //     }
+                    // },
+                });
+                calendar.render();
+            }
+            $('#pool_select').change(function() {
+                initializeCalendar();
             });
+            $('#pool_select').change();
 
             var titleFilterInitialized = false;
 
@@ -568,7 +598,7 @@
             /*=====================*/
             // Calendar Init
             /*=====================*/
-            calendar.render();
+
             var myModal = new bootstrap.Modal(document.getElementById("eventModal"));
             var modalToggle = document.querySelector(".fc-addEventButton-button ");
             document

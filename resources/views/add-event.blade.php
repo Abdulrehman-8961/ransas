@@ -49,7 +49,9 @@
                                 id="pool_select">
                                 <option value="">Select Pool</option>
                                 @foreach ($pool_option as $row)
-                                    <option value="{{ $row->id }}" {{ @$event->booking_type || old('pool_select') == $row->id ? 'selected' : '' }}>{{ $row->name }}</option>
+                                    <option value="{{ $row->id }}"
+                                        {{ @$event->booking_type || old('pool_select') == $row->id ? 'selected' : '' }}>
+                                        {{ $row->name }}</option>
                                 @endforeach
                             </select>
                             @error('type')
@@ -427,30 +429,62 @@
         })
         $('#repeat').change();
 
-        $('#pool_select').change(function(){
+        $('#pool_select').change(function() {
             var poolID = $(this).val();
-            if(poolID){
+            if (poolID) {
                 $.ajax({
-                    type:"GET",
-                    url:"{{ url('/getPaymentOptions') }}",
-                    data:{pool_id:poolID},
-                    success:function(response){
-                        if(response.success){
+                    type: "GET",
+                    url: "{{ url('/getPaymentOptions') }}",
+                    data: {
+                        pool_id: poolID
+                    },
+                    success: function(response) {
+                        if (response.success) {
                             $("#payment_method").empty();
                             $("#payment_method").append(response.options);
                             $('.btn-submit').prop('disabled', false);
+                           // Convert the days to numbers
+                    // Restrict the selectable dates in the datepicker
+                    var days = response.days;
+                    jQuery(".datepicker-autoclose").datepicker('destroy').datepicker({
+                        autoclose: true,
+                        todayHighlight: true,
+                        startDate: new Date(),
+                        beforeShowDay: function(date){
+                            var day = date.getDay();
+                            return [$.inArray(day, days) >= 0];
+                        }
+                    });
                         } else {
                             console.log('Error:', response.message);
                             $('.btn-submit').prop('disabled', true);
                         }
                     }
                 });
-            }else{
+            } else {
                 $("#otherSelect").empty();
             }
         });
 
         $('#pool_select').change();
+
+        $("#otherSelect").on('change',function(){
+            var date = $(this).datepicker('getDate');
+            var day = date.getDay(); // get the day of the week
+
+            $.ajax({
+                type: "GET",
+                url: "{{ url('/checkDayAvailability') }}",
+                data: {day: day},
+                success: function(response) {
+                    if(response.available) {
+                        console.log('Day is available');
+                    } else {
+                        console.log('Day is not available');
+                    }
+                }
+            });
+        })
 
 
         $(document).on('change', '#end_time', function() {

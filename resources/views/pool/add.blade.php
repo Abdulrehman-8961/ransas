@@ -131,11 +131,7 @@
                                     <label for="password">End Time</label>
                                     <input type="text" class="form-control pickatime-formatTime-display"
                                         id="mon_end_time" name="mon_end_time" />
-
-
                                 </div>
-
-
                             </div>
                             <div class="row mb-3">
                                 <div class="col-md-3 ">
