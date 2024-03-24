@@ -25,37 +25,20 @@ class CalendarController extends Controller
     public function getEvents(Request $request) {
         $start = $request->input('start');
         $end = $request->input('end');
-
-        // $events = Event::whereBetween('start_date', [$start, $end])->get();
-        if (Auth::user()->role == "Admin") {
-            $events = DB::table('events')
-            ->where('is_deleted', 0)
-            ->where(function ($query) use ($start, $end) {
-                $query->whereBetween('start_date', [$start, $end])
-                    ->orWhereBetween('end_date', [$start, $end])
-                    ->orWhere(function ($query) use ($start, $end) {
-                        $query->where('start_date', '<', $start)
-                                ->where('end_date', '>', $end);
-                    });
-            })
-            ->get();
-        } else {
-            $events = DB::table('events')
-            ->where('pool_id', Auth::user()->id)
-            ->where('is_deleted', 0)
-            ->where(function ($query) use ($start, $end) {
-                $query->whereBetween('start_date', [$start, $end])
-                    ->orWhereBetween('end_date', [$start, $end])
-                    ->orWhere(function ($query) use ($start, $end) {
-                        $query->where('start_date', '<', $start)
-                                ->where('end_date', '>', $end);
-                    });
-            })
-            ->get();
-
-
-
-        }
+        $user = DB::table('users')->where('id',Auth::user()->id)->first();
+        $poolIDs = explode(', ', $user->pool_id);
+        $events = DB::table('events')
+        ->wherein('pool_id', $poolIDs)
+        ->where('is_deleted', 0)
+        ->where(function ($query) use ($start, $end) {
+            $query->whereBetween('start_date', [$start, $end])
+                ->orWhereBetween('end_date', [$start, $end])
+                ->orWhere(function ($query) use ($start, $end) {
+                    $query->where('start_date', '<', $start)
+                            ->where('end_date', '>', $end);
+                });
+        })
+        ->get();
 
         $formattedEvents = [];
         foreach ($events as $event) {

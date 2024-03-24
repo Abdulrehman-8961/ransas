@@ -24,6 +24,7 @@ class AddEventController extends Controller
     public function save(Request $request)
         {
             $request->validate([
+                "pool_select" => 'required',
                 "type" => 'required',
                 "customer_name" => 'required',
                 "start_date" => 'required',
@@ -50,7 +51,7 @@ class AddEventController extends Controller
             $endtime = date('H:i:s', strtotime($request->input('end_time')));
             if ($startdate >= date('Y-m-d')) {
                 $save = DB::table('events')->insert([
-                     "pool_id" => Auth::user()->id,
+                     "pool_id" => $request->input('pool_select'),
                      "booking_type" => $request->input('type'),
                      "customer_name" => $request->input('customer_name'),
                      "start_date" => $startdate,
@@ -203,6 +204,21 @@ class AddEventController extends Controller
             $available = $conflictingEvents == 0;
 
             return response()->json(['available' => $available]);
+        }
+
+        public function getPaymentOptions(Request $request){
+            $poolID = $request->input('pool_id');
+            $pool = DB::table('pool')->where('id',$poolID)->first();
+            if ($pool) {
+                $options = explode(', ', $pool->payments);
+                $html = '<option value="">Select Payment Method</option>';
+                foreach ($options as $option) {
+                        $html .= '<option value="' . $option . '">' . $option . '</option>';
+                }
+                return response()->json(['success' => true, 'options' => $html]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Pool not found']);
+            }
         }
 
 

@@ -7,10 +7,11 @@
             ->where('pool_id', Auth::user()->id)
             ->where('is_deleted', 0)
             ->first();
-        $user = DB::table('users')->where('id', Auth::user()->id)->first();
+        $user = DB::table('users')
+            ->where('id', Auth::user()->id)
+            ->first();
         $poolIDs = explode(', ', $user->pool_id);
-        $pool_option = DB::table('pool')->wherein('id',$poolIDs)->where('is_deleted',0)->get();
-        dd($pool_option);
+        $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
     @endphp
     <div class="container-fluid">
         <div class="card bg-light-info shadow-none position-relative overflow-hidden">
@@ -40,26 +41,24 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="mb-4">Add Event</h5>
-                <div class="mb-3 row">
-                    <label for="example-text-input" class="col-md-2 col-form-label">Type</label>
-                    <div class="col-md-10">
-                        <select class="form-control @error('type') is-invalid @enderror" type="text" name="type"
-                            id="type">
-                            <option value="">Select Pool</option>
-
-                            @php
-
-                            @endphp
-                                <option value="{{ $pool_option->id }}">{{ $pool_option->name }}</option>
-                        </select>
-                        @error('type')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                    </div>
-                </div>
                 <form class="form" action="{{ url('Event/save') }}" method="POST">
+                    <div class="mb-3 row">
+                        <label for="example-text-input" class="col-md-2 col-form-label">Select Pool</label>
+                        <div class="col-md-10">
+                            <select class="form-control @error('pool_select') is-invalid @enderror" name="pool_select"
+                                id="pool_select">
+                                <option value="">Select Pool</option>
+                                @foreach ($pool_option as $row)
+                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('type')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
                     @csrf
                     <input type="hidden" id="parent_id" name="parent_id" value="0">
                     <div class="mb-3 row">
@@ -222,9 +221,9 @@
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">Payment Method</label>
                         <div class="col-md-10">
-                            <select class="form-control @error('payment_method') is-invalid @enderror"
-                                value="" name="payment_method" id="example-text-input">
-                                <option value="">Select Payment Method</option>
+                            <select class="form-control @error('payment_method') is-invalid @enderror" value=""
+                                name="payment_method" id="payment_method">
+
                             </select>
                             @error('payment_method')
                                 <span class="invalid-feedback" role="alert">
@@ -427,6 +426,29 @@
             }
         })
         $('#repeat').change();
+
+        $('#pool_select').change(function(){
+            var poolID = $(this).val();
+            if(poolID){
+                $.ajax({
+                    type:"GET",
+                    url:"{{ url('/getPaymentOptions') }}",
+                    data:{pool_id:poolID},
+                    success:function(response){
+                        if(response.success){
+                            $("#payment_method").empty();
+                            $("#payment_method").append(response.options);
+                            $('.btn-submit').prop('disabled', false);
+                        } else {
+                            console.log('Error:', response.message);
+                            $('.btn-submit').prop('disabled', true);
+                        }
+                    }
+                });
+            }else{
+                $("#otherSelect").empty();
+            }
+        });
 
 
         $(document).on('change', '#end_time', function() {
