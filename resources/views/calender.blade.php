@@ -48,6 +48,13 @@
                 </div>
             </div>
         </div>
+        @php
+            $user = DB::table('users')
+            ->where('id', Auth::user()->id)
+            ->first();
+        $poolIDs = explode(', ', $user->pool_id);
+        $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
+        @endphp
         <!-- BEGIN MODAL -->
         <div id="eventModal" class="modal fade" tabindex="-1" aria-labelledby="bs-example-modal-md" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -56,6 +63,17 @@
                         <form id="event-form" method="POST">
                             @csrf
                             <div class="row">
+                                <div class="col-md-12">
+                                    <div class="">
+                                        <label class="form-label">Pool</label>
+                                        <select class="form-control @error('type') is-invalid @enderror" value="Artisanal kale" name="pool_select" id="pool_select">
+                                            <option value="">Select Pool</option>
+                                            @foreach ($pool_option as $row)
+                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-md-12">
                                     <div class="">
                                         <label class="form-label">Event Title</label>
@@ -175,10 +193,6 @@
                                         <label class="form-label">Payment Method</label>
                                         <select class="form-control @error('payment_method') is-invalid @enderror"
                                             name="payment_method" id="payment_method">
-                                            <option value="">Select Payment Method</option>
-                                            <option value="Bank transfer">Bank transfer</option>
-                                            <option value="Card">Credit Card</option>
-                                            <option value="Cash">Cash</option>
                                         </select>
                                     </div>
                                 </div>
@@ -400,6 +414,7 @@
 
                 var update_id = eventObj.extendedProps.bookid,
                     date = eventObj.extendedProps.date_start,
+                    pool = eventObj.extendedProps.pool,
                     end_date = eventObj.extendedProps.date_end,
                     start_time = eventObj.extendedProps.start_time,
                     end_time = eventObj.extendedProps.end_time,
@@ -412,6 +427,7 @@
                     payment_status = eventObj.extendedProps.payment_status,
                     payment_method = eventObj.extendedProps.payment_method,
                     percentage_value = eventObj.extendedProps.percentage_value,
+                    payment_options = eventObj.extendedProps.payment_options,
                     total_payment = eventObj.extendedProps.total_payment;
 
 
@@ -439,9 +455,11 @@
                     getModalAddBtnEl.style.display = "none";
                     getModalUpdateBtnEl.style.display = "block";
                     $('#customer_name').val(customer_name);
+                    $('#pool_select').val(pool);
                     $('#customer_email').val(customer_email);
                     $('#customer_phone').val(customer_phone);
                     $('#payment_status').val(payment_status);
+                    $('#payment_method').append(payment_options);
                     $('#payment_method').val(payment_method);
                     $('#total_payment').val(total_payment);
                     $('#parent_id').val(eventId);
@@ -836,5 +854,27 @@
                 $('.percentage-field').addClass('d-none');
             }
         })
+        $('#pool_select').change(function(){
+            var poolID = $(this).val();
+            if(poolID){
+                $.ajax({
+                    type:"GET",
+                    url:"{{ url('/getPaymentOptions') }}",
+                    data:{pool_id:poolID},
+                    success:function(response){
+                        if(response.success){
+                            $("#payment_method").empty();
+                            $("#payment_method").append(response.options);
+                            $('.btn-submit').prop('disabled', false);
+                        } else {
+                            console.log('Error:', response.message);
+                            $('.btn-submit').prop('disabled', true);
+                        }
+                    }
+                });
+            }else{
+                $("#otherSelect").empty();
+            }
+        });
     </script>
 @endsection

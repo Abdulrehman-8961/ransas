@@ -138,22 +138,22 @@ class AddEventController extends Controller
                      // EOT;
 
                      try {
-                         // $response = Http::withHeaders([
-                         //     'Content-Type' => 'application/json',
-                         //     'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
-                         // ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
-                         //     "Data" => [
-                         //         "Message" => $message,
-                         //         "Recipients" => [
-                         //             [
-                         //                 "Phone" => "0542165091"
-                         //             ]
-                         //         ],
-                         //         "Settings" => [
-                         //             "Sender" => "Ransas"
-                         //         ]
-                         //     ]
-                         // ]);
+                         $response = Http::withHeaders([
+                             'Content-Type' => 'application/json',
+                             'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
+                         ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
+                             "Data" => [
+                                 "Message" => $message,
+                                 "Recipients" => [
+                                     [
+                                         "Phone" => "0542165091"
+                                     ]
+                                 ],
+                                 "Settings" => [
+                                     "Sender" => "Ransas"
+                                 ]
+                             ]
+                         ]);
                      } catch (\Throwable $th) {
                          //throw $th;
                      }

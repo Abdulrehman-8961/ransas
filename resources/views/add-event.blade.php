@@ -2,16 +2,16 @@
 
 @section('content')
     @php
-        $event = DB::table('events')
-            ->where('id', @$_GET['event'])
-            ->where('pool_id', Auth::user()->id)
-            ->where('is_deleted', 0)
-            ->first();
         $user = DB::table('users')
             ->where('id', Auth::user()->id)
             ->first();
         $poolIDs = explode(', ', $user->pool_id);
         $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
+        $event = DB::table('events')
+            ->where('id', @$_GET['event'])
+            ->wherein('pool_id', $poolIDs)
+            ->where('is_deleted', 0)
+            ->first();
     @endphp
     <div class="container-fluid">
         <div class="card bg-light-info shadow-none position-relative overflow-hidden">
@@ -49,7 +49,7 @@
                                 id="pool_select">
                                 <option value="">Select Pool</option>
                                 @foreach ($pool_option as $row)
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                    <option value="{{ $row->id }}" {{ @$event->booking_type || old('pool_select') == $row->id ? 'selected' : '' }}>{{ $row->name }}</option>
                                 @endforeach
                             </select>
                             @error('type')
@@ -449,6 +449,8 @@
                 $("#otherSelect").empty();
             }
         });
+
+        $('#pool_select').change();
 
 
         $(document).on('change', '#end_time', function() {

@@ -42,7 +42,16 @@ class CalendarController extends Controller
 
         $formattedEvents = [];
         foreach ($events as $event) {
-        // dd($event->id);
+            $pool = DB::table('pool')->where('id',$event->pool_id)->first();
+            if ($pool) {
+                $options = explode(', ', $pool->payments);
+                $html = '<option value="">Select Payment Method</option>';
+                foreach ($options as $option) {
+                        $html .= '<option value="' . $option . '">' . $option . '</option>';
+                }
+            } else {
+                $html = '';
+            }
             $start_date = $event->start_date;
             $start_time = $event->start_time;
             $end_date = $event->end_date;
@@ -57,6 +66,8 @@ class CalendarController extends Controller
             // dd($intervalDays,$intervalHours,$intervalMinutes);
             $formattedEvents[] = [
                 'bookid' => $event->id,
+                'pool' => $event->pool_id,
+                'payment_options' => $html,
                 'customer_name' => $event->customer_name,
                 'customer_email' => $event->customer_email,
                 'customer_phone' => $event->customer_phone,

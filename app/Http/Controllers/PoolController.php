@@ -39,33 +39,62 @@ class PoolController extends Controller
     {
         return view("pool.add");
     }
+
+    public function dateFormat($date){
+        if ($date) {
+            $value = date('H:i:s', strtotime($date));
+            return $value;
+        }
+        return null;
+    }
+
     public function save(Request $request)
     {
         $validated = $request->validate([
             "name" => 'required|unique:pool',
             "email" => 'required|email',
-            "start_time" => 'required',
-            "end_time" => 'required',
             "payment_options" => 'required',
             "sms" => 'required',
         ]);
         if($validated) {
-            $start_time = date('H:i:s', strtotime($request->input('start_time')));
-            $end_time = date('H:i:s', strtotime($request->input('end_time')));
 
             $data = $request->input('payment_options');
             $payment_options = implode(', ', $data);
 
-            DB::table('pool')
-            ->insert([
+            $insert_fields = [
                 "name" => $request->input('name'),
                 "email" => $request->input('email'),
                 "phone" => $request->input('phone'),
-                'start_time' => $start_time,
-                'end_time' => $end_time,
                 'payments' => $payment_options,
-                'messages' => $request->sms
-            ]);
+                'messages' => $request->sms,
+                'availble_days' => ['monday' => $request->input('monday'),
+                'tuesday' => $request->input('tuesday'),
+                'wednesday' => $request->input('wednesday'),
+                'thursday' => $request->input('thursday'),
+                'friday' => $request->input('friday'),
+                'saturday' => $request->input('saturday'),
+                'sunday' => $request->input('sunday')],
+                'mon_start_time'=> $this->dateFormat($request->input('mon_start_time')),
+                'mon_end_time'=> $this->dateFormat($request->input('mon_end_time')),
+                'tue_start_time'=> $this->dateFormat($request->input('tue_start_time')),
+                'tue_end_time'=> $this->dateFormat($request->input('tue_end_time')),
+                'wed_start_time'=> $this->dateFormat($request->input('wed_start_time')),
+                'wed_end_time'=> $this->dateFormat($request->input('wed_end_time')),
+                'thur_start_time'=> $this->dateFormat($request->input('thur_start_time')),
+                'thur_end_time'=> $this->dateFormat($request->input('thur_end_time')),
+                'fri_start_time'=> $this->dateFormat($request->input('fri_start_time')),
+                'fri_end_time'=> $this->dateFormat($request->input('fri_end_time')),
+                'sat_start_time'=> $this->dateFormat($request->input('sat_start_time')),
+                'sun_start_time'=> $this->dateFormat($request->input('sun_start_time')),
+                'sun_end_time'=> $this->dateFormat($request->input('sun_end_time')),
+                'sat_end_time'=> $this->dateFormat($request->input('sat_end_time')),
+            ];
+            if (isset($insert_fields['availble_days'])) {
+                $insert_fields['availble_days'] = implode(', ', $insert_fields['availble_days']);
+            }
+
+                // dd($insert_fields);
+            DB::table('pool')->insert($insert_fields);
             return redirect()->back()->with('success', "Pool added");
         }
     }
