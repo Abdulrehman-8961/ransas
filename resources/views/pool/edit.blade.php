@@ -112,14 +112,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="form-control pickatime-formatTime-display"
                                             id="mon_start_time" name="mon_start_time"
-                                            value="{{ $pool_data->mon_start_time?date('h:i a', strtotime($pool_data->mon_start_time)):'' }}" />
+                                            value="{{ $pool_data->mon_start_time ? date('h:i a', strtotime($pool_data->mon_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="form-control pickatime-formatTime-display"
                                             id="mon_end_time" name="mon_end_time"
-                                            value="{{ $pool_data->mon_end_time?date('h:i a', strtotime($pool_data->mon_end_time)):'' }}" />
+                                            value="{{ $pool_data->mon_end_time ? date('h:i a', strtotime($pool_data->mon_end_time)) : '' }}" />
 
 
                                     </div>
@@ -130,7 +130,8 @@
                                     <div class="col-md-3 ">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" id="tuesday"
-                                                name="tuesday" value="Tuesday" {{ in_array('Tuesday', $availble_days) ? 'checked' : '' }}>
+                                                name="tuesday" value="Tuesday"
+                                                {{ in_array('Tuesday', $availble_days) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="success-check">Tuesday</label>
                                         </div>
                                     </div>
@@ -140,14 +141,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="form-control  pickatime-formatTime-display "
                                             id="tue_start_time" name="tue_start_time"
-                                            value="{{ $pool_data->tue_start_time?date('h:i a', strtotime($pool_data->tue_start_time)):'' }}" />
+                                            value="{{ $pool_data->tue_start_time ? date('h:i a', strtotime($pool_data->tue_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="form-control r pickatime-formatTime-display"
                                             id="tue_end_time" name="tue_end_time"
-                                            value="{{ $pool_data->tue_end_time?date('h:i a', strtotime($pool_data->tue_end_time)):'' }}" />
+                                            value="{{ $pool_data->tue_end_time ? date('h:i a', strtotime($pool_data->tue_end_time)) : '' }}" />
 
 
                                     </div>
@@ -157,7 +158,8 @@
                                     <div class="col-md-3">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" id="wednesday"
-                                                name="wednesday" value="Wednesday" {{ in_array('Wednesday', $availble_days) ? 'checked' : '' }}>
+                                                name="wednesday" value="Wednesday"
+                                                {{ in_array('Wednesday', $availble_days) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="success-check">Wednesday</label>
                                         </div>
 
@@ -166,14 +168,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="form-control  pickatime-formatTime-display "
                                             id="wed_start_time" name="wed_start_time"
-                                            value="{{ $pool_data->wed_start_time?date('h:i a', strtotime($pool_data->wed_start_time)):'' }}" />
+                                            value="{{ $pool_data->wed_start_time ? date('h:i a', strtotime($pool_data->wed_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
                                             id="wed_end_time" name="wed_end_time"
-                                            value="{{ $pool_data->wed_end_time?date('h:i a', strtotime($pool_data->wed_end_time)):"" }}" />
+                                            value="{{ $pool_data->wed_end_time ? date('h:i a', strtotime($pool_data->wed_end_time)) : '' }}" />
 
 
                                     </div>
@@ -183,7 +185,8 @@
                                     <div class="col-md-3">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" id="thursday"
-                                                name="thursday" value="Thursday" {{ in_array('Thursday', $availble_days) ? 'checked' : '' }}>
+                                                name="thursday" value="Thursday"
+                                                {{ in_array('Thursday', $availble_days) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="success-check">Thursday</label>
                                         </div>
                                     </div>
@@ -191,14 +194,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control   "
                                             id="thur_start_time" name="thur_start_time"
-                                            value="{{ $pool_data->thur_start_time?date('h:i a', strtotime($pool_data->thur_start_time)):'' }}" />
+                                            value="{{ $pool_data->thur_start_time ? date('h:i a', strtotime($pool_data->thur_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
                                             id="thur_end_time" name="thur_end_time"
-                                            value="{{ $pool_data->thur_end_time?date('h:i a', strtotime($pool_data->thur_end_time)):'' }}" />
+                                            value="{{ $pool_data->thur_end_time ? date('h:i a', strtotime($pool_data->thur_end_time)) : '' }}" />
 
 
                                     </div>
@@ -209,7 +212,8 @@
                                     <div class="col-md-3">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" id="friday"
-                                                name="friday" value="Friday" {{ in_array('Friday', $availble_days) ? 'checked' : '' }}>
+                                                name="friday" value="Friday"
+                                                {{ in_array('Friday', $availble_days) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="success-check">Friday</label>
                                         </div>
                                     </div>
@@ -217,14 +221,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control   "
                                             id="fri_start_time" name="fri_start_time"
-                                            value="{{ $pool_data->fri_start_time?date('h:i a', strtotime($pool_data->fri_start_time)):'' }}" />
+                                            value="{{ $pool_data->fri_start_time ? date('h:i a', strtotime($pool_data->fri_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
                                             id="fri_end_time" name="fri_end_time"
-                                            value="{{ $pool_data->fri_end_time?date('h:i a', strtotime($pool_data->fri_end_time)):'' }}" />
+                                            value="{{ $pool_data->fri_end_time ? date('h:i a', strtotime($pool_data->fri_end_time)) : '' }}" />
 
 
                                     </div>
@@ -234,7 +238,8 @@
                                     <div class="col-md-3">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" id="saturday"
-                                                name="saturday" value="Saturday" {{ in_array('Saturday', $availble_days) ? 'checked' : '' }}>
+                                                name="saturday" value="Saturday"
+                                                {{ in_array('Saturday', $availble_days) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="success-check">Saturday</label>
                                         </div>
                                     </div>
@@ -242,14 +247,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control   "
                                             id="sat_start_time" name="sat_start_time"
-                                            value="{{ $pool_data->sat_start_time?date('h:i a', strtotime($pool_data->sat_start_time)):'' }}" />
+                                            value="{{ $pool_data->sat_start_time ? date('h:i a', strtotime($pool_data->sat_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
                                             id="sat_end_time" name="sat_end_time"
-                                            value="{{ $pool_data->sat_end_time?date('h:i a', strtotime($pool_data->sat_end_time)):'' }}" />
+                                            value="{{ $pool_data->sat_end_time ? date('h:i a', strtotime($pool_data->sat_end_time)) : '' }}" />
 
 
                                     </div>
@@ -259,7 +264,8 @@
                                     <div class="col-md-3 mb-3">
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input" type="checkbox" id="sunday"
-                                                name="sunday" value="Sunday" {{ in_array('Sunday', $availble_days) ? 'checked' : '' }}>
+                                                name="sunday" value="Sunday"
+                                                {{ in_array('Sunday', $availble_days) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="success-check">Sunday</label>
                                         </div>
                                     </div>
@@ -267,14 +273,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control   "
                                             id="sun_start_time" name="sun_start_time"
-                                            value="{{ $pool_data->sun_start_time?date('h:i a', strtotime($pool_data->sun_start_time)):'' }}" />
+                                            value="{{ $pool_data->sun_start_time ? date('h:i a', strtotime($pool_data->sun_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
                                             id="sun_end_time" name="sun_end_time"
-                                            value="{{ $pool_data->sun_end_time?date('h:i a', strtotime($pool_data->sun_end_time)):'' }}" />
+                                            value="{{ $pool_data->sun_end_time ? date('h:i a', strtotime($pool_data->sun_end_time)) : '' }}" />
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
