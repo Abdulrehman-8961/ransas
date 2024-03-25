@@ -48,7 +48,7 @@
             <div class="row container mb-5">
                 <div class="col-md-4 col-12">
                     <label for="">Select Pool</label>
-                    <select class="form-control" name="pool_select" id="pool_select">
+                    <select class="form-control" name="pool_select" id="pool_select_main">
                         <option value="">Select Pool</option>
                         @foreach ($pool_option as $row)
                             <option value="{{ $row->id }}" {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
@@ -299,7 +299,7 @@
 @section('javascript')
     <script src="{{ asset('public') }}/dist/libs/fullcalendar/index.global.min.js"></script>
     <script type="text/javascript">
-        var selectElement = document.getElementById('pool_select');
+        var selectElement = document.getElementById('pool_select_main');
 
         // Add change event listener
         selectElement.addEventListener('change', function() {
@@ -311,11 +311,73 @@
             autoclose: true,
             todayHighlight: true,
             startDate: new Date()
+        }).on('changeDate', function(selected) {
+            var selectedDate = selected.date;
+
+            // Format selected date as YYYY-MM-DD
+            var formattedDate = selectedDate.getFullYear() + '-' +
+                ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '-' +
+                ('0' + selectedDate.getDate()).slice(-2);
+
+            // Make AJAX request to fetch available time slots for the selected date
+            $.ajax({
+                type: "GET",
+                url: "{{ url('getAvailableTimeSlots') }}",
+                data: {
+                    selected_date: formattedDate
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update the options of your time picker with the available time slots
+                        var timePicker = $(".pickatime-formatTime-display").pickatime().pickatime(
+                            'picker');
+                        timePicker.set('disable', false); // Enable the time picker
+                        timePicker.set('min', response.startTime); // Set the minimum time
+                        timePicker.set('max', response.endTime); // Set the maximum time
+                    } else {
+                        console.error('Failed to fetch available time slots:', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Failed to fetch available time slots:', error);
+                }
+            });
         });
         jQuery(".datepicker-autoclose2").datepicker({
             autoclose: true,
             todayHighlight: true,
             startDate: new Date()
+        }).on('changeDate', function(selected) {
+            var selectedDate = selected.date;
+
+            // Format selected date as YYYY-MM-DD
+            var formattedDate = selectedDate.getFullYear() + '-' +
+                ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '-' +
+                ('0' + selectedDate.getDate()).slice(-2);
+
+            // Make AJAX request to fetch available time slots for the selected date
+            $.ajax({
+                type: "GET",
+                url: "{{ url('getAvailableTimeSlots') }}",
+                data: {
+                    selected_date: formattedDate
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update the options of your time picker with the available time slots
+                        var timePicker = $(".pickatime-formatTime-display2").pickatime().pickatime(
+                            'picker');
+                        timePicker.set('disable', false); // Enable the time picker
+                        timePicker.set('min', response.startTime); // Set the minimum time
+                        timePicker.set('max', response.endTime); // Set the maximum time
+                    } else {
+                        console.error('Failed to fetch available time slots:', response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Failed to fetch available time slots:', error);
+                }
+            });
         });
         jQuery("#date-range").datepicker({
             toggleActive: true,
@@ -545,7 +607,7 @@
                     events: function(info, successCallback, failureCallback) {
                         var start = info.start;
                         var end = info.end;
-                        var pool_select = $('#pool_select option:selected').val();
+                        var pool_select = $('#pool_select_main option:selected').val();
                         var url = '{{ asset('') }}get-events';
                         $.ajax({
                             url: url,
@@ -556,7 +618,6 @@
                                 end: end.toISOString()
                             },
                             success: function(response) {
-                                var availableDays = response.availableDays;
                                 console.log(response);
                                 response.events.forEach(function(event) {
                                     var startDate = new Date(event.date_start +
@@ -570,18 +631,6 @@
                                 });
                                 successCallback(response.events, );
                                 createTitleFilter(response.events);
-                                $('.fc-day').each(function() {
-                                    var date = $(this).attr('data-date');
-                                    var dayOfWeek = new Date(date)
-                                        .getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
-
-                                    // Check if the day is not in the available days list
-                                    if (availableDays.indexOf(dayOfWeek) === -1) {
-                                        // Disable the day by adding a specific class or styling
-                                        $(this).addClass('disabled-day');
-                                        // Or you can add more styles here, e.g., $(this).css('opacity', 0.5);
-                                    }
-                                });
                             },
                             error: function(xhr, status, error) {
                                 failureCallback(error);
@@ -929,6 +978,34 @@
                         } else {
                             console.log('Error:', response.message);
                             $('.btn-submit').prop('disabled', true);
+                        }
+                    }
+                });
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/getAvailableDays') }}",
+                    data: {
+                        pool_id: poolID
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Clear previous options and add new available days to datepicker
+                            $(".datepicker-autoclose").datepicker('destroy');
+                            $(".datepicker-autoclose").datepicker({
+                                autoclose: true,
+                                todayHighlight: true,
+                                startDate: new Date(),
+                                daysOfWeekDisabled: response.disabledDays
+                            });
+                            $(".datepicker-autoclose2").datepicker('destroy');
+                            $(".datepicker-autoclose2").datepicker({
+                                autoclose: true,
+                                todayHighlight: true,
+                                startDate: new Date(),
+                                daysOfWeekDisabled: response.disabledDays
+                            });
+                        } else {
+                            console.log('Error:', response.message);
                         }
                     }
                 });

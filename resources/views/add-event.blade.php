@@ -143,7 +143,7 @@
                         <div class="col-md-5">
                             <input type="text" class="form-control pickatime-formatTime-display"
                                 placeholder="Time Format" name="start_time" id="start_time"
-                                value="{{ old('start_time') }}" disabled/>
+                                value="{{ old('start_time') }}" @if(@$_GET['event'])  @else disabled @endif/>
                             @error('start_time')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -169,7 +169,7 @@
                         <div class="col-md-5">
                             <input type="text" class="form-control pickatime-formatTime-display2"
                                 placeholder="Time Format" value="{{ old('end_time') }}" name="end_time"
-                                id="end_time" disabled/>
+                                id="end_time" @if(@$_GET['event'])  @else disabled @endif/>
                             @error('end_time')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -303,7 +303,7 @@
                                     <input class="form-check-input primary check-light-primary repeat" type="checkbox"
                                         name="repeat" value="repeat" id="repeat"
                                         {{ old('repeat') == 'repeat' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalPrimary">Repeat</label>
+                                    <label class="form-check-label" for="repeat">Repeat</label>
                                 </div>
                             </div>
                         </div>
@@ -370,7 +370,7 @@
                 formatSubmit: "HH:i",
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
-            }).pickatime('picker').set('select', '{{ date('h:i a', strtotime(@$event->start_time)) }}');
+            }).pickatime('picker').set('select', '{{ date('H:i', strtotime(@$event->start_time)) }}');
             jQuery(".datepicker-autoclose").datepicker({
                 autoclose: true,
                 todayHighlight: true,
@@ -464,7 +464,7 @@
                 formatSubmit: "HH:i",
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
-            }).pickatime('picker').set('select', '{{ date('h:i a', strtotime(@$event->end_time)) }}');
+            }).pickatime('picker').set('select', '{{ date('H:i', strtotime(@$event->end_time)) }}');
             jQuery(".datepicker-autoclose2").datepicker({
                 autoclose: true,
                 todayHighlight: true,

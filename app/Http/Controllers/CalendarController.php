@@ -61,9 +61,6 @@ class CalendarController extends Controller
         })
         ->get();
 
-        $pool_available_days = DB::table('pool')->where('id', $pool_select)->first();
-        $available_days = explode(', ', $pool_available_days->availble_days);
-
         $formattedEvents = [];
         foreach ($events as $event) {
             $pool = DB::table('pool')->where('id',$event->pool_id)->first();
@@ -116,7 +113,7 @@ class CalendarController extends Controller
             ];
         }
 
-        return response()->json(['events' => $formattedEvents, 'availableDays' => $available_days]);
+        return response()->json(['events' => $formattedEvents]);
     }
 
     public function updateEvents(Request $request, $id) {
