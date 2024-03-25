@@ -245,6 +245,27 @@ class AddEventController extends Controller
                 return response()->json(['success' => false, 'message' => 'Pool not found']);
             }
         }
+        public function getAvailableTimeSlots(Request $request) {
+            // Get the selected date from the AJAX request
+            $selectedDate = $request->input('selected_date');
 
+            // Determine the day of the week (e.g., Monday, Tuesday, etc.) for the selected date
+            $dayOfWeek = date('l', strtotime($selectedDate));
 
+            // Fetch the start and end times for the selected day of the week
+            $dayColumns = strtolower(substr($dayOfWeek, 0, 3)); // Get first three letters in lowercase
+            $startTimeColumn = $dayColumns . '_start_time';
+            $endTimeColumn = $dayColumns . '_end_time';
+
+            $timeSlot = DB::table('pool')
+            ->where('availble_days', 'like', '%' . $dayOfWeek . '%')
+                            ->first([$startTimeColumn, $endTimeColumn]);
+
+            if (!$timeSlot) {
+                return response()->json(['success' => false, 'message' => 'No available time slots for selected day']);
+            }
+
+            // Respond with success and available time slot for the selected day
+            return response()->json(['success' => true, 'startTime' => $timeSlot->$startTimeColumn, 'endTime' => $timeSlot->$endTimeColumn]);
+        }
 }

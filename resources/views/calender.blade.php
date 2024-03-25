@@ -324,15 +324,15 @@
             todayHighlight: true,
         });
         $(".pickatime-formatTime-display").pickatime({
-            format: "h:i a",
-            formatLabel: "<b>h</b>:i <!i>a</!i>",
+            format: "H:i",
+            formatLabel: "<b>H</b>:i",
             formatSubmit: "HH:i",
             hiddenPrefix: "prefix__",
             hiddenSuffix: "__suffix",
         });
         $(".pickatime-formatTime-display2").pickatime({
-            format: "h:i a",
-            formatLabel: "<b>h</b>:i <!i>a</!i>",
+            format: "H:i",
+            formatLabel: "<b>H</b>:i",
             formatSubmit: "HH:i",
             hiddenPrefix: "prefix__",
             hiddenSuffix: "__suffix",
@@ -512,8 +512,8 @@
                     }).datepicker('setDate', formattedDateEnd);
                     // Set the timepicker options and initialize it for the first input
                     $(".pickatime-formatTime-display").pickatime({
-                        format: "h:i a",
-                        formatLabel: "<b>h</b>:i <!i>a</!i>",
+                        format: "H:i",
+                        formatLabel: "<b>H</b>:i",
                         formatSubmit: "HH:i",
                         hiddenPrefix: "prefix__",
                         hiddenSuffix: "__suffix"
@@ -521,8 +521,8 @@
 
                     // Set the timepicker options and initialize it for the second input
                     $(".pickatime-formatTime-display2").pickatime({
-                        format: "h:i a",
-                        formatLabel: "<b>h</b>:i <!i>a</!i>",
+                        format: "H:i",
+                        formatLabel: "<b>H</b>:i",
                         formatSubmit: "HH:i",
                         hiddenPrefix: "prefix__",
                         hiddenSuffix: "__suffix"

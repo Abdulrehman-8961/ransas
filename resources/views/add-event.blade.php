@@ -133,7 +133,7 @@
                             time</label>
                         <div class="col-md-5">
                             <input type="text" class="form-control datepicker-autoclose" id="start_date"
-                                placeholder="mm/dd/yyyy" name="start_date" value="{{ old('start_date') }}" />
+                                placeholder="mm/dd/yyyy" name="start_date" value="{{ old('start_date') }}" disabled/>
                             @error('start_date')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -143,7 +143,7 @@
                         <div class="col-md-5">
                             <input type="text" class="form-control pickatime-formatTime-display"
                                 placeholder="Time Format" name="start_time" id="start_time"
-                                value="{{ old('start_time') }}" />
+                                value="{{ old('start_time') }}" disabled/>
                             @error('start_time')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -157,7 +157,7 @@
                             time</label>
                         <div class="col-md-5">
                             <input type="text" class="form-control datepicker-autoclose2" id="end_date"
-                                placeholder="mm/dd/yyyy" name="end_date" value="{{ old('end_date') }}" />
+                                placeholder="mm/dd/yyyy" name="end_date" value="{{ old('end_date') }}" disabled/>
                             <span class="invalid-feedback time-slot d-none" role="alert"><strong>This time slot is
                                     booked.</strong></span>
                             @error('end_date')
@@ -169,7 +169,7 @@
                         <div class="col-md-5">
                             <input type="text" class="form-control pickatime-formatTime-display2"
                                 placeholder="Time Format" value="{{ old('end_time') }}" name="end_time"
-                                id="end_time" />
+                                id="end_time" disabled/>
                             @error('end_time')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -365,8 +365,8 @@
             var startDateParts = start_date.split('-');
             var formattedDateStart = `${startDateParts[1]}/${startDateParts[2]}/${startDateParts[0]}`;
             $(".pickatime-formatTime-display").pickatime({
-                format: "h:i a",
-                formatLabel: "<b>h</b>:i <!i>a</!i>",
+                format: "H:i",
+                formatLabel: "<b>H</b>:i",
                 formatSubmit: "HH:i",
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
@@ -386,12 +386,13 @@
                 // Make AJAX request to fetch available time slots for the selected date
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('getAvailableTimeSlots') }}",
+                    url: "{{ url('getAvailableTimeSlots') }}",
                     data: {
                         selected_date: formattedDate
                     },
                     success: function(response) {
                         if (response.success) {
+                            $(".pickatime-formatTime-display").prop('disabled', false);
                             // Update the options of your time picker with the available time slots
                             var timePicker = $(".pickatime-formatTime-display").pickatime().pickatime(
                                 'picker');
@@ -409,8 +410,8 @@
             });
         } else {
             $(".pickatime-formatTime-display").pickatime({
-                format: "h:i a",
-                formatLabel: "<b>h</b>:i <!i>a</!i>",
+                format: "H:i",
+                formatLabel: "<b>H</b>:i",
                 formatSubmit: "HH:i",
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
@@ -430,12 +431,13 @@
                 // Make AJAX request to fetch available time slots for the selected date
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('getAvailableTimeSlots') }}",
+                    url: "{{ url('getAvailableTimeSlots') }}",
                     data: {
                         selected_date: formattedDate
                     },
                     success: function(response) {
                         if (response.success) {
+                            $(".pickatime-formatTime-display").prop('disabled', false);
                             // Update the options of your time picker with the available time slots
                             var timePicker = $(".pickatime-formatTime-display").pickatime().pickatime(
                                 'picker');
@@ -457,8 +459,8 @@
             var endDateParts = end_date.split('-');
             var formattedDateEnd = `${endDateParts[1]}/${endDateParts[2]}/${endDateParts[0]}`;
             $(".pickatime-formatTime-display2").pickatime({
-                format: "h:i a",
-                formatLabel: "<b>h</b>:i <!i>a</!i>",
+                format: "H:i",
+                formatLabel: "<b>H</b>:i",
                 formatSubmit: "HH:i",
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
@@ -478,7 +480,7 @@
                 // Make AJAX request to fetch available time slots for the selected date
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('getAvailableTimeSlots') }}",
+                    url: "{{ url('getAvailableTimeSlots') }}",
                     data: {
                         selected_date: formattedDate
                     },
@@ -501,8 +503,8 @@
             });
         } else {
             $(".pickatime-formatTime-display2").pickatime({
-                format: "h:i a",
-                formatLabel: "<b>h</b>:i <!i>a</!i>",
+                format: "H:i",
+                formatLabel: "<b>H</b>:i",
                 formatSubmit: "HH:i",
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
@@ -522,12 +524,13 @@
                 // Make AJAX request to fetch available time slots for the selected date
                 $.ajax({
                     type: "GET",
-                    url: "{{ route('getAvailableTimeSlots') }}",
+                    url: "{{ url('getAvailableTimeSlots') }}",
                     data: {
                         selected_date: formattedDate
                     },
                     success: function(response) {
                         if (response.success) {
+                            $(".pickatime-formatTime-display2").prop('disabled', false);
                             // Update the options of your time picker with the available time slots
                             var timePicker = $(".pickatime-formatTime-display2").pickatime().pickatime(
                                 'picker');
@@ -568,6 +571,8 @@
                             $("#payment_method").empty();
                             $("#payment_method").append(response.options);
                             $('.btn-submit').prop('disabled', false);
+                            $('.datepicker-autoclose').prop('disabled', false);
+                            $('.datepicker-autoclose2').prop('disabled', false);
                         } else {
                             console.log('Error:', response.message);
                             $('.btn-submit').prop('disabled', true);

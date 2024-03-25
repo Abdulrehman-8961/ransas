@@ -45,6 +45,7 @@ Route::get('/User/delete/{id}', [UserController::class, 'delete'])->middleware('
 Route::get('/Add-Event', [AddEventController::class, 'index'])->middleware('user')->middleware('user');
 Route::get('/getPaymentOptions', [AddEventController::class, 'getPaymentOptions'])->middleware('user');
 Route::get('/getAvailableDays', [AddEventController::class, 'getAvailableDays'])->middleware('user');
+Route::get('/getAvailableTimeSlots', [AddEventController::class, 'getAvailableTimeSlots'])->middleware('user');
 Route::post('/Event/save', [AddEventController::class, 'save'])->middleware('user')->middleware('user');
 Route::get('/check-availablity', [AddEventController::class, 'checkAvailability'])->middleware('user');
 

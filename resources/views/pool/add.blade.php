@@ -292,8 +292,8 @@
 @section('javascript')
     <script>
         $(".pickatime-formatTime-display").pickatime({
-            format: "h:i a",
-            formatLabel: "<b>h</b>:i <!i>a</!i>",
+            format: "H:i",
+            formatLabel: "<b>H</b>:i",
             formatSubmit: "H:i:s",
             hiddenPrefix: "prefix__",
             hiddenSuffix: "__suffix",

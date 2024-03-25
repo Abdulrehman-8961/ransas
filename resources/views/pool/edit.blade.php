@@ -112,14 +112,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="form-control pickatime-formatTime-display"
                                             id="mon_start_time" name="mon_start_time"
-                                            value="{{ $pool_data->mon_start_time ? date('h:i a', strtotime($pool_data->mon_start_time)) : '' }}" />
+                                            value="{{ $pool_data->mon_start_time ? date('H:i', strtotime($pool_data->mon_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="form-control pickatime-formatTime-display"
                                             id="mon_end_time" name="mon_end_time"
-                                            value="{{ $pool_data->mon_end_time ? date('h:i a', strtotime($pool_data->mon_end_time)) : '' }}" />
+                                            value="{{ $pool_data->mon_end_time ? date('H:i', strtotime($pool_data->mon_end_time)) : '' }}" />
 
 
                                     </div>
@@ -141,14 +141,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="form-control  pickatime-formatTime-display "
                                             id="tue_start_time" name="tue_start_time"
-                                            value="{{ $pool_data->tue_start_time ? date('h:i a', strtotime($pool_data->tue_start_time)) : '' }}" />
+                                            value="{{ $pool_data->tue_start_time ? date('H:i', strtotime($pool_data->tue_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="form-control r pickatime-formatTime-display"
                                             id="tue_end_time" name="tue_end_time"
-                                            value="{{ $pool_data->tue_end_time ? date('h:i a', strtotime($pool_data->tue_end_time)) : '' }}" />
+                                            value="{{ $pool_data->tue_end_time ? date('H:i', strtotime($pool_data->tue_end_time)) : '' }}" />
 
 
                                     </div>
@@ -168,14 +168,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="form-control  pickatime-formatTime-display "
                                             id="wed_start_time" name="wed_start_time"
-                                            value="{{ $pool_data->wed_start_time ? date('h:i a', strtotime($pool_data->wed_start_time)) : '' }}" />
+                                            value="{{ $pool_data->wed_start_time ? date('H:i', strtotime($pool_data->wed_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
                                             id="wed_end_time" name="wed_end_time"
-                                            value="{{ $pool_data->wed_end_time ? date('h:i a', strtotime($pool_data->wed_end_time)) : '' }}" />
+                                            value="{{ $pool_data->wed_end_time ? date('H:i', strtotime($pool_data->wed_end_time)) : '' }}" />
 
 
                                     </div>
@@ -193,15 +193,15 @@
                                     <div class="col-md-3 ">
                                         <label for="password">Start Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control   "
-                                            id="thur_start_time" name="thur_start_time"
-                                            value="{{ $pool_data->thur_start_time ? date('h:i a', strtotime($pool_data->thur_start_time)) : '' }}" />
+                                            id="thu_start_time" name="thu_start_time"
+                                            value="{{ $pool_data->thu_start_time ? date('H:i', strtotime($pool_data->thu_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
-                                            id="thur_end_time" name="thur_end_time"
-                                            value="{{ $pool_data->thur_end_time ? date('h:i a', strtotime($pool_data->thur_end_time)) : '' }}" />
+                                            id="thu_end_time" name="thu_end_time"
+                                            value="{{ $pool_data->thu_end_time ? date('H:i', strtotime($pool_data->thu_end_time)) : '' }}" />
 
 
                                     </div>
@@ -221,14 +221,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control   "
                                             id="fri_start_time" name="fri_start_time"
-                                            value="{{ $pool_data->fri_start_time ? date('h:i a', strtotime($pool_data->fri_start_time)) : '' }}" />
+                                            value="{{ $pool_data->fri_start_time ? date('H:i', strtotime($pool_data->fri_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
                                             id="fri_end_time" name="fri_end_time"
-                                            value="{{ $pool_data->fri_end_time ? date('h:i a', strtotime($pool_data->fri_end_time)) : '' }}" />
+                                            value="{{ $pool_data->fri_end_time ? date('H:i', strtotime($pool_data->fri_end_time)) : '' }}" />
 
 
                                     </div>
@@ -247,14 +247,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control   "
                                             id="sat_start_time" name="sat_start_time"
-                                            value="{{ $pool_data->sat_start_time ? date('h:i a', strtotime($pool_data->sat_start_time)) : '' }}" />
+                                            value="{{ $pool_data->sat_start_time ? date('H:i', strtotime($pool_data->sat_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
                                             id="sat_end_time" name="sat_end_time"
-                                            value="{{ $pool_data->sat_end_time ? date('h:i a', strtotime($pool_data->sat_end_time)) : '' }}" />
+                                            value="{{ $pool_data->sat_end_time ? date('H:i', strtotime($pool_data->sat_end_time)) : '' }}" />
 
 
                                     </div>
@@ -273,14 +273,14 @@
                                         <label for="password">Start Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control   "
                                             id="sun_start_time" name="sun_start_time"
-                                            value="{{ $pool_data->sun_start_time ? date('h:i a', strtotime($pool_data->sun_start_time)) : '' }}" />
+                                            value="{{ $pool_data->sun_start_time ? date('H:i', strtotime($pool_data->sun_start_time)) : '' }}" />
 
                                     </div>
                                     <div class="col-md-3 ">
                                         <label for="password">End Time</label>
                                         <input type="text" class="pickatime-formatTime-display form-control r"
                                             id="sun_end_time" name="sun_end_time"
-                                            value="{{ $pool_data->sun_end_time ? date('h:i a', strtotime($pool_data->sun_end_time)) : '' }}" />
+                                            value="{{ $pool_data->sun_end_time ? date('H:i', strtotime($pool_data->sun_end_time)) : '' }}" />
                                     </div>
                                 </div>
                                 <div class="col-lg-4">
@@ -297,16 +297,16 @@
 @section('javascript')
     <script>
         $(".pickatime-formatTime-display").pickatime({
-            format: "h:i a",
-            formatLabel: "<b>h</b>:i <!i>a</!i>",
+            format: "H:i",
+            formatLabel: "<b>H</b>:i",
             formatSubmit: "HH:i",
             hiddenPrefix: "prefix__",
             hiddenSuffix: "__suffix"
         });
 
         $(".pickatime-formatTime-display2").pickatime({
-            format: "h:i a",
-            formatLabel: "<b>h</b>:i <!i>a</!i>",
+            format: "H:i",
+            formatLabel: "<b>H</b>:i",
             formatSubmit: "HH:i",
             hiddenPrefix: "prefix__",
             hiddenSuffix: "__suffix"
