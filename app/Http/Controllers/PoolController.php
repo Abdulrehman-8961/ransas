@@ -121,17 +121,41 @@ class PoolController extends Controller
 
             $data = $request->input('payment_options');
             $payment_options = implode(', ', $data);
-            DB::table('pool')->where('id', $id)
-            ->update([
+
+            $insert_fields = [
                 "name" => $request->input('name'),
                 "email" => $request->input('email'),
                 "phone" => $request->input('phone'),
-                'start_time' => $start_time,
-                'end_time' => $end_time,
                 'payments' => $payment_options,
                 'messages' => $request->sms,
+                'availble_days' => ['monday' => $request->input('monday'),
+                'tuesday' => $request->input('tuesday'),
+                'wednesday' => $request->input('wednesday'),
+                'thursday' => $request->input('thursday'),
+                'friday' => $request->input('friday'),
+                'saturday' => $request->input('saturday'),
+                'sunday' => $request->input('sunday')],
+                'mon_start_time'=> $this->dateFormat($request->input('mon_start_time')),
+                'mon_end_time'=> $this->dateFormat($request->input('mon_end_time')),
+                'tue_start_time'=> $this->dateFormat($request->input('tue_start_time')),
+                'tue_end_time'=> $this->dateFormat($request->input('tue_end_time')),
+                'wed_start_time'=> $this->dateFormat($request->input('wed_start_time')),
+                'wed_end_time'=> $this->dateFormat($request->input('wed_end_time')),
+                'thur_start_time'=> $this->dateFormat($request->input('thur_start_time')),
+                'thur_end_time'=> $this->dateFormat($request->input('thur_end_time')),
+                'fri_start_time'=> $this->dateFormat($request->input('fri_start_time')),
+                'fri_end_time'=> $this->dateFormat($request->input('fri_end_time')),
+                'sat_start_time'=> $this->dateFormat($request->input('sat_start_time')),
+                'sun_start_time'=> $this->dateFormat($request->input('sun_start_time')),
+                'sun_end_time'=> $this->dateFormat($request->input('sun_end_time')),
+                'sat_end_time'=> $this->dateFormat($request->input('sat_end_time')),
                 "updated_at" => date("Y-m-d H:i:s")
-            ]);
+            ];
+            if (isset($insert_fields['availble_days'])) {
+                $insert_fields['availble_days'] = implode(', ', $insert_fields['availble_days']);
+            }
+            DB::table('pool')->where('id', $id)
+            ->update($insert_fields);
 
             return redirect()->back()->with('success', 'Pool Profile updated');
         }

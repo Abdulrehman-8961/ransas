@@ -546,6 +546,7 @@
                                 end: end.toISOString()
                             },
                             success: function(response) {
+                                var availableDays = response.availableDays;
                                 console.log(response);
                                 response.events.forEach(function(event) {
                                     var startDate = new Date(event.date_start +
@@ -557,8 +558,19 @@
                                     event.start = startDate;
                                     event.end = endDate;
                                 });
-                                successCallback(response.events);
+                                successCallback(response.events,);
                                 createTitleFilter(response.events);
+                                $('.fc-day').each(function() {
+                                    var date = $(this).attr('data-date');
+                                    var dayOfWeek = new Date(date).getDay(); // 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+
+                                    // Check if the day is not in the available days list
+                                    if (availableDays.indexOf(dayOfWeek) === -1) {
+                                        // Disable the day by adding a specific class or styling
+                                        $(this).addClass('disabled-day');
+                                        // Or you can add more styles here, e.g., $(this).css('opacity', 0.5);
+                                    }
+                                });
                             },
                             error: function(xhr, status, error) {
                                 failureCallback(error);

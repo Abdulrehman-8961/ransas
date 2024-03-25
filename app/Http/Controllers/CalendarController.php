@@ -42,20 +42,6 @@ class CalendarController extends Controller
         $pool_available_days = DB::table('pool')->where('id', $pool_select)->first();
         $available_days = explode(', ', $pool_available_days->availble_days);
 
-        // Construct business hours array
-        $businessHours = [];
-
-        foreach ($available_days as $day) {
-            $day_lower = strtolower(substr($day, 0, 3));
-            $start_time_column = $day_lower . '_start_time';
-            $end_time_column = $day_lower . '_end_time';
-
-            $businessHours[$day] = [
-                'startTime' => $pool_available_days->$start_time_column,
-                'endTime' => $pool_available_days->$end_time_column
-            ];
-        }
-
         $formattedEvents = [];
         foreach ($events as $event) {
             $pool = DB::table('pool')->where('id',$event->pool_id)->first();
@@ -108,7 +94,7 @@ class CalendarController extends Controller
             ];
         }
 
-        return response()->json(['events' => $formattedEvents, 'businessHours' => $businessHours]);
+        return response()->json(['events' => $formattedEvents, 'availableDays' => $available_days]);
     }
 
     public function updateEvents(Request $request, $id) {
