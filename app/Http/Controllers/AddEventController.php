@@ -84,9 +84,9 @@ class AddEventController extends Controller
                          $repeat_count = $request->input('repeat_count');
 
                          for($i = 1 ; $i <= $repeat_count ; $i++){
-                            $dayOfWeek = date('l', strtotime($newStartDate));
-                            $dayOfWeekend = date('l', strtotime($newEndDate));
-                            if(in_array($dayOfWeek,$availableDays) && in_array($dayOfWeekend,$availableDays)){
+                             $dayOfWeek = date('l', strtotime($newStartDate));
+                             $dayOfWeekend = date('l', strtotime($newEndDate));
+                             if(in_array($dayOfWeek,$availableDays) && in_array($dayOfWeekend,$availableDays)){
                              if ($repeat_cycle == "Monthly") {
                                  $newStartDate = date("Y-m-d", strtotime($newStartDate . " +30 days"));
                                  $newEndDate = date("Y-m-d", strtotime($newEndDate . " +30 days"));
@@ -98,7 +98,7 @@ class AddEventController extends Controller
                                  $newEndDate = date("Y-m-d", strtotime($newEndDate . " +1 days"));
                              }
                              $data[] = [
-                                 "pool_id" => Auth::user()->id,
+                                 "pool_id" => $request->input('pool_select'),
                                  "booking_type" => $request->input('type'),
                                  "customer_name" => $request->input('customer_name'),
                                  "start_date" => $newStartDate,
@@ -153,22 +153,22 @@ class AddEventController extends Controller
                          // EOT;
 
                          try {
-                             $response = Http::withHeaders([
-                                 'Content-Type' => 'application/json',
-                                 'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
-                             ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
-                                 "Data" => [
-                                     "Message" => $message,
-                                     "Recipients" => [
-                                         [
-                                             "Phone" => "0542165091"
-                                         ]
-                                     ],
-                                     "Settings" => [
-                                         "Sender" => "Ransas"
-                                     ]
-                                 ]
-                             ]);
+                            //  $response = Http::withHeaders([
+                            //      'Content-Type' => 'application/json',
+                            //      'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
+                            //  ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
+                            //      "Data" => [
+                            //          "Message" => $message,
+                            //          "Recipients" => [
+                            //              [
+                            //                  "Phone" => "0542165091"
+                            //              ]
+                            //          ],
+                            //          "Settings" => [
+                            //              "Sender" => "Ransas"
+                            //          ]
+                            //      ]
+                            //  ]);
                          } catch (\Throwable $th) {
                              //throw $th;
                          }
