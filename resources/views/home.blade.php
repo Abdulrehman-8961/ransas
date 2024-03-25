@@ -10,6 +10,7 @@
                         <div class="text-center">
                             <img src="{{ asset('public') }}/dist/images/svgs/icon-user-male.svg" width="50" height="50"
                                 class="mb-3" alt="" />
+                                {{-- Total revenue (month) --}}
                             <p class="fw-semibold fs-3 text-primary mb-1"> סך ההכנסות (החודש) </p>
                             <h5 class="fw-semibold text-primary mb-0">₪9600</h5>
                         </div>
@@ -22,6 +23,7 @@
                         <div class="text-center">
                             <img src="{{ asset('public') }}/dist/images/svgs/icon-briefcase.svg" width="50"
                                 height="50" class="mb-3" alt="" />
+                                {{-- birthdays --}}
                             <p class="fw-semibold fs-3 text-warning mb-1">ימי הולדת</p>
                             <h5 class="fw-semibold text-warning mb-0">300</h5>
                         </div>
@@ -34,6 +36,7 @@
                         <div class="text-center">
                             <img src="{{ asset('public') }}/dist/images/svgs/icon-mailbox.svg" width="50" height="50"
                                 class="mb-3" alt="" />
+                                {{-- Swimming courses --}}
                             <p class="fw-semibold fs-3 text-info mb-1">קורסי שחייה</p>
                             <h5 class="fw-semibold text-info mb-0">356</h5>
                         </div>
@@ -46,6 +49,7 @@
                         <div class="text-center">
                             <img src="{{ asset('public') }}/dist/images/svgs/icon-favorites.svg" width="50"
                                 height="50" class="mb-3" alt="" />
+                                {{-- Swimming hours available --}}
                             <p class="fw-semibold fs-3 text-danger mb-1">שעות שחייה זמינות</p>
                             <h5 class="fw-semibold text-danger mb-0">696</h5>
                         </div>
@@ -58,6 +62,7 @@
                         <div class="text-center">
                             <img src="{{ asset('public') }}/dist/images/svgs/icon-speech-bubble.svg" width="50"
                                 height="50" class="mb-3" alt="" />
+                                {{-- Swimming hours are busy --}}
                             <p class="fw-semibold fs-3 text-success mb-1">שעות שחייה תפוסות</p>
                             <h5 class="fw-semibold text-success mb-0">96</h5>
                         </div>
