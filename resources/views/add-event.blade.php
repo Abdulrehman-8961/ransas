@@ -364,11 +364,6 @@
         if (start_date) {
             var startDateParts = start_date.split('-');
             var formattedDateStart = `${startDateParts[1]}/${startDateParts[2]}/${startDateParts[0]}`;
-            jQuery(".datepicker-autoclose").datepicker({
-                autoclose: true,
-                todayHighlight: true,
-                startDate: new Date()
-            }).datepicker('setDate', formattedDateStart);
             $(".pickatime-formatTime-display").pickatime({
                 format: "h:i a",
                 formatLabel: "<b>h</b>:i <!i>a</!i>",
@@ -376,12 +371,43 @@
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
             }).pickatime('picker').set('select', '{{ date('h:i a', strtotime(@$event->start_time)) }}');
-        } else {
             jQuery(".datepicker-autoclose").datepicker({
                 autoclose: true,
                 todayHighlight: true,
                 startDate: new Date()
+            }).datepicker('setDate', formattedDateStart).on('changeDate', function(selected) {
+                var selectedDate = selected.date;
+
+                // Format selected date as YYYY-MM-DD
+                var formattedDate = selectedDate.getFullYear() + '-' +
+                    ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '-' +
+                    ('0' + selectedDate.getDate()).slice(-2);
+
+                // Make AJAX request to fetch available time slots for the selected date
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('getAvailableTimeSlots') }}",
+                    data: {
+                        selected_date: formattedDate
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the options of your time picker with the available time slots
+                            var timePicker = $(".pickatime-formatTime-display").pickatime().pickatime(
+                                'picker');
+                            timePicker.set('disable', false); // Enable the time picker
+                            timePicker.set('min', response.startTime); // Set the minimum time
+                            timePicker.set('max', response.endTime); // Set the maximum time
+                        } else {
+                            console.error('Failed to fetch available time slots:', response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Failed to fetch available time slots:', error);
+                    }
+                });
             });
+        } else {
             $(".pickatime-formatTime-display").pickatime({
                 format: "h:i a",
                 formatLabel: "<b>h</b>:i <!i>a</!i>",
@@ -389,16 +415,47 @@
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
             });
+            jQuery(".datepicker-autoclose").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            }).on('changeDate', function(selected) {
+                var selectedDate = selected.date;
+
+                // Format selected date as YYYY-MM-DD
+                var formattedDate = selectedDate.getFullYear() + '-' +
+                    ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '-' +
+                    ('0' + selectedDate.getDate()).slice(-2);
+
+                // Make AJAX request to fetch available time slots for the selected date
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('getAvailableTimeSlots') }}",
+                    data: {
+                        selected_date: formattedDate
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the options of your time picker with the available time slots
+                            var timePicker = $(".pickatime-formatTime-display").pickatime().pickatime(
+                                'picker');
+                            timePicker.set('disable', false); // Enable the time picker
+                            timePicker.set('min', response.startTime); // Set the minimum time
+                            timePicker.set('max', response.endTime); // Set the maximum time
+                        } else {
+                            console.error('Failed to fetch available time slots:', response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Failed to fetch available time slots:', error);
+                    }
+                });
+            });
         }
         var end_date = $('#hidden_end_date').val();
         if (end_date) {
             var endDateParts = end_date.split('-');
             var formattedDateEnd = `${endDateParts[1]}/${endDateParts[2]}/${endDateParts[0]}`;
-            jQuery(".datepicker-autoclose2").datepicker({
-                autoclose: true,
-                todayHighlight: true,
-                startDate: new Date()
-            }).datepicker('setDate', formattedDateEnd);
             $(".pickatime-formatTime-display2").pickatime({
                 format: "h:i a",
                 formatLabel: "<b>h</b>:i <!i>a</!i>",
@@ -406,12 +463,43 @@
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
             }).pickatime('picker').set('select', '{{ date('h:i a', strtotime(@$event->end_time)) }}');
-        } else {
             jQuery(".datepicker-autoclose2").datepicker({
                 autoclose: true,
                 todayHighlight: true,
                 startDate: new Date()
+            }).datepicker('setDate', formattedDateEnd).on('changeDate', function(selected) {
+                var selectedDate = selected.date;
+
+                // Format selected date as YYYY-MM-DD
+                var formattedDate = selectedDate.getFullYear() + '-' +
+                    ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '-' +
+                    ('0' + selectedDate.getDate()).slice(-2);
+
+                // Make AJAX request to fetch available time slots for the selected date
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('getAvailableTimeSlots') }}",
+                    data: {
+                        selected_date: formattedDate
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the options of your time picker with the available time slots
+                            var timePicker = $(".pickatime-formatTime-display2").pickatime().pickatime(
+                                'picker');
+                            timePicker.set('disable', false); // Enable the time picker
+                            timePicker.set('min', response.startTime); // Set the minimum time
+                            timePicker.set('max', response.endTime); // Set the maximum time
+                        } else {
+                            console.error('Failed to fetch available time slots:', response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Failed to fetch available time slots:', error);
+                    }
+                });
             });
+        } else {
             $(".pickatime-formatTime-display2").pickatime({
                 format: "h:i a",
                 formatLabel: "<b>h</b>:i <!i>a</!i>",
@@ -419,6 +507,43 @@
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
             });
+            jQuery(".datepicker-autoclose2").datepicker({
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            }).on('changeDate', function(selected) {
+                var selectedDate = selected.date;
+
+                // Format selected date as YYYY-MM-DD
+                var formattedDate = selectedDate.getFullYear() + '-' +
+                    ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '-' +
+                    ('0' + selectedDate.getDate()).slice(-2);
+
+                // Make AJAX request to fetch available time slots for the selected date
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('getAvailableTimeSlots') }}",
+                    data: {
+                        selected_date: formattedDate
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Update the options of your time picker with the available time slots
+                            var timePicker = $(".pickatime-formatTime-display2").pickatime().pickatime(
+                                'picker');
+                            timePicker.set('disable', false); // Enable the time picker
+                            timePicker.set('min', response.startTime); // Set the minimum time
+                            timePicker.set('max', response.endTime); // Set the maximum time
+                        } else {
+                            console.error('Failed to fetch available time slots:', response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Failed to fetch available time slots:', error);
+                    }
+                });
+            });
+
         }
         $(document).on('change', '.repeat', function() {
             if ($(this).prop('checked')) {
@@ -443,21 +568,37 @@
                             $("#payment_method").empty();
                             $("#payment_method").append(response.options);
                             $('.btn-submit').prop('disabled', false);
-                           // Convert the days to numbers
-                    // Restrict the selectable dates in the datepicker
-                    var days = response.days;
-                    jQuery(".datepicker-autoclose").datepicker('destroy').datepicker({
-                        autoclose: true,
-                        todayHighlight: true,
-                        startDate: new Date(),
-                        beforeShowDay: function(date){
-                            var day = date.getDay();
-                            return [$.inArray(day, days) >= 0];
-                        }
-                    });
                         } else {
                             console.log('Error:', response.message);
                             $('.btn-submit').prop('disabled', true);
+                        }
+                    }
+                });
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('/getAvailableDays') }}",
+                    data: {
+                        pool_id: poolID
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Clear previous options and add new available days to datepicker
+                            $(".datepicker-autoclose").datepicker('destroy');
+                            $(".datepicker-autoclose").datepicker({
+                                autoclose: true,
+                                todayHighlight: true,
+                                startDate: new Date(),
+                                daysOfWeekDisabled: response.disabledDays
+                            });
+                            $(".datepicker-autoclose2").datepicker('destroy');
+                            $(".datepicker-autoclose2").datepicker({
+                                autoclose: true,
+                                todayHighlight: true,
+                                startDate: new Date(),
+                                daysOfWeekDisabled: response.disabledDays
+                            });
+                        } else {
+                            console.log('Error:', response.message);
                         }
                     }
                 });
@@ -468,16 +609,19 @@
 
         $('#pool_select').change();
 
-        $("#otherSelect").on('change',function(){
+
+        $("#otherSelect").on('change', function() {
             var date = $(this).datepicker('getDate');
             var day = date.getDay(); // get the day of the week
 
             $.ajax({
                 type: "GET",
                 url: "{{ url('/checkDayAvailability') }}",
-                data: {day: day},
+                data: {
+                    day: day
+                },
                 success: function(response) {
-                    if(response.available) {
+                    if (response.available) {
                         console.log('Day is available');
                     } else {
                         console.log('Day is not available');

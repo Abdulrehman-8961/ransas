@@ -216,30 +216,35 @@ class AddEventController extends Controller
                     $html .= '<option value="' . $option . '">' . $option . '</option>';
                 }
 
-                // Create a mapping of days to numbers
-                $dayNumberMapping = [
-                    'Sunday' => 0,
-                    'Monday' => 1,
-                    'Tuesday' => 2,
-                    'Wednesday' => 3,
-                    'Thursday' => 4,
-                    'Friday' => 5,
-                    'Saturday' => 6
-                ];
-
-                // Fetch the available days and convert them to numbers
-                $days = explode(', ', $pool->availble_days);
-                $days = array_filter($days); // Remove empty strings
-                $days = array_map(function($day) use ($dayNumberMapping) {
-                    return $dayNumberMapping[$day];
-                }, $days);
-
-                return response()->json(['success' => true, 'options' => $html, 'days' => $days]);
+                return response()->json(['success' => true, 'options' => $html]);
             } else {
                 return response()->json(['success' => false, 'message' => 'Pool not found']);
             }
         }
 
+        public function getAvailableDays(Request $request) {
+            $poolID = $request->input('pool_id');
+            $pool = DB::table('pool')->where('id', $poolID)->first();
+
+            if ($pool) {
+                $availableDays = explode(', ', $pool->availble_days);
+                $availableDays = array_filter($availableDays);
+                $allDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+                // Find the days to be disabled
+                $disabledDays = array_diff($allDays, $availableDays);
+
+                // Convert textual days to numeric days (0-6)
+                $disabledDaysNumeric = [];
+                foreach ($disabledDays as $day) {
+                    $disabledDaysNumeric[] = date('w', strtotime($day));
+                }
+
+                return response()->json(['success' => true, 'disabledDays' => $disabledDaysNumeric]);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Pool not found']);
+            }
+        }
 
 
 }
