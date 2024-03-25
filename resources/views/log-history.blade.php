@@ -56,8 +56,8 @@
                 </div>
             </div>
             <!-- ---------------------
-                                    end Contact
-                                ---------------- -->
+                                        end Contact
+                                    ---------------- -->
             <!-- Modal -->
             <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog"
                 aria-labelledby="addContactModalTitle" aria-hidden="true">
@@ -136,22 +136,20 @@
                         </thead>
                         <tbody>
                             @php
-                            if (Auth::user()->role == "Admin") {
                                 $history = DB::table('log_history')->get();
-                            } else {
-                                $history = DB::table('log_history')->where('user_id', Auth::user()->id)->get();
-                            }
                             @endphp
                             <!-- start row -->
                             @foreach ($history as $row)
-                            @php
-                                $user = DB::table('users')->where('id',$row->user_id)->first();
-                            @endphp
+                                @php
+                                    $user = DB::table('users')
+                                        ->where('id', $row->user_id)
+                                        ->first();
+                                @endphp
                                 <tr>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $row->page }}</td>
-                                    <td>{{ $row->description }}</td>
-                                    <td>{{ date('Y-m-d',strtotime($row->created_at)) }}</td>
+                                    <td>{{ @$user->name }}</td>
+                                    <td>{{ @$row->page }}</td>
+                                    <td>{{ @$row->description }}</td>
+                                    <td>{{ date('Y-m-d', strtotime(@$row->created_at)) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

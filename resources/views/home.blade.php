@@ -95,11 +95,15 @@
                 ->sum('total_payment');
             // dd($birthdays,$Swimming_courses,$revenue);
         }
-        $user = DB::table('users')
-            ->where('id', Auth::user()->id)
-            ->first();
-        $poolIDs = explode(', ', $user->pool_id);
-        $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
+        if (Auth::user()->role == 'Admin') {
+            $pool_option = DB::table('pool')->where('is_deleted', 0)->get();
+        } else {
+            $user = DB::table('users')
+                ->where('id', Auth::user()->id)
+                ->first();
+            $poolIDs = explode(', ', $user->pool_id);
+            $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
+        }
     @endphp
     <div class="container-fluid">
         <form action="{{ URL::current() }}" id="myForm">
@@ -192,7 +196,7 @@
             </div>
 
         </div>
-        @if (Auth::user()->role != 'Admin')
+        @if (Auth::user()->role == 'Staff')
             <div class="card">
                 <div>
                     <div class="row gx-0">
@@ -465,8 +469,8 @@
                     var update_id = event.extendedProps.id,
                         date = dateFormat(event.extendedProps.date_start),
                         end_date = dateFormat(event.extendedProps.date_end),
-                        start_time = timeFormat(event.extendedProps.start_time),
-                        end_time = timeFormat(event.extendedProps.end_time),
+                        start_time = event.extendedProps.start_time,
+                        end_time = event.extendedProps.end_time,
                         customer_name = event.extendedProps.customer_name,
                         customer_email = event.extendedProps.customer_email,
                         customer_phone = event.extendedProps.customer_phone,

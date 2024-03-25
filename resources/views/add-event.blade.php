@@ -42,6 +42,7 @@
             <div class="card-body">
                 <h5 class="mb-4">Add Event</h5>
                 <form class="form" action="{{ url('Event/save') }}" method="POST">
+                    @csrf
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">Select Pool</label>
                         <div class="col-md-10">
@@ -61,7 +62,6 @@
                             @enderror
                         </div>
                     </div>
-                    @csrf
                     <input type="hidden" id="parent_id" name="parent_id" value="0">
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">Type</label>

@@ -48,7 +48,7 @@
                         </a>
                     </li>
                 @endif
-                @if (Auth::user()->role == 'Admin' || Auth::user()->role == 'Staff')
+                @if (Auth::user()->role == 'Admin')
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="{{ url('/Log-History') }}" aria-expanded="false">
                             <span>

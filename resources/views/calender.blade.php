@@ -445,7 +445,7 @@
                 }
             };
             var calendarHeaderToolbar = {
-                left: "prev next ExportCsv",
+                left: "prev next AddEvent ExportCsv",
                 center: "title",
                 right: "dayGridMonth,timeGridWeek,timeGridDay",
             };
@@ -651,6 +651,12 @@
                                 exportCalendarEventsToCsv(calendar);
                             },
                         },
+                        AddEvent: {
+                            text: "Add Event",
+                            click: function() {
+                                window.location = '{{ url('/Add-Event') }}';
+                            },
+                        },
                     },
                     eventClassNames: function({
                         event: calendarEvent
@@ -815,8 +821,8 @@
                     var update_id = event.extendedProps.id,
                         date = dateFormat(event.extendedProps.date_start),
                         end_date = dateFormat(event.extendedProps.date_end),
-                        start_time = timeFormat(event.extendedProps.start_time),
-                        end_time = timeFormat(event.extendedProps.end_time),
+                        start_time = event.extendedProps.start_time,
+                        end_time = event.extendedProps.end_time,
                         customer_name = event.extendedProps.customer_name,
                         customer_email = event.extendedProps.customer_email,
                         customer_phone = event.extendedProps.customer_phone,
