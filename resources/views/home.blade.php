@@ -74,17 +74,21 @@
                 $poolIDs = explode(', ', $user->pool_id);
                 $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
             @endphp
-            <div class="row container mb-5">
-                <div class="col-md-4 col-12">
-                    <label for="">Select Pool</label>
-                    <select class="form-control" name="pool_select" id="pool_select">
-                        @foreach ($pool_option as $row)
-                            <option value="{{ $row->id }}">
-                                {{ $row->name }}</option>
-                        @endforeach
-                    </select>
+            <form id="myForm" action="{{ URL::current() }}" method="get">
+                <div class="row container mb-5">
+                    <div class="col-md-4 col-12">
+                        <label for="">Select Pool</label>
+                        <select class="form-control" name="pool_select" id="pool_select">
+                            <option value="">Select Pool</option>
+                            @foreach ($pool_option as $row)
+                                <option value="{{ $row->id }}"
+                                    {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
+                                    {{ $row->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
+            </form>
             <div class="card">
                 <div>
                     <div class="row gx-0">
@@ -193,6 +197,13 @@
 @section('javascript')
     <script src="{{ asset('public') }}/dist/libs/fullcalendar/index.global.min.js"></script>
     <script type="text/javascript">
+        var selectElement = document.getElementById('pool_select');
+
+        // Add change event listener
+        selectElement.addEventListener('change', function() {
+            // Submit the form when the select field changes
+            document.getElementById('myForm').submit();
+        });
         /*========Calender Js=========*/
         /*==========================*/
 
@@ -378,7 +389,7 @@
             // Active Calender
             /*=====================*/
             function initializeCalendar() {
-                var calendar = new FullCalendar.Calendar(calendarEl, {
+                var calendarOptions = {
                     selectable: true,
                     height: checkWidowWidth() ? 900 : 1052,
                     initialView: "timeGridDay",
@@ -508,16 +519,21 @@
                             }
                         });
                     },
-                    // windowResize: function(arg) {
-                    //     if (checkWidowWidth()) {
-                    //         calendar.changeView("listWeek");
-                    //         calendar.setOption("height", 900);
-                    //     } else {
-                    //         calendar.changeView("dayGridMonth");
-                    //         calendar.setOption("height", 1052);
-                    //     }
-                    // },
-                });
+                }
+                @if (isset($_GET['pool_select']))
+                    calendarOptions.businessHours = [
+                        @foreach ($startTimes as $day => $startTime)
+                            {
+                                daysOfWeek: [
+                                    {{ strtolower(substr($day, 0, 3)) == 'thur' ? 4 : array_search($day, ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']) }}
+                                ],
+                                startTime: '{{ $startTime }}',
+                                endTime: '{{ $endTimes[$day] }}'
+                            },
+                        @endforeach
+                    ];
+                @endif
+                var calendar = new FullCalendar.Calendar(calendarEl, calendarOptions);
                 calendar.render();
             }
             $('#pool_select').change(function() {

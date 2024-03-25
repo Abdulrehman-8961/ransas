@@ -25,9 +25,31 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('home');
+        $pool_data = DB::table('pool')->where('id',@$request['pool_select'])->first();
+        $start_times = [];
+        $end_times = [];
+        if ($pool_data) {
+            // Split available days into an array
+            $available_days = explode(', ', $pool_data->availble_days);
+            $available_days = array_filter($available_days);
+
+            // Extract start time and end time for each available day
+            foreach ($available_days as $day) {
+                // Construct column names for start time and end time
+                $start_column = strtolower(substr($day, 0, 3)) . '_start_time';
+                $end_column = strtolower(substr($day, 0, 3)) . '_end_time';
+
+                // For other days, use regular column names
+                $start_times[$day] = $pool_data->$start_column;
+                $end_times[$day] = $pool_data->$end_column;
+            }
+        }
+        return view('home', [
+            'startTimes' => $start_times,
+            'endTimes' => $end_times,
+        ]);
 
     }
 
