@@ -1,18 +1,137 @@
 @extends('layouts.dashboard')
 
 @section('content')
+    @php
+        if (isset($_GET['daterange'])) {
+            $dateParts = explode(' - ', $_GET['daterange']);
+            $startDate = date('Y-m-d', strtotime($dateParts[0]));
+            $endDate = date('Y-m-d', strtotime($dateParts[1]));
+        } else {
+            $currentDate = \Carbon\Carbon::now();
+            $startDate = $currentDate->startOfWeek()->format('Y-m-d');
+            $endDate = $currentDate->endOfWeek()->format('Y-m-d');
+        }
+        if (isset($_GET['pool_select'])) {
+            $pool = DB::table('pool')
+                ->where('id', $_GET['pool_select'])
+                ->first();
+
+            $totalAvailableHours = [];
+
+            // Loop through each available day
+            $availableDays = explode(', ', $pool->availble_days);
+            $availableDays = array_filter($availableDays);
+            // dd($availableDays);
+            foreach ($availableDays as $day) {
+                // Calculate the total available hours for this day
+                $startColumnName = strtolower(substr($day, 0, 3)) . '_start_time';
+                $endColumnName = strtolower(substr($day, 0, 3)) . '_end_time';
+
+                $startTime = strtotime($pool->{$startColumnName});
+                $endTime = strtotime($pool->{$endColumnName});
+
+                $totalAvailableHours[$day] = ($endTime - $startTime) / 3600; // Convert seconds to hours
+            }
+            // Fetch booked hours from the event table for the specific date range and pool
+            $bookedHours = DB::table('events')
+                ->where('pool_id', $_GET['pool_select'])
+                ->whereBetween('start_date', [$startDate, $endDate])
+                ->get();
+
+            // dd($_GET['pool_select'],$startDate,$endDate);
+
+            // Calculate the total booked hours for the date range
+            $totalBookedHours = 0;
+            foreach ($bookedHours as $booking) {
+                // Calculate the duration in hours for each booking
+                $startTime = strtotime($booking->start_time);
+                $endTime = strtotime($booking->end_time);
+                $bookingDurationHours = ($endTime - $startTime) / 3600; // Convert seconds to hours
+
+                // Add the booking duration to the total booked hours
+                $totalBookedHours += $bookingDurationHours;
+            }
+
+            // Calculate the total remaining free hours for the pool
+            $totalFreeHours = [];
+            foreach ($availableDays as $day) {
+                $totalFreeHours[$day] = max(0, $totalAvailableHours[$day] - $totalBookedHours);
+            }
+
+            // Total available hours and booked hours for the entire date range
+            $totalAvailableHoursAllDays = array_sum($totalAvailableHours);
+            $totalBookedHoursAllDays = $totalBookedHours;
+            $totalFreeHoursAllDays = max(0, $totalAvailableHoursAllDays - $totalBookedHoursAllDays);
+
+            // dd($totalFreeHoursAllDays);
+            $swimming_hours = DB::table('events')
+                ->where('pool_id', $_GET['pool_select'])
+                ->whereBetween('start_date', [$startDate, $endDate])
+                ->where('booking_type', 'Swimming Course')
+                ->get();
+            $totalMinutes = 0;
+            foreach ($swimming_hours as $row) {
+                $startTime = strtotime($row->start_time);
+                $endTime = strtotime($row->end_time);
+
+                $courseDurationMinutes = ($endTime - $startTime) / 60;
+
+                $totalMinutes += $courseDurationMinutes;
+            }
+            $totalHours = floor(@$totalMinutes / 60);
+            $birthdays = DB::Table('events')
+                ->where('pool_id', $_GET['pool_select'])
+                ->whereBetween('start_date', [$startDate, $endDate])
+                ->where('booking_type', 'Birthday')
+                ->count();
+            $Swimming_courses = DB::Table('events')
+                ->where('pool_id', $_GET['pool_select'])
+                ->whereBetween('start_date', [$startDate, $endDate])
+                ->where('booking_type', 'Swimming Course')
+                ->count();
+            $revenue = DB::Table('events')
+                ->where('pool_id', $_GET['pool_select'])
+                ->whereBetween('start_date', [$startDate, $endDate])
+                ->sum('total_payment');
+            // dd($birthdays,$Swimming_courses,$revenue);
+        }
+        $user = DB::table('users')
+            ->where('id', Auth::user()->id)
+            ->first();
+        $poolIDs = explode(', ', $user->pool_id);
+        $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
+    @endphp
     <div class="container-fluid">
+        <form action="{{ URL::current() }}" id="myForm">
+            <div class="row mb-5">
+                <div class="col-lg-3 col-12">
+                    <input type="text" class="form-control daterange" name="daterange" value="{{ @$_GET['daterange'] }}" />
+                </div>
+                <div class="col-md-3 col-12">
+                    <select class="form-control" name="pool_select" id="pool_select">
+                        <option value="">Select Pool</option>
+                        @foreach ($pool_option as $row)
+                            <option value="{{ $row->id }}" {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
+                                {{ $row->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
+        </form>
         <!--  Owl carousel -->
         <div class="owl-carousel  counter-carousel owl-theme">
             <div class="item">
                 <div class="card border-0 zoom-in bg-light-primary shadow-none">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="{{ asset('public') }}/dist/images/svgs/icon-user-male.svg" width="50" height="50"
-                                class="mb-3" alt="" />
-                                {{-- Total revenue (month) --}}
+                            <img src="{{ asset('public') }}/dist/images/svgs/icon-user-male.svg" width="50"
+                                height="50" class="mb-3" alt="" />
+                            {{-- Total revenue (month) --}}
                             <p class="fw-semibold fs-3 text-primary mb-1"> סך ההכנסות (החודש) </p>
-                            <h5 class="fw-semibold text-primary mb-0">₪9600</h5>
+                            <h5 class="fw-semibold text-primary mb-0">{{ isset($revenue) ? '₪' . $revenue : '0.00' }}</h5>
                         </div>
                     </div>
                 </div>
@@ -23,9 +142,9 @@
                         <div class="text-center">
                             <img src="{{ asset('public') }}/dist/images/svgs/icon-briefcase.svg" width="50"
                                 height="50" class="mb-3" alt="" />
-                                {{-- birthdays --}}
+                            {{-- birthdays --}}
                             <p class="fw-semibold fs-3 text-warning mb-1">ימי הולדת</p>
-                            <h5 class="fw-semibold text-warning mb-0">300</h5>
+                            <h5 class="fw-semibold text-warning mb-0">{{ isset($birthdays) ? $birthdays : '0' }}</h5>
                         </div>
                     </div>
                 </div>
@@ -36,9 +155,10 @@
                         <div class="text-center">
                             <img src="{{ asset('public') }}/dist/images/svgs/icon-mailbox.svg" width="50" height="50"
                                 class="mb-3" alt="" />
-                                {{-- Swimming courses --}}
+                            {{-- Swimming courses --}}
                             <p class="fw-semibold fs-3 text-info mb-1">קורסי שחייה</p>
-                            <h5 class="fw-semibold text-info mb-0">356</h5>
+                            <h5 class="fw-semibold text-info mb-0">{{ isset($Swimming_courses) ? $Swimming_courses : '0' }}
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -49,9 +169,10 @@
                         <div class="text-center">
                             <img src="{{ asset('public') }}/dist/images/svgs/icon-favorites.svg" width="50"
                                 height="50" class="mb-3" alt="" />
-                                {{-- Swimming hours available --}}
+                            {{-- Swimming hours available --}}
                             <p class="fw-semibold fs-3 text-danger mb-1">שעות שחייה זמינות</p>
-                            <h5 class="fw-semibold text-danger mb-0">696</h5>
+                            <h5 class="fw-semibold text-danger mb-0">
+                                {{ isset($totalFreeHoursAllDays) ? $totalFreeHoursAllDays : '0' }}</h5>
                         </div>
                     </div>
                 </div>
@@ -62,9 +183,9 @@
                         <div class="text-center">
                             <img src="{{ asset('public') }}/dist/images/svgs/icon-speech-bubble.svg" width="50"
                                 height="50" class="mb-3" alt="" />
-                                {{-- Swimming hours are busy --}}
+                            {{-- Swimming hours are busy --}}
                             <p class="fw-semibold fs-3 text-success mb-1">שעות שחייה תפוסות</p>
-                            <h5 class="fw-semibold text-success mb-0">96</h5>
+                            <h5 class="fw-semibold text-success mb-0">{{ isset($totalHours) ? $totalHours : '0' }}</h5>
                         </div>
                     </div>
                 </div>
@@ -72,28 +193,6 @@
 
         </div>
         @if (Auth::user()->role != 'Admin')
-            @php
-                $user = DB::table('users')
-                    ->where('id', Auth::user()->id)
-                    ->first();
-                $poolIDs = explode(', ', $user->pool_id);
-                $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
-            @endphp
-            <form id="myForm" action="{{ URL::current() }}" method="get">
-                <div class="row container mb-5">
-                    <div class="col-md-4 col-12">
-                        <label for="">Select Pool</label>
-                        <select class="form-control" name="pool_select" id="pool_select">
-                            <option value="">Select Pool</option>
-                            @foreach ($pool_option as $row)
-                                <option value="{{ $row->id }}"
-                                    {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
-                                    {{ $row->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </form>
             <div class="card">
                 <div>
                     <div class="row gx-0">
@@ -202,12 +301,11 @@
 @section('javascript')
     <script src="{{ asset('public') }}/dist/libs/fullcalendar/index.global.min.js"></script>
     <script type="text/javascript">
-        var selectElement = document.getElementById('pool_select');
-
-        // Add change event listener
-        selectElement.addEventListener('change', function() {
-            // Submit the form when the select field changes
-            document.getElementById('myForm').submit();
+        var startDate = moment().startOf('week');
+        var endDate = moment().endOf('week');
+        $(".daterange").daterangepicker({
+            startDate: startDate,
+            endDate: endDate
         });
         /*========Calender Js=========*/
         /*==========================*/
