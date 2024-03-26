@@ -21,6 +21,7 @@ class PoolController extends Controller
     {
         $search = @$request->get('search');
         $users = DB::table('pool')
+        ->where('is_deleted',0)
         ->where(function ($query) use ($search) {
             if(!empty($search)) {
                 $query->where('name', 'LIKE', '%'.$search.'%')
@@ -174,9 +175,7 @@ class PoolController extends Controller
     }
     public function delete($id)
     {
-        DB::table('pool')->where('id', $id)->update([
-            'is_deleted' => 1
-        ]);
+        DB::table('pool')->where('id', $id)->delete();
         return redirect()->back()->with('success', 'Pool deleted');
     }
 

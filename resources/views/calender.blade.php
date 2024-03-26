@@ -49,7 +49,6 @@
                 <div class="col-md-4 col-12">
                     <label for="">Select Pool</label>
                     <select class="form-control" name="pool_select" id="pool_select_main">
-                        <option value="">Select Pool</option>
                         @foreach ($pool_option as $row)
                             <option value="{{ $row->id }}" {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
                                 {{ $row->name }}</option>
@@ -306,6 +305,9 @@
             // Submit the form when the select field changes
             document.getElementById('myForm').submit();
         });
+        @if(!isset($_GET['pool_select']))
+        document.getElementById('myForm').submit();
+        @endif
         jQuery(".mydatepicker, #datepicker, .input-group.date").datepicker();
         jQuery(".datepicker-autoclose").datepicker({
             autoclose: true,

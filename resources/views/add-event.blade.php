@@ -48,7 +48,6 @@
                         <div class="col-md-10">
                             <select class="form-control @error('pool_select') is-invalid @enderror" name="pool_select"
                                 id="pool_select">
-                                <option value="">Select Pool</option>
                                 @foreach ($pool_option as $row)
                                     <option value="{{ $row->id }}"
                                         {{ @$event->booking_type || old('pool_select') == $row->id ? 'selected' : '' }}>

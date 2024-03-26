@@ -113,7 +113,6 @@
                 </div>
                 <div class="col-md-3 col-12">
                     <select class="form-control" name="pool_select" id="pool_select">
-                        <option value="">Select Pool</option>
                         @foreach ($pool_option as $row)
                             <option value="{{ $row->id }}" {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
                                 {{ $row->name }}</option>
@@ -311,6 +310,9 @@
             startDate: startDate,
             endDate: endDate
         });
+    @if (!isset($_GET['pool_select']))
+            $('#myForm').submit();
+        @endif
         /*========Calender Js=========*/
         /*==========================*/
 
