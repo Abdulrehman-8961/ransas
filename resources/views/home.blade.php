@@ -434,7 +434,6 @@
                     $('.total').text(total_payment);
                     $('.payment_type').text(payment_method);
                     $('.status').text(payment_status);
-                    console.log(payment_status, payment_method)
                     if (payment_method == "Card" && (payment_status == "Not Paid" || payment_status ==
                             "On Hold")) {
                         $('.btn-pay').removeClass('d-none');
@@ -519,7 +518,6 @@
                                 end: end.toISOString()
                             },
                             success: function(response) {
-                                // console.log(response);
                                 response.events.forEach(function(event) {
                                     var startDate = new Date(event.date_start +
                                         ' ' +
@@ -529,6 +527,9 @@
                                         .end_time);
                                     event.start = startDate;
                                     event.end = endDate;
+                                    var customerName = event.customer_name;
+                                    var originalTitle = event.title;
+                                    event.title = originalTitle + '\n(' + customerName + ')';
                                 });
                                 successCallback(response.events);
                                 createTitleFilter(response.events);
@@ -584,7 +585,6 @@
                         var newEnd = getTime(event.end);
                         var bokkingId = event.extendedProps.bookid;
 
-                        console.log(bokkingId, newStart, newEnd);
                         $.ajax({
                             url: 'update-event-time',
                             type: 'POST',
@@ -598,7 +598,6 @@
                             },
                             success: function(response) {
                                 if (response.success) {
-                                    console.log('Event time updated successfully');
                                     Swal.fire({
                                         title: 'Success!',
                                         text: 'Event time updated successfully',
@@ -628,14 +627,18 @@
                             }
                         });
                     },
+                    eventTimeFormat: {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: false
+                    },
                     slotLabelFormat: {
                         hour: '2-digit',
                         minute: '2-digit',
                         hour12: false
-                    }
+                    },
                 };
                 @if (isset($_GET['pool_select']))
-                console.log('{{ $startTime }}');
                     calendarOptions.businessHours = [
                         @foreach ($startTimes as $day => $startTime)
                             {
@@ -649,6 +652,31 @@
                     ];
                 @endif
                 var calendar = new FullCalendar.Calendar(calendarEl, calendarOptions);
+                var titleFilterInitialized = false;
+
+                function createTitleFilter(events) {
+                    if (!titleFilterInitialized) {
+                        var uniqueTitles = [...new Set(events.map(event => event.title))];
+                        var selectFilter = $(
+                            '<select class="form-control" style="max-width:200px; margin-right: 10px;" id="title-filter"><option value="">All Titles</option><option value="Birthday">Birthday</option><option value="Private event">Private event</option><option value="Swimming Course">Swimming Course</option></select>'
+                        );
+                        selectFilter.on('change', function() {
+                            var selectedTitle = $(this).val();
+                            calendar.getEvents().forEach(function(event) {
+                                var explodedTitle = event.title.split('(')[0].trim();
+                                console.log(explodedTitle);
+                                if (selectedTitle === "" || explodedTitle === selectedTitle) {
+                                    event.setProp('display', 'block');
+                                } else {
+                                    event.setProp('display', 'background');
+                                }
+                            });
+                        });
+                        var thirdDiv = $('.fc-toolbar > div:nth-child(3)');
+                        thirdDiv.addClass('d-flex').prepend(selectFilter);
+                        titleFilterInitialized = true;
+                    }
+                }
                 calendar.render();
             }
             $('#pool_select').change(function() {
@@ -656,29 +684,7 @@
             });
             $('#pool_select').change();
 
-            var titleFilterInitialized = false;
 
-            function createTitleFilter(events) {
-                if (!titleFilterInitialized) {
-                    var uniqueTitles = [...new Set(events.map(event => event.title))];
-                    var selectFilter = $(
-                        '<select class="form-control" style="max-width:200px; margin-right: 10px;" id="title-filter"><option value="">All Titles</option><option value="Birthday">Birthday</option><option value="Private event">Private event</option><option value="Swimming Course">Swimming Course</option></select>'
-                    );
-                    selectFilter.on('change', function() {
-                        var selectedTitle = $(this).val();
-                        calendar.getEvents().forEach(function(event) {
-                            if (selectedTitle === "" || event.title === selectedTitle) {
-                                event.setProp('display', 'block');
-                            } else {
-                                event.setProp('display', 'background');
-                            }
-                        });
-                    });
-                    var thirdDiv = $('.fc-toolbar > div:nth-child(3)');
-                    thirdDiv.addClass('d-flex').prepend(selectFilter);
-                    titleFilterInitialized = true;
-                }
-            }
 
             /*=====================*/
             // Update Calender Event

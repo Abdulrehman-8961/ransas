@@ -375,6 +375,7 @@
                 todayHighlight: true,
                 startDate: new Date()
             }).datepicker('setDate', formattedDateStart).on('changeDate', function(selected) {
+                var selected_pool = $("#pool_select option:selected").val();
                 var selectedDate = selected.date;
 
                 // Format selected date as YYYY-MM-DD
@@ -387,6 +388,7 @@
                     type: "GET",
                     url: "{{ url('getAvailableTimeSlots') }}",
                     data: {
+                        pool_id: selected_pool,
                         selected_date: formattedDate
                     },
                     success: function(response) {
@@ -420,6 +422,7 @@
                 todayHighlight: true,
                 startDate: new Date()
             }).on('changeDate', function(selected) {
+                var selected_pool = $("#pool_select option:selected").val();
                 var selectedDate = selected.date;
 
                 // Format selected date as YYYY-MM-DD
@@ -432,6 +435,7 @@
                     type: "GET",
                     url: "{{ url('getAvailableTimeSlots') }}",
                     data: {
+                        pool_id: selected_pool,
                         selected_date: formattedDate
                     },
                     success: function(response) {
@@ -469,6 +473,7 @@
                 todayHighlight: true,
                 startDate: new Date()
             }).datepicker('setDate', formattedDateEnd).on('changeDate', function(selected) {
+                var selected_pool = $("#pool_select option:selected").val();
                 var selectedDate = selected.date;
 
                 // Format selected date as YYYY-MM-DD
@@ -481,6 +486,7 @@
                     type: "GET",
                     url: "{{ url('getAvailableTimeSlots') }}",
                     data: {
+                        pool_id: selected_pool,
                         selected_date: formattedDate
                     },
                     success: function(response) {
@@ -513,6 +519,7 @@
                 todayHighlight: true,
                 startDate: new Date()
             }).on('changeDate', function(selected) {
+                var selected_pool = $("#pool_select option:selected").val();
                 var selectedDate = selected.date;
 
                 // Format selected date as YYYY-MM-DD
@@ -525,6 +532,7 @@
                     type: "GET",
                     url: "{{ url('getAvailableTimeSlots') }}",
                     data: {
+                        pool_id: selected_pool,
                         selected_date: formattedDate
                     },
                     success: function(response) {
@@ -656,7 +664,6 @@
                         endDate: end_date,
                     },
                     success: function(response) {
-                        // console.log(response);
                         if (response.available == true) {
                             // Time slot is available
                             console.log('Time slot is available');
