@@ -113,6 +113,28 @@
                             </div>
                             <h4 class="mb-3">Available Days & Time</h4>
                             <div class="row mb-3">
+                                <div class="col-md-3 mb-3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="sunday" name="sunday"
+                                            value="Sunday">
+                                        <label class="form-check-label" for="success-check">Sunday</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 ">
+                                    <label for="password">Start Time</label>
+                                    <input type="text" class="pickatime-formatTime-display form-control   "
+                                        id="sun_start_time" name="sun_start_time" />
+
+                                </div>
+                                <div class="col-md-3 ">
+                                    <label for="password">End Time</label>
+                                    <input type="text" class="pickatime-formatTime-display form-control r"
+                                        id="sun_end_time" name="sun_end_time" />
+
+
+                                </div>
+                            </div>
+                            <div class="row mb-3">
                                 <div class="col-md-3 ">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="monday" name="monday"
@@ -251,28 +273,6 @@
 
                                 </div>
 
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-3 mb-3">
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="sunday" name="sunday"
-                                            value="Sunday">
-                                        <label class="form-check-label" for="success-check">Sunday</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 ">
-                                    <label for="password">Start Time</label>
-                                    <input type="text" class="pickatime-formatTime-display form-control   "
-                                        id="sun_start_time" name="sun_start_time" />
-
-                                </div>
-                                <div class="col-md-3 ">
-                                    <label for="password">End Time</label>
-                                    <input type="text" class="pickatime-formatTime-display form-control r"
-                                        id="sun_end_time" name="sun_end_time" />
-
-
-                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-lg-4 mt-3">
