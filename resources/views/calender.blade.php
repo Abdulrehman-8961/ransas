@@ -305,8 +305,8 @@
             // Submit the form when the select field changes
             document.getElementById('myForm').submit();
         });
-        @if(!isset($_GET['pool_select']))
-        document.getElementById('myForm').submit();
+        @if (!isset($_GET['pool_select']))
+            document.getElementById('myForm').submit();
         @endif
         jQuery(".mydatepicker, #datepicker, .input-group.date").datepicker();
         jQuery(".datepicker-autoclose").datepicker({
@@ -743,6 +743,11 @@
                             }
                         });
                     },
+                    slotLabelFormat: {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    }
                 }
                 @if (isset($_GET['pool_select']))
                     calendarOptions.businessHours = [

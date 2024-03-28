@@ -95,6 +95,10 @@
         .select2-container {
             width: 100%
         }
+
+        .fc .fc-timegrid-col.fc-day-today{
+            background-color: inherit !important;
+        }
     </style>
 
 

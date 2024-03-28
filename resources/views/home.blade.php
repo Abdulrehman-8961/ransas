@@ -310,7 +310,7 @@
             startDate: startDate,
             endDate: endDate
         });
-    @if (!isset($_GET['pool_select']))
+        @if (!isset($_GET['pool_select']))
             $('#myForm').submit();
         @endif
         /*========Calender Js=========*/
@@ -628,8 +628,14 @@
                             }
                         });
                     },
-                }
+                    slotLabelFormat: {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false
+                    }
+                };
                 @if (isset($_GET['pool_select']))
+                console.log('{{ $startTime }}');
                     calendarOptions.businessHours = [
                         @foreach ($startTimes as $day => $startTime)
                             {
