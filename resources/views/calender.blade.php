@@ -265,22 +265,22 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn" data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn btn-success btn-update-event" data-fc-event-public-id="">
-                            Update changes
-                        </button>
-                        <a class="btn btn-primary btn-duplicate-event">
-                            Duplicate Event
-                        </a>
-                        <button type="button" class="btn btn-primary btn-add-event">
-                            Add Event
-                        </button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" class="btn btn-success btn-update-event" data-fc-event-public-id="">
+                                Update changes
+                            </button>
+                            <a class="btn btn-primary btn-duplicate-event">
+                                Duplicate Event
+                            </a>
+                            <button type="button" class="btn btn-primary btn-add-event">
+                                Add Event
+                            </button>
+                        </div>
+                    </form>
                 </div>
                 <!-- /.modal-content -->
             </div>
@@ -926,14 +926,14 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            $(".datepicker-autoclose").datepicker('destroy');
+                            // $(".datepicker-autoclose").datepicker('destroy');
                             $(".datepicker-autoclose").datepicker({
                                 autoclose: true,
                                 todayHighlight: true,
                                 startDate: new Date(),
                                 daysOfWeekDisabled: response.disabledDays
                             }).datepicker('setDate', start_date);
-                            $(".datepicker-autoclose2").datepicker('destroy');
+                            // $(".datepicker-autoclose2").datepicker('destroy');
                             $(".datepicker-autoclose2").datepicker({
                                 autoclose: true,
                                 todayHighlight: true,

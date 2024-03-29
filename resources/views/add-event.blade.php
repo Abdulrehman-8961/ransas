@@ -322,7 +322,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control @error('repeat_count') is-invalid @enderror"
+                            <input type="number" class="form-control @error('repeat_count') is-invalid @enderror"
                                 name="repeat_count" id="repeat_count" placeholder="Repeat Count">
                         </div>
                         @error('repeat_cycle')
@@ -339,7 +339,6 @@
                                     Submit
                                 </div>
                             </button>
-
                         </div>
                     </div>
 

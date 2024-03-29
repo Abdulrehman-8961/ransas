@@ -91,6 +91,7 @@
                 ->count();
             $revenue = DB::Table('events')
                 ->where('pool_id', $_GET['pool_select'])
+                ->where('payment_status', 'Paid')
                 ->whereBetween('start_date', [$startDate, $endDate])
                 ->sum('total_payment');
             // dd($birthdays,$Swimming_courses,$revenue);

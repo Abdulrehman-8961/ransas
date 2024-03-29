@@ -34,17 +34,17 @@
                             enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <div class="col-lg-4 form-group">
+                                <div class="col-lg-3 form-group">
                                     <label>Name</label>
                                     <input type="" placeholder="Enter Name" value="{{ $pool_data->name }}"
                                         name="name" class="form-control">
                                 </div>
-                                <div class="col-lg-4 form-group">
+                                <div class="col-lg-3 form-group">
                                     <label>Telephone</label>
                                     <input type="" placeholder="Enter Telephone" value="{{ $pool_data->phone }}"
                                         name="phone" class="form-control">
                                 </div>
-                                <div class="col-lg-4 form-group">
+                                <div class="col-lg-3 form-group">
                                     <label>Email</label>
                                     <input type="email" placeholder="Enter Email" value="{{ $pool_data->email }}"
                                         name="email" class="form-control">
@@ -54,7 +54,7 @@
                                     $paymentOptions = explode(', ', $pool_data->payments);
                                     $availble_days = explode(', ', $pool_data->availble_days);
                                 @endphp
-                                <div class="col-lg-4 form-group">
+                                <div class="col-lg-3 form-group">
                                     <label>Payment Options</label>
                                     <div class="mt-2">
                                         <div class="form-check form-check-inline">
@@ -80,7 +80,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-4 form-group">
+                                <div class="col-lg-3 form-group">
                                     <label>Messages</label>
                                     <div class="mt-2">
                                         <div class="form-check form-check-inline">
@@ -96,6 +96,17 @@
                                             <label class="form-check-label" for="primary2-outline-radio">Turn off</label>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-lg-3 form-group bank-field">
+                                    <label>Account No.</label>
+                                    <input type="text" placeholder="Enter account number"
+                                        value="{{ old('account_no') }}" name="account_no"
+                                        class="form-control @error('account_no') is-invalid @enderror">
+                                    @error('account_no')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-12"></div>
                                 <h4 class="mb-3">Available Days & Time</h4>
@@ -125,8 +136,9 @@
                                 <div class="row mb-3">
                                     <div class="col-md-3 ">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="checkbox" id="monday" name="monday"
-                                                value="Monday" {{ in_array('Monday', $availble_days) ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="checkbox" id="monday"
+                                                name="monday" value="Monday"
+                                                {{ in_array('Monday', $availble_days) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="success-check">Monday</label>
                                         </div>
                                     </div>
@@ -311,5 +323,13 @@
             hiddenPrefix: "prefix__",
             hiddenSuffix: "__suffix"
         });
+        $('#primary-outline-check').on('change', function() {
+            if ($(this).prop('checked')) {
+                $('.bank-field').removeClass('d-none');
+            } else {
+                $('.bank-field').addClass('d-none');
+            }
+        });
+        $('#primary-outline-check').change();
     </script>
 @endsection

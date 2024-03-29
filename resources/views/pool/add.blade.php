@@ -110,6 +110,16 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-3 form-group d-none bank-field">
+                                    <label>Account No.</label>
+                                    <input type="text" placeholder="Enter account number" value="{{ old('account_no') }}"
+                                        name="account_no" class="form-control @error('account_no') is-invalid @enderror">
+                                    @error('account_no')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
                             <h4 class="mb-3">Available Days & Time</h4>
                             <div class="row mb-3">
@@ -298,5 +308,12 @@
             hiddenPrefix: "prefix__",
             hiddenSuffix: "__suffix",
         });
+        $('#primary-outline-check').on('change', function(){
+            if($(this).prop('checked')){
+                $('.bank-field').removeClass('d-none');
+            } else {
+                $('.bank-field').addClass('d-none');
+            }
+        })
     </script>
 @endsection
