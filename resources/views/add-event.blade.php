@@ -132,7 +132,7 @@
                             time</label>
                         <div class="col-md-5">
                             <input type="text" class="form-control datepicker-autoclose" id="start_date"
-                                placeholder="mm/dd/yyyy" name="start_date" value="{{ old('start_date') }}" disabled/>
+                                placeholder="mm/dd/yyyy" name="start_date" value="{{ old('start_date') }}" disabled />
                             @error('start_date')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -142,7 +142,7 @@
                         <div class="col-md-5">
                             <input type="text" class="form-control pickatime-formatTime-display"
                                 placeholder="Time Format" name="start_time" id="start_time"
-                                value="{{ old('start_time') }}" @if(@$_GET['event'])  @else disabled @endif/>
+                                value="{{ old('start_time') }}" @if (@$_GET['event']) @else disabled @endif />
                             @error('start_time')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -156,7 +156,7 @@
                             time</label>
                         <div class="col-md-5">
                             <input type="text" class="form-control datepicker-autoclose2" id="end_date"
-                                placeholder="mm/dd/yyyy" name="end_date" value="{{ old('end_date') }}" disabled/>
+                                placeholder="mm/dd/yyyy" name="end_date" value="{{ old('end_date') }}" disabled />
                             <span class="invalid-feedback time-slot d-none" role="alert"><strong>This time slot is
                                     booked.</strong></span>
                             @error('end_date')
@@ -167,8 +167,8 @@
                         </div>
                         <div class="col-md-5">
                             <input type="text" class="form-control pickatime-formatTime-display2"
-                                placeholder="Time Format" value="{{ old('end_time') }}" name="end_time"
-                                id="end_time" @if(@$_GET['event'])  @else disabled @endif/>
+                                placeholder="Time Format" value="{{ old('end_time') }}" name="end_time" id="end_time"
+                                @if (@$_GET['event']) @else disabled @endif />
                             @error('end_time')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -331,6 +331,19 @@
                             </span>
                         @enderror
                     </div>
+                    <div class="mb-3 row d-none repeat-fields">
+                        <label for="example-text-input" class="col-md-2 col-form-label">Off Dates</label>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control off-dates" name="off-dates[]">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center">
+                            <a href="javascript:;" class="btn-remove-row" class="text-danger"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                    <div class="more-fields"></div>
+                    <button type="button" class="btn btn-primary mt-3 add-more btn-sm d-none repeat-fields"><i class="fa fa-plus"></i>
+                        Add
+                        More</button>
                     <div class="row">
                         <div class="col-lg-12 text-end mt-3">
                             <button type="submit" class="btn btn-info font-medium rounded-pill px-4 btn-submit" disabled>
@@ -341,7 +354,6 @@
                             </button>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -358,6 +370,31 @@
 
 @section('javascript')
     <script>
+        $(document).on('click', '.add-more', function() {
+            var html = `<div class="mb-3 row repeat-fields">
+                        <label for="example-text-input" class="col-md-2 col-form-label"></label>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control off-dates" name="off-dates[]">
+                        </div>
+                        <div class="col-md-1 d-flex align-items-center">
+                            <a href="javascript:;" class="btn-remove-row" class="text-danger"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>`;
+            $(".more-fields").append(html);
+            jQuery(".off-dates").datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            startDate: new Date()
+        });
+        });
+        $(document).on('click', '.btn-remove-row', function() {
+            $(this).closest('.row').remove();
+        });
+        jQuery(".off-dates").datepicker({
+            autoclose: true,
+            todayHighlight: true,
+            startDate: new Date()
+        });
         var start_date = $('#hidden_start_date').val();
         if (start_date) {
             var startDateParts = start_date.split('-');

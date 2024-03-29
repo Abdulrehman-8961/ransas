@@ -201,8 +201,75 @@
                 <div>
                     <div class="row gx-0">
                         <div class="col-lg-12">
-                            <div class="p-4 calender-sidebar app-calendar">
-                                <div id="calendar"></div>
+                            <div class="p-3">
+                                {{-- <div id="calendar"></div> --}}
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div>
+                                            <button id="prevBtn" type="button" aria-pressed="false"
+                                                class="btn btn-primary me-2"><span
+                                                    class="fc-icon fc-icon-chevron-left"></span></button><button
+                                                id="nextBtn" type="button" title="Next day" aria-pressed="false"
+                                                class="btn btn-primary btn-outline me-2"><span
+                                                    class="fc-icon fc-icon-chevron-right"></span></button>
+                                            <button type="button" id="exportCsvBtn" title="Export Csv" aria-pressed="false"
+                                                class="btn btn-primary">Export Csv</button>
+                                        </div>
+                                    </div>
+                                    <h2 id="calendarDate" class="fc-toolbar-title" id="fc-dom-1">{{ date('M d,Y') }}</h2>
+                                    <div></div>
+                                </div>
+                                <div class=" mt-3 mb-3 d-flex justify-content-between align-items-center">
+                                    <div class="">
+                                        <input type="text" class="form-control" name="search">
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="me-3">
+                                            <input type="checkbox" class="btn-check" name="events[]" value="Birthdays"
+                                                id="btn-check-2" checked autocomplete="off">
+                                            <label class="btn btn-outline-info font-medium rounded-pill"
+                                                for="btn-check-2">Birthdays</label>
+                                        </div>
+                                        <div class="me-3">
+                                            <input type="checkbox" class="btn-check" name="events[]"
+                                                value="Swimming Courses" id="btn-check-3" checked autocomplete="off">
+                                            <label class="btn btn-outline-info font-medium rounded-pill"
+                                                for="btn-check-3">Swimming Courses</label>
+                                        </div>
+                                        <div class="me-3">
+                                            <input type="checkbox" class="btn-check" name="events[]"
+                                                value="Private Events" id="btn-check-4" checked autocomplete="off">
+                                            <label class="btn btn-outline-info font-medium rounded-pill"
+                                                for="btn-check-4">Private Events</label>
+                                        </div>
+                                        <div class="me-3">
+                                            <input type="checkbox" class="btn-check" name="events[]" value="Other"
+                                                id="btn-check-5" checked autocomplete="off">
+                                            <label class="btn btn-outline-info font-medium rounded-pill"
+                                                for="btn-check-5">Others</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table search-table align-middle text-nowrap">
+                                        <thead class="header-item">
+                                            <tr>
+                                                <th>Client Name</th>
+                                                <th>Start Date</th>
+                                                <th>Event Name</th>
+                                                <th>Payment Method</th>
+                                                <th>Day</th>
+                                                <th>Total Hour</th>
+                                                <th>Cost</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -254,9 +321,7 @@
                                         </tr>
                                         <tr>
                                             <th>Payment Status</th>
-                                            <td><span class="status">Not Paid</span> <a class="ms-3 btn-pay"
-                                                    href="javascript:;">Click To
-                                                    Pay</a>
+                                            <td><span class="status">Not Paid</span>
                                             </td>
                                         </tr>
 
@@ -305,6 +370,158 @@
 @section('javascript')
     <script src="{{ asset('public') }}/dist/libs/fullcalendar/index.global.min.js"></script>
     <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get reference to the previous and next buttons
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const calendarDate = document.getElementById('calendarDate');
+
+            // Initial date
+            let currentDate = new Date();
+
+            // Update date function
+            function updateDate() {
+                calendarDate.textContent = currentDate.toDateString();
+            }
+
+            function fetchData() {
+                var date = $('#calendarDate').text();
+                var pool = $('#pool_select option:selected').val();
+                var csrfToken = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: '{{ url('fetch-data') }}',
+                    method: 'POST',
+                    data: {
+                        _token: csrfToken,
+                        pool: pool,
+                        date: date,
+                        search: $('[name="search"]').val(),
+                        events: $('[name="events[]"]:checked').map(function() {
+                            return $(this).val();
+                        }).get()
+                    },
+                    success: function(response) {
+                        var html = '';
+                        $.each(response, function(index, item) {
+                            html += '<tr>';
+                            html += '<td>' + item.customer_name + '</td>';
+                            html += '<td>' + item.start_date + '</td>';
+                            html += '<td>' + item.booking_type + '</td>';
+                            html += '<td>' + item.payment_method + '</td>';
+                            html += '<td>' + item.day_of_week + '</td>';
+                            html += '<td>' + item.duration_hours + '</td>';
+                            html += '<td>' + item.total_payment + '</td>';
+                            // Check conditions for adding the button
+                            if (item.payment_method === 'Credit Card' && item.payment_status !==
+                                'Paid') {
+                                html +=
+                                    '<td><a class="ms-3 btn-pay" data-amount=' + item
+                                    .total_payment + ' data-customer=' + item.customer_name +
+                                    ' data-customer_email=' + item.customer_email +
+                                    ' data-book_type=' + item.booking_type +
+                                    ' data-book_id=' + item.id +
+                                    ' data-customer_phone=' + item.customer_phone +
+                                    ' href="javascript:;">Click To Pay</a></td>';
+                            } else {
+                                html += '<td></td>'; // Empty cell if button is not required
+                            }
+
+                            html += '</tr>';
+                        });
+
+                        $('.search-table tbody').html(html);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
+            fetchData();
+
+            $('[name="search"], [name="events[]"]').on('change keyup', function() {
+                fetchData();
+            });
+
+            function exportToCsv(filename, rows) {
+        var processRow = function (row) {
+            var finalVal = '';
+            for (var j = 0; j < row.length; j++) {
+                var innerValue = row[j] === null ? '' : row[j].toString();
+                if (row[j] instanceof Date) {
+                    innerValue = row[j].toLocaleString();
+                }
+                var result = innerValue.replace(/"/g, '""');
+                if (result.search(/("|,|\n)/g) >= 0)
+                    result = '"' + result + '"';
+                if (j > 0)
+                    finalVal += ',';
+                finalVal += result;
+            }
+            return finalVal + '\n';
+        };
+
+        var csvFile = '';
+
+        // Add table headers
+        var tableHeaders = [];
+        $('.search-table thead th').each(function() {
+            tableHeaders.push($(this).text());
+        });
+        csvFile += processRow(tableHeaders);
+
+        // Add table data
+        for (var i = 0; i < rows.length; i++) {
+            csvFile += processRow(rows[i]);
+        }
+
+        var blob = new Blob([csvFile], { type: 'text/csv;charset=utf-8;' });
+        if (navigator.msSaveBlob) { // IE 10+
+            navigator.msSaveBlob(blob, filename);
+        } else {
+            var link = document.createElement("a");
+            if (link.download !== undefined) {
+                var url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    }
+
+    // Event listener for Export CSV button
+    $('#exportCsvBtn').on('click', function() {
+        var rows = [];
+        $('.search-table tbody tr').each(function(index, tr) {
+            var rowData = [];
+            $(tr).find('td').each(function(index, td) {
+                rowData.push($(td).text());
+            });
+            rows.push(rowData);
+        });
+        exportToCsv('data.csv', rows);
+    });
+
+            // Event listeners for buttons
+            prevBtn.addEventListener('click', function() {
+                currentDate.setDate(currentDate.getDate() - 1);
+                updateDate();
+                fetchData();
+            });
+
+            nextBtn.addEventListener('click', function() {
+                currentDate.setDate(currentDate.getDate() + 1);
+                updateDate();
+                fetchData();
+            });
+
+            // Initial date update
+            updateDate();
+        });
+
         var startDate = moment().startOf('week');
         var endDate = moment().endOf('week');
         $(".daterange").daterangepicker({
@@ -530,7 +747,8 @@
                                     event.end = endDate;
                                     var customerName = event.customer_name;
                                     var originalTitle = event.title;
-                                    event.title = originalTitle + '\n(' + customerName + ')';
+                                    event.title = originalTitle + '\n(' + customerName +
+                                        ')';
                                 });
                                 successCallback(response.events);
                                 createTitleFilter(response.events);

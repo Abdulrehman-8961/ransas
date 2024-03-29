@@ -170,4 +170,44 @@ class CalendarController extends Controller
         return response()->json(['success' => (bool)$update]);
     }
 
+    public function fetchData(Request $request)
+    {
+
+        $pool = $request->input('pool');
+        $date = $request->input('date');
+        $newdate = date('Y-m-d',strtotime($date));
+        $search = $request->input('search');
+        $events = $request->input('events');
+
+
+        // Start building the query
+        $query = DB::table('events')->where('start_date',$newdate)->where('pool_id',$pool);
+
+        // Apply search filter
+        if (!empty($search)) {
+            $query->where(function($q) use ($search) {
+                $q->where('customer_name', 'like', "%$search%");
+            });
+        }
+        // Apply events filter
+        if (!empty($events)) {
+            $query->whereIn('booking_type', $events);
+        }
+
+        // Execute the query and fetch data
+        $data = $query->get();
+
+        // dd($data);
+        foreach ($data as $item) {
+            $startDateTime = new DateTime($item->start_date.' '.$item->start_time);
+            $endDateTime = new DateTime($item->end_date.' '.$item->end_time);
+            $duration = $startDateTime->diff($endDateTime);
+            $hours = $duration->h + ($duration->days * 24);
+            $item->duration_hours = $hours;
+
+            $item->day_of_week = $startDateTime->format('l');
+        }
+        return response()->json($data);
+    }
+
 }

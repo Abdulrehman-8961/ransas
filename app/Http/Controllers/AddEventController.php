@@ -53,7 +53,7 @@ class AddEventController extends Controller
             $pool = DB::table('pool')->where('id', $request->input('pool_select'))->first();
 
             $dayOfWeek = date('l', strtotime($startdate));
-            $dayOfWeekend = date('l', strtotime($endtime));
+            $dayOfWeekend = date('l', strtotime($enddate));
 
             $availableDays = explode(', ', $pool->availble_days);
             $availableDays = array_filter($availableDays);
@@ -77,16 +77,24 @@ class AddEventController extends Controller
                     "created_by" => Auth::user()->id
                 ]);
                 if (@$request->input('repeat')) {
-                    $data = [];
+                    $offDates = '';
+                    if (@$request->input('off-dates')) {
+                        $offDates = $request->input('off-dates');
+
+                        $offDates = array_map(function ($date) {
+                            return date("Y-m-d", strtotime($date));
+                        }, $offDates);
+                    }
                     $newStartDate = $startdate;
                     $newEndDate = $enddate;
                     $repeat_cycle = $request->input('repeat_cycle');
                     $repeat_count = $request->input('repeat_count');
 
-                    for ($i = 1; $i < $repeat_count; $i++) {
+                    $i = 1;
+                    while ($i < $repeat_count) {
                         $dayOfWeek = date('l', strtotime($newStartDate));
                         $dayOfWeekend = date('l', strtotime($newEndDate));
-                        if (in_array($dayOfWeek, $availableDays) && in_array($dayOfWeekend, $availableDays)) {
+                        if (in_array($newStartDate, $offDates) && in_array($newEndDate, $offDates)) {
                             if ($repeat_cycle == "Monthly") {
                                 $newStartDate = date("Y-m-d", strtotime($newStartDate . " +30 days"));
                                 $newEndDate = date("Y-m-d", strtotime($newEndDate . " +30 days"));
@@ -97,28 +105,52 @@ class AddEventController extends Controller
                                 $newStartDate = date("Y-m-d", strtotime($newStartDate . " +1 days"));
                                 $newEndDate = date("Y-m-d", strtotime($newEndDate . " +1 days"));
                             }
-                            $data[] = [
-                                "pool_id" => $request->input('pool_select'),
-                                "booking_type" => $request->input('type'),
-                                "customer_name" => $request->input('customer_name'),
-                                "start_date" => $newStartDate,
-                                "start_time" => $starttime,
-                                "end_date" => $newEndDate,
-                                "end_time" => $endtime,
-                                "customer_email" => $request->input('customer_email'),
-                                "customer_phone" => $request->input('customer_phone'),
-                                "total_payment" => $request->input('total_payment'),
-                                "payment_method" => $request->input('payment_method'),
-                                "payment_status" => $request->input('payment_status'),
-                                "color" => $request->input('event_level'),
-                                "percentage_value" => $request->input('percentage_value'),
-                                "created_by" => Auth::user()->id
-                            ];
+                            continue;
                         } else {
-                            break;
+                            if (in_array($dayOfWeek, $availableDays) && in_array($dayOfWeekend, $availableDays)) {
+                                if ($repeat_cycle == "Monthly") {
+                                    $newStartDate = date("Y-m-d", strtotime($newStartDate . " +30 days"));
+                                    $newEndDate = date("Y-m-d", strtotime($newEndDate . " +30 days"));
+                                } elseif ($repeat_cycle == "Weekly") {
+                                    $newStartDate = date("Y-m-d", strtotime($newStartDate . " +7 days"));
+                                    $newEndDate = date("Y-m-d", strtotime($newEndDate . " +7 days"));
+                                } else {
+                                    $newStartDate = date("Y-m-d", strtotime($newStartDate . " +1 days"));
+                                    $newEndDate = date("Y-m-d", strtotime($newEndDate . " +1 days"));
+                                }
+                                DB::table('events')->insert([
+                                    "pool_id" => $request->input('pool_select'),
+                                    "booking_type" => $request->input('type'),
+                                    "customer_name" => $request->input('customer_name'),
+                                    "start_date" => $newStartDate,
+                                    "start_time" => $starttime,
+                                    "end_date" => $newEndDate,
+                                    "end_time" => $endtime,
+                                    "customer_email" => $request->input('customer_email'),
+                                    "customer_phone" => $request->input('customer_phone'),
+                                    "total_payment" => $request->input('total_payment'),
+                                    "payment_method" => $request->input('payment_method'),
+                                    "payment_status" => $request->input('payment_status'),
+                                    "color" => $request->input('event_level'),
+                                    "percentage_value" => $request->input('percentage_value'),
+                                    "created_by" => Auth::user()->id
+                                ]);
+                                $i++;
+                            } else {
+                                if ($repeat_cycle == "Monthly") {
+                                    $newStartDate = date("Y-m-d", strtotime($newStartDate . " +30 days"));
+                                    $newEndDate = date("Y-m-d", strtotime($newEndDate . " +30 days"));
+                                } elseif ($repeat_cycle == "Weekly") {
+                                    $newStartDate = date("Y-m-d", strtotime($newStartDate . " +7 days"));
+                                    $newEndDate = date("Y-m-d", strtotime($newEndDate . " +7 days"));
+                                } else {
+                                    $newStartDate = date("Y-m-d", strtotime($newStartDate . " +1 days"));
+                                    $newEndDate = date("Y-m-d", strtotime($newEndDate . " +1 days"));
+                                }
+                                continue;
+                            }
                         }
                     }
-                    DB::table('events')->insert($data);
                 }
                 if ($save) {
                     DB::table('log_history')->insert([
