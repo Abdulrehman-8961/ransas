@@ -138,8 +138,7 @@
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <input type="text" class="form-control datepicker-autoclose"
-                                                    id="start_date" placeholder="mm/dd/yyyy" name="start_date"
-                                                    value="{{ old('start_date') }}" />
+                                                    id="start_date" placeholder="mm/dd/yyyy" name="start_date" />
                                                 @error('start_date')
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
@@ -165,8 +164,7 @@
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <input type="text" class="form-control datepicker-autoclose2"
-                                                    id="end_date" placeholder="mm/dd/yyyy" name="end_date"
-                                                    value="{{ old('end_date') }}" />
+                                                    id="end_date" placeholder="mm/dd/yyyy" name="end_date" />
                                                 <span class="invalid-feedback time-slot d-none"
                                                     role="alert"><strong>This time slot is
                                                         booked.</strong></span>
@@ -298,6 +296,8 @@
 @section('javascript')
     <script src="{{ asset('public') }}/dist/libs/fullcalendar/index.global.min.js"></script>
     <script type="text/javascript">
+    var formattedDateStart = '';
+    var formattedDateEnd = '';
         var selectElement = document.getElementById('pool_select_main');
 
         // Add change event listener
@@ -309,78 +309,6 @@
             document.getElementById('myForm').submit();
         @endif
         jQuery(".mydatepicker, #datepicker, .input-group.date").datepicker();
-        jQuery(".datepicker-autoclose").datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            startDate: new Date()
-        }).on('changeDate', function(selected) {
-            var selectedDate = selected.date;
-
-            // Format selected date as YYYY-MM-DD
-            var formattedDate = selectedDate.getFullYear() + '-' +
-                ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '-' +
-                ('0' + selectedDate.getDate()).slice(-2);
-
-            // Make AJAX request to fetch available time slots for the selected date
-            $.ajax({
-                type: "GET",
-                url: "{{ url('getAvailableTimeSlots') }}",
-                data: {
-                    selected_date: formattedDate
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Update the options of your time picker with the available time slots
-                        var timePicker = $(".pickatime-formatTime-display").pickatime().pickatime(
-                            'picker');
-                        timePicker.set('disable', false); // Enable the time picker
-                        timePicker.set('min', response.startTime); // Set the minimum time
-                        timePicker.set('max', response.endTime); // Set the maximum time
-                    } else {
-                        console.error('Failed to fetch available time slots:', response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Failed to fetch available time slots:', error);
-                }
-            });
-        });
-        jQuery(".datepicker-autoclose2").datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            startDate: new Date()
-        }).on('changeDate', function(selected) {
-            var selectedDate = selected.date;
-
-            // Format selected date as YYYY-MM-DD
-            var formattedDate = selectedDate.getFullYear() + '-' +
-                ('0' + (selectedDate.getMonth() + 1)).slice(-2) + '-' +
-                ('0' + selectedDate.getDate()).slice(-2);
-
-            // Make AJAX request to fetch available time slots for the selected date
-            $.ajax({
-                type: "GET",
-                url: "{{ url('getAvailableTimeSlots') }}",
-                data: {
-                    selected_date: formattedDate
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Update the options of your time picker with the available time slots
-                        var timePicker = $(".pickatime-formatTime-display2").pickatime().pickatime(
-                            'picker');
-                        timePicker.set('disable', false); // Enable the time picker
-                        timePicker.set('min', response.startTime); // Set the minimum time
-                        timePicker.set('max', response.endTime); // Set the maximum time
-                    } else {
-                        console.error('Failed to fetch available time slots:', response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Failed to fetch available time slots:', error);
-                }
-            });
-        });
         jQuery("#date-range").datepicker({
             toggleActive: true,
         });
@@ -530,7 +458,6 @@
                     info.jsEvent.preventDefault();
                 } else {
                     var eventId = info.event.id;
-                    console.log(update_id);
                     document.getElementById("event-form").action = 'Event-update/' + update_id;
                     $('.btn-duplicate-event').attr('href', '{{ url('/Add-Event') }}?event=' + update_id);
                     var getModalEventId = eventObj._def.publicId;
@@ -561,20 +488,12 @@
                         $('.percentage_value').val(percentage_value);
                     }
                     var parts = date.split('-');
-                    var formattedDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
+                    formattedDateStart = `${parts[1]}/${parts[2]}/${parts[0]}`;
                     var endDateParts = end_date.split('-');
-                    var formattedDateEnd = `${endDateParts[1]}/${endDateParts[2]}/${endDateParts[0]}`;
-                    jQuery(".datepicker-autoclose").datepicker({
-                        autoclose: true,
-                        todayHighlight: true,
-                        startDate: new Date()
-                    }).datepicker('setDate', formattedDate);
-                    jQuery(".datepicker-autoclose2").datepicker({
-                        autoclose: true,
-                        todayHighlight: true,
-                        startDate: new Date()
-                    }).datepicker('setDate', formattedDateEnd);
+                    formattedDateEnd = `${endDateParts[1]}/${endDateParts[2]}/${endDateParts[0]}`;
                     // Set the timepicker options and initialize it for the first input
+                    // console.log(formattedDate,formattedDateEnd);
+                    getPoolDetails(pool,formattedDateStart,formattedDateEnd);
                     $(".pickatime-formatTime-display").pickatime({
                         format: "H:i",
                         formatLabel: "<b>H</b>:i",
@@ -742,6 +661,11 @@
                                 });
                             }
                         });
+                    },
+                    eventTimeFormat: {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: false
                     },
                     slotLabelFormat: {
                         hour: '2-digit',
@@ -974,8 +898,8 @@
                 $('.percentage-field').addClass('d-none');
             }
         })
-        $('#pool_select').change(function() {
-            var poolID = $(this).val();
+        function getPoolDetails(poolID,start_date,end_date){
+            console.log(start_date,end_date);
             if (poolID) {
                 $.ajax({
                     type: "GET",
@@ -1002,29 +926,30 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            // Clear previous options and add new available days to datepicker
                             $(".datepicker-autoclose").datepicker('destroy');
                             $(".datepicker-autoclose").datepicker({
                                 autoclose: true,
                                 todayHighlight: true,
                                 startDate: new Date(),
                                 daysOfWeekDisabled: response.disabledDays
-                            });
+                            }).datepicker('setDate', start_date);
                             $(".datepicker-autoclose2").datepicker('destroy');
                             $(".datepicker-autoclose2").datepicker({
                                 autoclose: true,
                                 todayHighlight: true,
                                 startDate: new Date(),
                                 daysOfWeekDisabled: response.disabledDays
-                            });
+                            }).datepicker('setDate', end_date);
                         } else {
                             console.log('Error:', response.message);
                         }
                     }
                 });
-            } else {
-                $("#otherSelect").empty();
             }
+        }
+        $('#pool_select').change(function() {
+            var poolID = $("#pool_select option:selected").val();
+            getPoolDetails(poolID,formattedDateStart,formattedDateEnd);
         });
     </script>
 @endsection

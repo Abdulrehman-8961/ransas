@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="rtl">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -167,7 +167,7 @@
                                         data-bs-toggle="dropdown" aria-expanded="false">
                                         <div class="d-flex align-items-center">
                                             <div class="user-profile-img">
-                                                <img src="{{ asset('public') }}/dist/images/profile/user-1.jpg"
+                                                <img src="{{ asset('public') }}/dist/images/profile/{{ Auth::user()->image }}"
                                                     class="rounded-circle" width="35" height="35"
                                                     alt="" />
                                             </div>
@@ -180,7 +180,7 @@
                                                 <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
                                             </div>
                                             <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                                                <img src="{{ asset('public') }}/dist/images/profile/user-1.jpg"
+                                                <img src="{{ asset('public') }}/dist/images/profile/{{ Auth::user()->image }}"
                                                     class="rounded-circle" width="80" height="80"
                                                     alt="" />
                                                 <div class="ms-3">

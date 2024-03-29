@@ -31,11 +31,18 @@ class ProfileSettings extends Controller
         ]);
         if($validated)
         {
-            DB::table('users')->where('id', Auth::user()->id)->update([
+            $insertFields = [
                 "name" => $request->input('name'),
                 "email" => $request->input('email'),
                 "phone" => $request->input('phone'),
-            ]);
+            ];
+            if ($request->hasFile('file')) {
+                $fileName = $request->file('file')->getClientOriginalName();
+                $request->file('file')->move(public_path('dist/images/profile'), $fileName);
+
+                $insertFields['image'] = $fileName;
+            }
+            DB::table('users')->where('id', Auth::user()->id)->update($insertFields);
             return redirect()->back()->with('success', "Profile Updated");
         }
     }

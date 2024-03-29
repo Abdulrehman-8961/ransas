@@ -36,7 +36,7 @@
 
             </div>
             <div class="card-body p-4">
-                <form method="POST" class="container-fluid" action="{{ url('/profile-settings/update') }}">@csrf
+                <form method="POST" class="container-fluid" action="{{ url('/profile-settings/update') }}" enctype="multipart/form-data">@csrf
                     <div class="row">
                         <div class="col-md-4 col-12">
                             <div class="mb-3">
@@ -67,6 +67,15 @@
                                     value="{{ $user->phone }}" name="phone" id="exampleInputphone1"
                                     aria-describedby="phoneHelp">
                                 @error('phone')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-12">
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Profile Image</label>
+                                <input type="file" class="form-control @error('file') is-invalid @enderror" name="file">
+                                @error('file')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
