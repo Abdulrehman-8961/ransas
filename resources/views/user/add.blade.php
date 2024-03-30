@@ -5,13 +5,13 @@
             <div class="card-body px-4 py-3">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-semibold mb-8">Add User</h4>
+                        <h4 class="fw-semibold mb-8">הוסף משתמש</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
                                         href="{{ url('/Users') }}">
-                                        Users</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Add User</li>
+                                        משתמשים</a></li>
+                                <li class="breadcrumb-item" aria-current="page">הוסף משתמש</li>
                             </ol>
                         </nav>
                     </div>
@@ -27,7 +27,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="px-4 py-3 border-bottom">
-                        <h5 class="card-title fw-semibold mb-0">Add User</h5>
+                        <h5 class="card-title fw-semibold mb-0">הוסף משתמש</h5>
                     </div>
                     <div class="card-body">
                         <form action="{{ url('/User/save') }}" id="jquery-val-form" method="POST"
@@ -35,8 +35,8 @@
                             @csrf
                             <div class="row">
                                 <div class="col-lg-4 form-group">
-                                    <label>Name</label>
-                                    <input type="" placeholder="Enter Name" name="name"
+                                    <label>שֵׁם</label>
+                                    <input type="" placeholder="הכנס שם" name="name"
                                         class="form-control @error('name') is-invalid @enderror"
                                         value="{{ old('name') }}">
                                     @error('name')
@@ -46,8 +46,8 @@
                                     @enderror
                                 </div>
                                 <div class="col-lg-4 form-group">
-                                    <label>Telephone</label>
-                                    <input type="" placeholder="Enter Telephone Name" value="{{ old('phone') }}"
+                                    <label>טֵלֵפוֹן</label>
+                                    <input type="" placeholder="הזן מספר טלפון" value="{{ old('phone') }}"
                                         name="phone" class="form-control @error('phone') is-invalid @enderror">
                                     @error('phone')
                                         <span class="invalid-feedback" role="alert">
@@ -56,8 +56,8 @@
                                     @enderror
                                 </div>
                                 <div class="col-lg-4 form-group">
-                                    <label>Email</label>
-                                    <input type="email" placeholder="Enter Email" value="{{ old('email') }}"
+                                    <label>אימייל</label>
+                                    <input type="email" placeholder="הזן אימייל" value="{{ old('email') }}"
                                         name="email" class="form-control @error('email') is-invalid @enderror">
                                     @error('email')
                                         <span class="invalid-feedback" role="alert">
@@ -67,7 +67,7 @@
                                 </div>
                                 <div class="col-lg-12"></div>
                                 <div class="col-lg-4 form-group">
-                                    <label>Role</label>
+                                    <label>תַפְקִיד</label>
                                     <select type="" placeholder="Enter Role" id="role" name="role"
                                         class="form-control @error('role') is-invalid @enderror">
                                         <option value="Staff" {{ old('role') == 'Staff' ? 'selected' : '' }}>Staff</option>
@@ -80,12 +80,12 @@
                                     @enderror
                                 </div>
                                 <div class="col-lg-4 form-group">
-                                    <label>Permissions</label>
+                                    <label>הרשאות</label>
                                     <select type="" placeholder="Enter Permission" id="permission" name="permission"
                                         class="form-control @error('permission') is-invalid @enderror">
                                         <option value="Readonly" {{ old('permission') == 'Readonly' ? 'selected' : '' }}>
-                                            Readonly</option>
-                                        <option value="Edit" {{ old('permission') == 'Edit' ? 'selected' : '' }}>Edit
+                                            לקריאה בלבד</option>
+                                        <option value="Edit" {{ old('permission') == 'Edit' ? 'selected' : '' }}>לַעֲרוֹך
                                         </option>
 
                                     </select>
@@ -99,10 +99,10 @@
                                     $pool = DB::table('pool')->where('is_deleted',0)->get();
                                 @endphp
                                 <div class="col-lg-4 form-group">
-                                    <label>Pool</label>
+                                    <label>בריכה</label>
                                     <select id="pool" name="pool[]"
                                         class="form-control select2 @error('pool') is-invalid @enderror" multiple="multiple">
-                                        <option value="" disabled>Select Pool</option>
+                                        <option value="" disabled>בחר בריכה</option>
                                         @foreach ($pool as $p)
                                         <option value="{{ $p->id }}" {{ old('pool') == $p->id ? 'selected' : '' }}>
                                             {{ $p->name }}</option>
@@ -115,7 +115,7 @@
                                     @enderror
                                 </div>
                                 <div class="col-lg-4 form-group">
-                                    <label>Password</label>
+                                    <label>סיסמה</label>
                                     <input type="password" placeholder="Enter Password" id="password" name="password"
                                         class="form-control @error('password') is-invalid @enderror">
                                     @error('password')
@@ -125,13 +125,13 @@
                                     @enderror
                                 </div>
                                 <div class="col-lg-4 form-group">
-                                    <label>Confirm Password</label>
+                                    <label>אשר סיסמה</label>
                                     <input type="password" placeholder="Enter Confirm Password" name="confirm_password"
                                         class="form-control">
                                 </div>
                                 <div class="col-lg-12"></div>
                                 <div class="col-lg-4 mt-3">
-                                    <button class="btn btn-primary" name="submit" type="submit">Save</button>
+                                    <button class="btn btn-primary" name="submit" type="submit">להציל</button>
                                 </div>
                             </div>
                         </form>

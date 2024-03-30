@@ -58,11 +58,11 @@
                         <div
                             class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
                             <div class="col-sm-8 col-md-6 col-xl-9">
-                                <h2 class="mb-3 fs-7 fw-bolder">Welcome to RANSAS</h2>
+                                <h2 class="mb-3 fs-7 fw-bolder">ברוכים הבאים ל- RANSAS</h2>
                                 <form method="POST" action="{{ route('login') }}">
                                     @csrf
                                     <div class="mb-3">
-                                        <label for="exampleInputEmail1" class="form-label">Email</label>
+                                        <label for="exampleInputEmail1" class="form-label">אימייל</label>
                                         <input id="email" type="email"
                                             class="form-control @error('email') is-invalid @enderror" name="email"
                                             value="{{ old('email') }}" required autocomplete="email" autofocus
@@ -74,7 +74,7 @@
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                                        <label for="exampleInputPassword1" class="form-label">סיסמה</label>
                                         <input id="password" type="password"
                                             class="form-control @error('password') is-invalid @enderror" name="password"
                                             required autocomplete="current-password">
@@ -86,10 +86,10 @@
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mb-4">
                                         <a class="fw-medium"
-                                            href="{{ route('password.request') }}">Forgot Password ?</a>
+                                            href="{{ route('password.request') }}">שכחת את הסיסמא ?</a>
                                     </div>
                                     <button type="submit" name="submit"
-                                        class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign In</button>
+                                        class="btn btn-primary w-100 py-8 mb-4 rounded-2">להתחבר</button>
                                 </form>
                             </div>
                         </div>

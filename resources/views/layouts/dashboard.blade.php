@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="rtl">
 
 <head>
     <meta charset="utf-8">
@@ -177,7 +177,7 @@
                                         aria-labelledby="drop1">
                                         <div class="profile-dropdown position-relative" data-simplebar>
                                             <div class="py-3 px-7 pb-0">
-                                                <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
+                                                <h5 class="mb-0 fs-5 fw-semibold">פרופיל משתמש</h5>
                                             </div>
                                             <div class="d-flex align-items-center py-9 mx-7 border-bottom">
                                                 <img src="{{ asset('public') }}/dist/images/profile/{{ Auth::user()->image }}"
@@ -201,8 +201,8 @@
                                                             alt="" width="24" height="24">
                                                     </span>
                                                     <div class="w-75 d-inline-block v-middle ps-3">
-                                                        <h6 class="mb-1 bg-hover-primary fw-semibold"> My Profile </h6>
-                                                        <span class="d-block text-dark">Account Settings</span>
+                                                        <h6 class="mb-1 bg-hover-primary fw-semibold"> הפרופיל שלי </h6>
+                                                        <span class="d-block text-dark">הגדרות חשבון</span>
                                                     </div>
                                                 </a>
 
@@ -212,13 +212,13 @@
                                                 <div class="d-grid py-2 px-7 pt-8">
                                                     <a href="javascript:void(0);"
                                                         onclick="window.location = '{{ url('Back-to-Admin') }}/{{ session('admin') }}'"
-                                                        class="btn btn-outline-primary">Back to Admin</a>
+                                                        class="btn btn-outline-primary">חזרה לאדמן</a>
                                                 </div>
                                             @endif
                                             <div class="d-grid py-4 px-7 pt-8">
                                                 <a href="javascript:void(0);"
                                                     onclick="document.getElementById('logoutForm').submit();"
-                                                    class="btn btn-outline-primary">Log Out</a>
+                                                    class="btn btn-outline-primary">להתנתק</a>
                                                 <form id="logoutForm" method="POST" action="{{ url('/logout') }}">
                                                     @csrf</form>
                                             </div>
@@ -272,7 +272,7 @@
             @if (Session::has('success'))
                 <script>
                     Swal.fire({
-                        title: 'Success!',
+                        title: 'הַצלָחָה!',
                         text: '{{ Session::get('success') }}',
                         icon: 'success',
                         customClass: {
@@ -284,7 +284,7 @@
             @elseif (Session::has('error'))
                 <script>
                     Swal.fire({
-                        title: 'Error!',
+                        title: 'שְׁגִיאָה!',
                         text: '{{ Session::get('error') }}',
                         icon: 'error',
                         customClass: {

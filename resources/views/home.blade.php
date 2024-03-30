@@ -121,7 +121,7 @@
                     </select>
                 </div>
                 <div class="col-md-1">
-                    <button type="submit" class="btn btn-primary">Filter</button>
+                    <button type="submit" class="btn btn-primary">לְסַנֵן</button>
                 </div>
             </div>
         </form>
@@ -213,7 +213,7 @@
                                                 class="btn btn-primary btn-outline me-2"><span
                                                     class="fc-icon fc-icon-chevron-right"></span></button>
                                             <button type="button" id="exportCsvBtn" title="Export Csv" aria-pressed="false"
-                                                class="btn btn-primary">Export Csv</button>
+                                                class="btn btn-primary">ייצוא כ csv</button>
                                         </div>
                                     </div>
                                     <h2 id="calendarDate" class="fc-toolbar-title" id="fc-dom-1">{{ date('M d,Y') }}</h2>
@@ -228,25 +228,25 @@
                                             <input type="checkbox" class="btn-check" name="events[]" value="Birthdays"
                                                 id="btn-check-2" checked autocomplete="off">
                                             <label class="btn btn-outline-info font-medium rounded-pill"
-                                                for="btn-check-2">Birthdays</label>
+                                                for="btn-check-2">ימי הולדת</label>
                                         </div>
                                         <div class="me-3">
                                             <input type="checkbox" class="btn-check" name="events[]"
                                                 value="Swimming Courses" id="btn-check-3" checked autocomplete="off">
                                             <label class="btn btn-outline-info font-medium rounded-pill"
-                                                for="btn-check-3">Swimming Courses</label>
+                                                for="btn-check-3">קורסי שחייה</label>
                                         </div>
                                         <div class="me-3">
                                             <input type="checkbox" class="btn-check" name="events[]"
                                                 value="Private Events" id="btn-check-4" checked autocomplete="off">
                                             <label class="btn btn-outline-info font-medium rounded-pill"
-                                                for="btn-check-4">Private Events</label>
+                                                for="btn-check-4">אירועים פרטיים</label>
                                         </div>
                                         <div class="me-3">
                                             <input type="checkbox" class="btn-check" name="events[]" value="Other"
                                                 id="btn-check-5" checked autocomplete="off">
                                             <label class="btn btn-outline-info font-medium rounded-pill"
-                                                for="btn-check-5">Others</label>
+                                                for="btn-check-5">אחרים</label>
                                         </div>
                                     </div>
                                 </div>
@@ -254,18 +254,17 @@
                                     <table class="table search-table align-middle text-nowrap">
                                         <thead class="header-item">
                                             <tr>
-                                                <th>Client Name</th>
-                                                <th>Start Date</th>
-                                                <th>Event Name</th>
-                                                <th>Payment Method</th>
-                                                <th>Day</th>
-                                                <th>Total Hour</th>
-                                                <th>Cost</th>
-                                                <th>Action</th>
+                                                <th>שם הלקוח</th>
+                                                <th>תאריך התחלה</th>
+                                                <th>שם אירוע</th>
+                                                <th>אמצעי תשלום</th>
+                                                <th>יְוֹם</th>
+                                                <th>סך הכל שעה</th>
+                                                <th>עֲלוּת</th>
+                                                <th>פעולה</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -412,8 +411,8 @@
                             html += '<td>' + item.duration_hours + '</td>';
                             html += '<td>' + item.total_payment + '</td>';
                             // Check conditions for adding the button
-                            if (item.payment_method === 'Credit Card' && item.payment_status !==
-                                'Paid') {
+                            if (item.payment_method === 'כרטיס אשראי' && item.payment_status !==
+                                'שולם') {
                                 html +=
                                     '<td><a class="ms-3 btn-pay" data-amount=' + item
                                     .total_payment + ' data-customer=' + item.customer_name +
@@ -421,9 +420,9 @@
                                     ' data-book_type=' + item.booking_type +
                                     ' data-book_id=' + item.id +
                                     ' data-customer_phone=' + item.customer_phone +
-                                    ' href="javascript:;">Click To Pay</a></td>';
+                                    ' href="javascript:;">לחץ כדי לשלם</a></td>';
                             } else {
-                                html += '<td></td>'; // Empty cell if button is not required
+                                html += '<td></td>';
                             }
 
                             html += '</tr>';

@@ -97,7 +97,7 @@ class PoolController extends Controller
 
                 // dd($insert_fields);
             DB::table('pool')->insert($insert_fields);
-            return redirect()->back()->with('success', "Pool added");
+            return redirect()->back()->with('success', "נוספה בריכה");
         }
     }
     public function edit($id)
@@ -160,7 +160,7 @@ class PoolController extends Controller
             DB::table('pool')->where('id', $id)
             ->update($insert_fields);
 
-            return redirect()->back()->with('success', 'Pool Profile updated');
+            return redirect()->back()->with('success', 'פרופיל הבריכה עודכן');
         }
     }
     public function update_password(Request $request, $id)
@@ -173,12 +173,12 @@ class PoolController extends Controller
                 "password" => Hash::make($request->input('password')),
                 "updated_at" => date("Y-m-d H:i:s")
             ]);
-            return redirect()->back()->with('success', 'Pool password updated');
+            return redirect()->back()->with('success', 'סיסמת הבריכה עודכנה');
     }
     public function delete($id)
     {
         DB::table('pool')->where('id', $id)->delete();
-        return redirect()->back()->with('success', 'Pool deleted');
+        return redirect()->back()->with('success', 'הבריכה נמחקה');
     }
 
     public function loginToPool($id){
@@ -186,9 +186,9 @@ class PoolController extends Controller
             if($user) {
                 session(['admin' => Auth::user()->id]);
                 Auth::login($user);
-                return redirect('/Home')->with('success','Loged in as '.$user->role);
+                return redirect('/Home')->with('success','מחובר כמשתמש');
             } else {
-                return redirect()->back()->with('error','Something went wrong');
+                return redirect()->back()->with('error','משהו השתבש');
             }
     }
     public function loginToAdmin($id){
@@ -196,9 +196,9 @@ class PoolController extends Controller
             if($user) {
                 Session::forget('admin');
                 Auth::login($user);
-                return redirect('/Home')->with('success','Loged in as '.$user->role);
+                return redirect('/Home')->with('success','מחובר כמנהל');
             } else {
-                return redirect()->back()->with('error','Something went wrong');
+                return redirect()->back()->with('error','משהו השתבש');
             }
     }
 }

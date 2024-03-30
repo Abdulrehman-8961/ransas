@@ -62,7 +62,7 @@
                                 <div class="position-relative text-center my-4">
                                     <p
                                         class="mb-0 fs-4 px-3 d-inline-block bg-white text-dark z-index-5 position-relative">
-                                        Reset Pasword</p>
+                                        לאפס את הסיסמה</p>
                                     <span
                                         class="border-top w-100 position-absolute top-50 start-50 translate-middle"></span>
                                 </div>
@@ -75,7 +75,7 @@
 
 
                                     <div class="mb-3">
-                                        <label for="exampleInputEmail1" class="form-label">Email</label>
+                                        <label for="exampleInputEmail1" class="form-label">אימייל</label>
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             value="{{ old('email') }}" name="email" id="exampleInputEmail1"
                                             aria-describedby="emailHelp">
@@ -84,7 +84,7 @@
                                         @enderror
                                     </div>
                                     <div class="mb-4">
-                                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                                        <label for="exampleInputPassword1" class="form-label">סיסמה</label>
                                         <input type="password"
                                             class="form-control @error('password') is-invalid @enderror" name="password"
                                             id="exampleInputPassword1">
@@ -95,7 +95,7 @@
 
 
                                     <div class="mb-4">
-                                        <label for="exampleInputPassword1" class="form-label">Confirm Password</label>
+                                        <label for="exampleInputPassword1" class="form-label">אשר סיסמה</label>
                                         <input type="password"
                                             class="form-control @error('password_confirmation') is-invalid @enderror"
                                             name="password_confirmation" id="exampleInputPassword1">
@@ -105,7 +105,7 @@
                                     </div>
 
                                     <button type="submit"
-                                        class="btn btn-primary w-100 py-8 mb-4 rounded-2">Reset</button>
+                                        class="btn btn-primary w-100 py-8 mb-4 rounded-2">אִתחוּל</button>
 
                                 </form>
                             </div>

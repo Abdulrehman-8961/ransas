@@ -27,7 +27,7 @@
                         <span>
                             <i class="ti ti-home"></i>
                         </span>
-                        <span class="hide-menu">Dashboard</span>
+                        <span class="hide-menu">דף ראשי</span>
                     </a>
                 </li>
                 @if (Auth::user()->role == 'Staff')
@@ -36,7 +36,7 @@
                             <span>
                                 <i class="ti ti-notes"></i>
                             </span>
-                            <span class="hide-menu">Add Event</span>
+                            <span class="hide-menu">הוספת אירוע</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -44,7 +44,7 @@
                             <span>
                                 <i class="ti ti-calendar"></i>
                             </span>
-                            <span class="hide-menu">Calendar</span>
+                            <span class="hide-menu">יומן</span>
                         </a>
                     </li>
                 @endif
@@ -54,7 +54,7 @@
                             <span>
                                 <i class="ti ti-history"></i>
                             </span>
-                            <span class="hide-menu">Log/History</span>
+                            <span class="hide-menu">היסטוריה </span>
                         </a>
                     </li>
                 @endif
@@ -64,7 +64,7 @@
                             <span>
                                 <i class="ti ti-users"></i>
                             </span>
-                            <span class="hide-menu">Pools</span>
+                            <span class="hide-menu">בריכות</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -72,7 +72,7 @@
                             <span>
                                 <i class="ti ti-users"></i>
                             </span>
-                            <span class="hide-menu">Users</span>
+                            <span class="hide-menu">משתמשים</span>
                         </a>
                     </li>
                 @endif
@@ -82,7 +82,7 @@
                             <span class="d-flex">
                                 <i class="ti ti-settings"></i>
                             </span>
-                            <span class="hide-menu">Settings</span>
+                            <span class="hide-menu">הגדרות</span>
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">
                             <li class="sidebar-item">
@@ -90,7 +90,7 @@
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
-                                    <span class="hide-menu">Reminder Template</span>
+                                    <span class="hide-menu">תבנית להודעת תזכורת</span>
                                 </a>
                             </li>
                             <li class="sidebar-item">
@@ -98,7 +98,7 @@
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
-                                    <span class="hide-menu">Confirmation Template</span>
+                                    <span class="hide-menu">תבנית להודעת אישור</span>
                                 </a>
                             </li>
                         </ul>

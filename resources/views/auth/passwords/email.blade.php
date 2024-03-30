@@ -71,13 +71,13 @@
                                 <div class="position-relative text-center my-4">
                                     <p
                                         class="mb-0 fs-4 px-3 d-inline-block bg-white text-dark z-index-5 position-relative">
-                                        Reset Password</p>
+                                        לאפס את הסיסמה</p>
                                     <span
                                         class="border-top w-100 position-absolute top-50 start-50 translate-middle"></span>
                                 </div>
                                 <form method="POST" action="{{ route('password.email') }}">@csrf
                                     <div class="mb-3">
-                                        <label for="exampleInputEmail1" class="form-label">Email</label>
+                                        <label for="exampleInputEmail1" class="form-label">אימייל</label>
                                         <input type="email" class="form-control @error('email') is-invalid @enderror"
                                             value="{{ old('email') }}" name="email" id="exampleInputEmail1"
                                             aria-describedby="emailHelp">
@@ -87,7 +87,7 @@
                                     </div>
 
                                     <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">
-                                        {{ __('Send Password Reset Link') }}</button>
+                                        {{ __('שלח קישור לאיפוס סיסמה') }}</button>
 
                                 </form>
                             </div>

@@ -94,7 +94,7 @@ class AddEventController extends Controller
                     while ($i < $repeat_count) {
                         $dayOfWeek = date('l', strtotime($newStartDate));
                         $dayOfWeekend = date('l', strtotime($newEndDate));
-                        if (in_array($newStartDate, $offDates) && in_array($newEndDate, $offDates)) {
+                        if (in_array($newStartDate, $offDates) || in_array($newEndDate, $offDates)) {
                             if ($repeat_cycle == "Monthly") {
                                 $newStartDate = date("Y-m-d", strtotime($newStartDate . " +30 days"));
                                 $newEndDate = date("Y-m-d", strtotime($newEndDate . " +30 days"));
@@ -118,23 +118,32 @@ class AddEventController extends Controller
                                     $newStartDate = date("Y-m-d", strtotime($newStartDate . " +1 days"));
                                     $newEndDate = date("Y-m-d", strtotime($newEndDate . " +1 days"));
                                 }
-                                DB::table('events')->insert([
-                                    "pool_id" => $request->input('pool_select'),
-                                    "booking_type" => $request->input('type'),
-                                    "customer_name" => $request->input('customer_name'),
-                                    "start_date" => $newStartDate,
-                                    "start_time" => $starttime,
-                                    "end_date" => $newEndDate,
-                                    "end_time" => $endtime,
-                                    "customer_email" => $request->input('customer_email'),
-                                    "customer_phone" => $request->input('customer_phone'),
-                                    "total_payment" => $request->input('total_payment'),
-                                    "payment_method" => $request->input('payment_method'),
-                                    "payment_status" => $request->input('payment_status'),
-                                    "color" => $request->input('event_level'),
-                                    "percentage_value" => $request->input('percentage_value'),
-                                    "created_by" => Auth::user()->id
-                                ]);
+
+                                $dayColumns = strtolower(substr($dayOfWeek, 0, 3));
+                                $startTimeColumn = $dayColumns . '_start_time';
+                                $endTimeColumn = $dayColumns . '_end_time';
+                                $timeSlot = DB::table('pool')
+                                    ->where('id', $request->input('pool_select'))
+                                    ->first([$startTimeColumn, $endTimeColumn]);
+                                if ($starttime >= $timeSlot->$startTimeColumn && $endtime <= $timeSlot->$endTimeColumn) {
+                                    DB::table('events')->insert([
+                                        "pool_id" => $request->input('pool_select'),
+                                        "booking_type" => $request->input('type'),
+                                        "customer_name" => $request->input('customer_name'),
+                                        "start_date" => $newStartDate,
+                                        "start_time" => $starttime,
+                                        "end_date" => $newEndDate,
+                                        "end_time" => $endtime,
+                                        "customer_email" => $request->input('customer_email'),
+                                        "customer_phone" => $request->input('customer_phone'),
+                                        "total_payment" => $request->input('total_payment'),
+                                        "payment_method" => $request->input('payment_method'),
+                                        "payment_status" => $request->input('payment_status'),
+                                        "color" => $request->input('event_level'),
+                                        "percentage_value" => $request->input('percentage_value'),
+                                        "created_by" => Auth::user()->id
+                                    ]);
+                                }
                                 $i++;
                             } else {
                                 if ($repeat_cycle == "Monthly") {
@@ -207,9 +216,9 @@ class AddEventController extends Controller
                 }
             }
 
-            return redirect()->back()->with('success', "Event added");
+            return redirect()->back()->with('success', "אירוע נוסף");
         }
-        return redirect()->back()->with('error', "Previous date not allowed");
+        return redirect()->back()->with('error', "תאריך קודם אסור");
     }
 
 
@@ -268,7 +277,7 @@ class AddEventController extends Controller
 
             return response()->json(['success' => true, 'options' => $html]);
         } else {
-            return response()->json(['success' => false, 'message' => 'Pool not found']);
+            return response()->json(['success' => false, 'message' => 'בריכה לא נמצאה']);
         }
     }
 

@@ -152,9 +152,9 @@ class CalendarController extends Controller
                     'page' => 'Edit Event'
                 ]);
             }
-            return redirect()->back()->with('success', "Event Updated");
+            return redirect()->back()->with('success', "האירוע עודכן");
         }
-        return redirect()->back()->with('error', "Something went wrong");
+        return redirect()->back()->with('error', "משהו השתבש");
     }
 
     public function changeEventTime(Request $request){
@@ -172,7 +172,6 @@ class CalendarController extends Controller
 
     public function fetchData(Request $request)
     {
-
         $pool = $request->input('pool');
         $date = $request->input('date');
         $newdate = date('Y-m-d',strtotime($date));
@@ -197,6 +196,7 @@ class CalendarController extends Controller
         // Execute the query and fetch data
         $data = $query->get();
 
+        // dd($data);
         // dd($data);
         foreach ($data as $item) {
             $startDateTime = new DateTime($item->start_date.' '.$item->start_time);

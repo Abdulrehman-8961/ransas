@@ -5,12 +5,12 @@
             <div class="card-body px-4 py-3">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-semibold mb-8"> Pools</h4>
+                        <h4 class="fw-semibold mb-8"> בריכות</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
-                                        href="{{ url('/Home') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item" aria-current="page"> Pools</li>
+                                        href="{{ url('/Home') }}">לוּחַ מַחווָנִים</a></li>
+                                <li class="breadcrumb-item" aria-current="page"> בריכות</li>
                             </ol>
                         </nav>
                     </div>
@@ -31,7 +31,7 @@
                     <div class="col-md-4 col-xl-3">
                         <form class="position-relative" id="search-form" action="{{ url()->current() }}" method="GET">
                             <input type="text" name="search" id="search" class="form-control product-search ps-5" id="input-search"
-                                placeholder="Search Contacts...">
+                                placeholder="חיפוש משתמשים...">
                             <i
                                 class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
                         </form>
@@ -45,7 +45,7 @@
                             </a>
                         </div>
                         <a href="{{ url('/Pool/add') }}" id="btn-add-contact" class="btn btn-info d-flex align-items-center">
-                            <i class="ti ti-users text-white me-1 fs-5"></i> Add Pool
+                            <i class="ti ti-users text-white me-1 fs-5"></i> הוסף בריכה
                         </a>
                     </div>
                 </div>
@@ -55,11 +55,11 @@
                     <table class="table search-table align-middle text-nowrap">
                         <thead class="header-item">
                             <tr>
-                                <th>Name</th>
-                                <th>Email</th>
+                                <th>שֵׁם</th>
+                                <th>אימייל</th>
 
-                                <th>Phone</th>
-                                <th>Action</th>
+                                <th>טלפון</th>
+                                <th>פעולה</th>
                             </tr>
                         </thead>
                         <tbody>

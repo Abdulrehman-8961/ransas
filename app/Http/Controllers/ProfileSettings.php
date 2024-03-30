@@ -43,7 +43,7 @@ class ProfileSettings extends Controller
                 $insertFields['image'] = $fileName;
             }
             DB::table('users')->where('id', Auth::user()->id)->update($insertFields);
-            return redirect()->back()->with('success', "Profile Updated");
+            return redirect()->back()->with('success', "הפרופיל עודכן");
         }
     }
     public function update_password(Request $request)
@@ -56,7 +56,7 @@ class ProfileSettings extends Controller
             DB::table('users')->where('id', Auth::user()->id)->update([
                 "password" => Hash::make($request->input('password')),
             ]);
-            return redirect()->back()->with('success', 'Password updated');
+            return redirect()->back()->with('success', 'הסיסמה עודכנה');
         }
     }
 }

@@ -17,14 +17,14 @@
             <div class="card-body px-4 py-3">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-semibold mb-8">Calendar</h4>
+                        <h4 class="fw-semibold mb-8">לוּחַ שָׁנָה</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-muted " href="{{ url('/Home') }}">Dashboard</a>
+                                    <a class="text-muted " href="{{ url('/Home') }}">לוּחַ מַחווָנִים</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
-                                    Calendar
+                                    לוּחַ שָׁנָה
                                 </li>
                             </ol>
                         </nav>
@@ -47,7 +47,7 @@
         <form id="myForm" action="{{ URL::current() }}" method="get">
             <div class="row container mb-5">
                 <div class="col-md-4 col-12">
-                    <label for="">Select Pool</label>
+                    <label for="">בחר בריכה</label>
                     <select class="form-control" name="pool_select" id="pool_select_main">
                         @foreach ($pool_option as $row)
                             <option value="{{ $row->id }}" {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
@@ -85,10 +85,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">Pool</label>
+                                        <label class="form-label">בחר בריכה</label>
                                         <select class="form-control @error('type') is-invalid @enderror"
                                             value="Artisanal kale" name="pool_select" id="pool_select">
-                                            <option value="">Select Pool</option>
+                                            <option value="">בחר בריכה</option>
                                             @foreach ($pool_option as $row)
                                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
                                             @endforeach
@@ -97,29 +97,28 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">Event Title</label>
+                                        <label class="form-label">כותרת האירוע</label>
                                         <select class="form-control event-type @error('type') is-invalid @enderror"
                                             type="text" value="Artisanal kale" name="type" id="event-title">
-                                            <option value="">Select Type</option>
-                                            <option value="Swimming Course">
-                                                Swimming Course</option>
-                                            <option value="Birthday">Birthday</option>
-                                            <option value="Private event">Private
-                                                event</option>
-                                            <option value="Other">Other</option>
+                                            <option value="">בחר סוג</option>
+                                            <option value="קורס שחייה">
+                                                קורס שחייה</option>
+                                            <option value="יום הולדת">יום הולדת</option>
+                                            <option value="אירוע פרטי">אירוע פרטי</option>
+                                            <option value="אַחֵר">אַחֵר</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">Customer Name</label>
+                                        <label class="form-label">שם לקוח</label>
                                         <input class="form-control  @error('customer_name') is-invalid @enderror"
                                             name="customer_name" id="customer_name">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">Email</label>
+                                        <label class="form-label">אימייל</label>
                                         <input class="form-control  @error('customer_email') is-invalid @enderror"
                                             type="email" name="customer_email" placeholder="example@example.com"
                                             id="customer_email">
@@ -127,14 +126,14 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">Phone</label>
+                                        <label class="form-label">טלפון</label>
                                         <input class="form-control @error('customer_phone') is-invalid @enderror"
                                             type="number" name="customer_phone" id="customer_phone">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">Start Date and Time</label>
+                                        <label class="form-label">תאריך ושעה התחלה</label>
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <input type="text" class="form-control datepicker-autoclose"
@@ -160,14 +159,13 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">End Date and Time</label>
+                                        <label class="form-label">תאריך ושעה סיום</label>
                                         <div class="row">
                                             <div class="col-md-6 col-12">
                                                 <input type="text" class="form-control datepicker-autoclose2"
                                                     id="end_date" placeholder="mm/dd/yyyy" name="end_date" />
                                                 <span class="invalid-feedback time-slot d-none"
-                                                    role="alert"><strong>This time slot is
-                                                        booked.</strong></span>
+                                                    role="alert"><strong>משבצת זמן זו הוזמנה.</strong></span>
                                                 @error('end_date')
                                                     <span class="invalid-feedback" role="alert">
                                                         <strong>{{ $message }}</strong>
@@ -189,7 +187,7 @@
                                 </div>
                                 <div class="col-md-12 d-none percentage-field">
                                     <div class="">
-                                        <label class="form-label">Percentage Value</label>
+                                        <label class="form-label">אחוז ערך</label>
                                         <select class="form-control percentage_value" name="percentage_value"
                                             id="percentage_value">
                                             <option value="">Select value</option>
@@ -202,14 +200,14 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">Total Payment</label>
+                                        <label class="form-label">סך התשלום</label>
                                         <input class="form-control  @error('total_payment') is-invalid @enderror"
                                             type="number" name="total_payment" id="total_payment">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">Payment Method</label>
+                                        <label class="form-label">אמצעי תשלום</label>
                                         <select class="form-control @error('payment_method') is-invalid @enderror"
                                             name="payment_method" id="payment_method">
                                         </select>
@@ -217,49 +215,48 @@
                                 </div>
                                 <div class="col-md-12">
                                     <div class="">
-                                        <label class="form-label">Payment Status</label>
+                                        <label class="form-label">מצב תשלום</label>
                                         <select class="form-control @error('payment_status') is-invalid @enderror"
                                             name="payment_status" id="payment_status">
-                                            <option value="">Select Payment Status</option>
-                                            <option value="Paid">Paid
+                                            <option value="">בחר סטטוס תשלום</option>
+                                            <option value="שולם">שולם
                                             </option>
-                                            <option value="Not Paid">Not
-                                                Paid</option>
-                                            <option value="On Hold">On Hold
+                                            <option value="לא שולם">לא שולם</option>
+                                            <option value="בהמתנה">בהמתנה
                                             </option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12 mt-4">
-                                    <div><label class="form-label">Event Color</label></div>
+                                    <div><label class="form-label">צבע אירוע</label></div>
                                     <div class="d-flex">
                                         <div class="n-chk">
                                             <div class="form-check form-check-primary form-check-inline">
                                                 <input class="form-check-input" type="radio" name="event_level"
                                                     value="Danger" id="modalDanger" />
-                                                <label class="form-check-label" for="modalDanger">Danger</label>
+                                                <label class="form-check-label" for="modalDanger">סַכָּנָה</label>
                                             </div>
                                         </div>
                                         <div class="n-chk">
                                             <div class="form-check form-check-warning form-check-inline">
                                                 <input class="form-check-input" type="radio" name="event_level"
                                                     value="Success" id="modalSuccess" />
-                                                <label class="form-check-label" for="modalSuccess">Success</label>
+                                                <label class="form-check-label" for="modalSuccess">הַצלָחָה</label>
                                             </div>
                                         </div>
                                         <div class="n-chk">
                                             <div class="form-check form-check-success form-check-inline">
                                                 <input class="form-check-input" type="radio" name="event_level"
                                                     value="Primary" id="modalPrimary" />
-                                                <label class="form-check-label" for="modalPrimary">Primary</label>
+                                                <label class="form-check-label" for="modalPrimary">יְסוֹדִי</label>
                                             </div>
                                         </div>
                                         <div class="n-chk">
                                             <div class="form-check form-check-danger form-check-inline">
                                                 <input class="form-check-input" type="radio" name="event_level"
                                                     value="Warning" id="modalWarning" />
-                                                <label class="form-check-label" for="modalWarning">Warning</label>
+                                                <label class="form-check-label" for="modalWarning">אַזהָרָה</label>
                                             </div>
                                         </div>
                                     </div>
@@ -268,16 +265,16 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn" data-bs-dismiss="modal">
-                                Close
+                                סגור
                             </button>
                             <button type="submit" class="btn btn-success btn-update-event" data-fc-event-public-id="">
-                                Update changes
+                                עדכן שינויים
                             </button>
                             <a class="btn btn-primary btn-duplicate-event">
-                                Duplicate Event
+                                אירוע כפול
                             </a>
                             <button type="button" class="btn btn-primary btn-add-event">
-                                Add Event
+                                הוסף אירוע
                             </button>
                         </div>
                     </form>
@@ -567,13 +564,13 @@
                     eventResizable: true,
                     customButtons: {
                         ExportCsv: {
-                            text: "Export Csv",
+                            text: "ייצוא csv",
                             click: function() {
                                 exportCalendarEventsToCsv(calendar);
                             },
                         },
                         AddEvent: {
-                            text: "Add Event",
+                            text: "הוסף אירוע",
                             click: function() {
                                 window.location = '{{ url('/Add-Event') }}';
                             },
@@ -700,7 +697,7 @@
                 if (!titleFilterInitialized) {
                     var uniqueTitles = [...new Set(events.map(event => event.title))];
                     var selectFilter = $(
-                        '<select class="form-control" style="max-width:200px; margin-right: 10px;" id="title-filter"><option value="">All Titles</option><option value="Birthday">Birthday</option><option value="Private event">Private event</option><option value="Swimming Course">Swimming Course</option></select>'
+                        '<select class="form-control" style="max-width:200px; margin-right: 10px;" id="title-filter"><option value="">כל הכותרות</option><option value="יום הולדת">יום הולדת</option><option value="אירוע פרטי">אירוע פרטי</option><option value="קורס שחייה">קורס שחייה</option></select>'
                     );
                     selectFilter.on('change', function() {
                         var selectedTitle = $(this).val();

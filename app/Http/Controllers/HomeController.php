@@ -94,7 +94,7 @@ class HomeController extends Controller
         if (isset($responseData['Data']['RedirectURL'])) {
             return redirect($responseData['Data']['RedirectURL']);
         } else {
-            return redirect()->back()->with('error', 'Something went wrong.');
+            return redirect()->back()->with('error', 'משהו השתבש');
         }
     }
 
@@ -107,7 +107,7 @@ class HomeController extends Controller
             'sumit_payment_id' => $paymentId,
             'sumit_customr_id' => $customerId,
         ]);
-        return redirect()->back()->with('success', 'Payment Successfull.');
+        return redirect()->back()->with('success', 'התשלום הצליח.');
 
     }
 }

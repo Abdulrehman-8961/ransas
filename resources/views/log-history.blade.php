@@ -5,12 +5,12 @@
             <div class="card-body px-4 py-3">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-semibold mb-8">History</h4>
+                        <h4 class="fw-semibold mb-8">הִיסטוֹרִיָה</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
-                                        href="{{ url('/Home') }}">Dashboard</a></li>
-                                <li class="breadcrumb-item" aria-current="page">History/logs</li>
+                                        href="{{ url('/Home') }}">לוּחַ מַחווָנִים</a></li>
+                                <li class="breadcrumb-item" aria-current="page">היסטוריה/יומנים</li>
                             </ol>
                         </nav>
                     </div>
@@ -41,7 +41,7 @@
                         </form>
                     </div>
                     <div class="col-lg-4">
-                        <button class="btn btn-primary">Filter</button>
+                        <button class="btn btn-primary">לְסַנֵן</button>
                     </div>
                     <div
                         class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
@@ -127,11 +127,11 @@
                     <table class="table search-table align-middle text-nowrap">
                         <thead class="header-item">
                             <tr>
-                                <th>User</th>
-                                <th>Page</th>
+                                <th>מִשׁתַמֵשׁ</th>
+                                <th>עמוד</th>
 
-                                <th>Description</th>
-                                <th>Date</th>
+                                <th>תיאור</th>
+                                <th>תַאֲרִיך</th>
                             </tr>
                         </thead>
                         <tbody>

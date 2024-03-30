@@ -75,7 +75,7 @@ class UserController extends Controller
             "password" => Hash::make($request->input('password')),
             "role" => $request->input('role')
         ]);
-        return redirect()->back()->with('success', "User added");
+        return redirect()->back()->with('success', "משתמש נוסף");
     }
     public function edit($id)
     {
@@ -113,7 +113,7 @@ class UserController extends Controller
                 "role" => $request->input('role'),
                 "updated_at" => date("Y-m-d H:i:s")
             ]);
-            return redirect()->back()->with('success', 'User Profile updated');
+            return redirect()->back()->with('success', 'פרופיל משתמש עודכן');
         }
     }
     public function update_password(Request $request, $id)
@@ -127,12 +127,12 @@ class UserController extends Controller
                 "password" => Hash::make($request->input('password')),
                 "updated_at" => date("Y-m-d H:i:s")
             ]);
-            return redirect()->back()->with('success', 'User password updated');
+            return redirect()->back()->with('success', 'סיסמת המשתמש עודכנה');
         }
     }
     public function delete($id)
     {
         DB::table('users')->where('role', '!=', 'Amdin')->where('id', $id)->delete();
-        return redirect()->back()->with('success', 'User deleted');
+        return redirect()->back()->with('success', 'המשתמש נמחק');
     }
 }

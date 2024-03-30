@@ -5,13 +5,13 @@
             <div class="card-body px-4 py-3">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-semibold mb-8">Message Template</h4>
+                        <h4 class="fw-semibold mb-8">תבנית הודעה</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
-                                        href="{{ url('/Users') }}">
-                                        Users</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Message Template</li>
+                                        href="{{ url('/Home') }}">
+                                        לוּחַ מַחווָנִים</a></li>
+                                <li class="breadcrumb-item" aria-current="page">תבנית הודעה</li>
                             </ol>
                         </nav>
                     </div>
@@ -30,14 +30,14 @@
                     <input type="hidden" name="template_id" value="{{ @$_GET['temp'] }}">
                     <div class="row">
                         <div class="col-md-6 col-12 mb-3">
-                            <label for="name" class="form-label">Subject</label>
+                            <label for="name" class="form-label">נושא</label>
                             <input type="text" class="form-control" value="{{ @$template->subject }}" name="name" id="name">
                         </div>
                         <div class="col-md-6 col-12 mb-3">
-                            <label for="status" class="form-label">Status</label>
+                            <label for="status" class="form-label">סטָטוּס</label>
                             <select class="form-control" name="status" id="status">
-                                <option value="Send" {{ @$template->status == "Send" ? "selected" : "" }}>Send</option>
-                                <option value="Stop" {{ @$template->status == "Stop" ? "selected" : "" }}>Stop</option>
+                                <option value="Send" {{ @$template->status == "Send" ? "selected" : "" }}>לִשְׁלוֹחַ</option>
+                                <option value="Stop" {{ @$template->status == "Stop" ? "selected" : "" }}>תפסיק</option>
                             </select>
                         </div>
                     </div>
@@ -45,19 +45,19 @@
                         <label for="content" class="form-label">
                             Content
                             <ul class="text-danger mb-0 fs-2 ps-1">
-                                <li>Booking Type : {booking_type}</li>
-                                <li>Customer Name : {customer_name}</li>
-                                <li>Booking Date : {date}</li>
-                                <li>Booking Time : {time}</li>
-                                <li>Payment Method : {payment_method}</li>
-                                <li>Payment Status : {payment_status}</li>
-                                <li>Total Amount : {total_amount}</li>
+                                <li>סוג הזמנה: {booking_type}</li>
+                                <li>שם לקוח: {customer_name}</li>
+                                <li>תאריך הזמנה: {date}</li>
+                                <li>זמן הזמנה: {time}</li>
+                                <li>אמצעי תשלום: {payment_method}</li>
+                                <li>סטטוס תשלום: {payment_status}</li>
+                                <li>סכום כולל : {total_amount}</li>
                             </ul>
                         </label>
                         <textarea rows="6" class="form-control" name="content" id="content" rows="3">{!! @$template->content !!}</textarea>
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-primary mt-2">Save Changes</button>
+                        <button type="submit" class="btn btn-primary mt-2">שמור שינויים</button>
                     </div>
                 </form>
             </div>

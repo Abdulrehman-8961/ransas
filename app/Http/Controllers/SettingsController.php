@@ -35,9 +35,9 @@ class SettingsController extends Controller
                 'status' => $request->status,
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
-            return redirect()->back()->with('success','Template Updated successfully');
+            return redirect()->back()->with('success','התבנית עודכנה בהצלחה');
         }
-        return redirect()->back()->with('error','Template not found');
+        return redirect()->back()->with('error','התבנית לא נמצאה');
     }
 
 }

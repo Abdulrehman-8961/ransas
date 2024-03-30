@@ -18,12 +18,12 @@
             <div class="card-body px-4 py-3">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-semibold mb-8">Add Event</h4>
+                        <h4 class="fw-semibold mb-8">הוסף אירוע</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
-                                        href="{{ url('/Home') }}">Events</a></li>
-                                <li class="breadcrumb-item" aria-current="page">Add Event</li>
+                                        href="{{ url('/Home') }}">אירועים</a></li>
+                                <li class="breadcrumb-item" aria-current="page">הוסף אירוע</li>
                             </ol>
                         </nav>
                     </div>
@@ -40,11 +40,11 @@
 
         <div class="card">
             <div class="card-body">
-                <h5 class="mb-4">Add Event</h5>
+                <h5 class="mb-4">הוסף אירוע</h5>
                 <form class="form" action="{{ url('Event/save') }}" method="POST">
                     @csrf
                     <div class="mb-3 row">
-                        <label for="example-text-input" class="col-md-2 col-form-label">Select Pool</label>
+                        <label for="example-text-input" class="col-md-2 col-form-label">בחר בריכה</label>
                         <div class="col-md-10">
                             <select class="form-control @error('pool_select') is-invalid @enderror" name="pool_select"
                                 id="pool_select">
@@ -63,7 +63,7 @@
                     </div>
                     <input type="hidden" id="parent_id" name="parent_id" value="0">
                     <div class="mb-3 row">
-                        <label for="example-text-input" class="col-md-2 col-form-label">Type</label>
+                        <label for="example-text-input" class="col-md-2 col-form-label">סוּג</label>
                         <div class="col-md-10">
                             <select class="form-control @error('type') is-invalid @enderror" type="text" name="type"
                                 id="type">
@@ -88,7 +88,7 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="example-search-input" class="col-md-2 col-form-label">Customer Name</label>
+                        <label for="example-search-input" class="col-md-2 col-form-label">שם לקוח</label>
                         <div class="col-md-10">
                             <input class="form-control  @error('customer_name') is-invalid @enderror" name="customer_name"
                                 type="" id="example-search-input"
@@ -102,7 +102,7 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="example-email-input" class="col-md-2 col-form-label">Email</label>
+                        <label for="example-email-input" class="col-md-2 col-form-label">אימייל</label>
                         <div class="col-md-10">
                             <input class="form-control  @error('customer_email') is-invalid @enderror" type="email"
                                 name="customer_email" placeholder="example@example.com" id="example-email-input"
@@ -115,7 +115,7 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="example-search-input" class="col-md-2 col-form-label">Phone</label>
+                        <label for="example-search-input" class="col-md-2 col-form-label">טלפון</label>
                         <div class="col-md-10">
                             <input class="form-control @error('customer_phone') is-invalid @enderror" type="number"
                                 name="customer_phone" id="example-search-input"
@@ -128,8 +128,7 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="example-datetime-local-input" class="col-md-2 col-form-label">Start Date and
-                            time</label>
+                        <label for="example-datetime-local-input" class="col-md-2 col-form-label">תאריך ושעה התחלה</label>
                         <div class="col-md-5">
                             <input type="text" class="form-control datepicker-autoclose" id="start_date"
                                 placeholder="mm/dd/yyyy" name="start_date" value="{{ old('start_date') }}" disabled />
@@ -152,13 +151,12 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="example-datetime-local-input" class="col-md-2 col-form-label">End Date and
-                            time</label>
+                        <label for="example-datetime-local-input" class="col-md-2 col-form-label">תאריך ושעה סיום</label>
                         <div class="col-md-5">
                             <input type="text" class="form-control datepicker-autoclose2" id="end_date"
                                 placeholder="mm/dd/yyyy" name="end_date" value="{{ old('end_date') }}" disabled />
-                            <span class="invalid-feedback time-slot d-none" role="alert"><strong>This time slot is
-                                    booked.</strong></span>
+                            <span class="invalid-feedback time-slot d-none" role="alert"><strong>משבצת זמן זו
+                                    הוזמנה.</strong></span>
                             @error('end_date')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -177,7 +175,7 @@
                         </div>
                     </div>
                     <div class="mb-3 row d-none percentage-field">
-                        <label for="example-search-input" class="col-md-2 col-form-label">Percentage Value</label>
+                        <label for="example-search-input" class="col-md-2 col-form-label">אחוז ערך</label>
                         <div class="col-md-10">
                             <select class="form-control" name="percentage_value" id="percentage_value">
                                 <option value="">Select value</option>
@@ -207,7 +205,7 @@
                     </div>
 
                     <div class="mb-3 row">
-                        <label for="example-datetime-local-input" class="col-md-2 col-form-label">Total Payment</label>
+                        <label for="example-datetime-local-input" class="col-md-2 col-form-label">סך התשלום</label>
                         <div class="col-md-10">
                             <input class="form-control  @error('total_payment') is-invalid @enderror" type="number"
                                 value="{{ $event ? $event->total_payment : old('total_payment') }}" name="total_payment"
@@ -220,7 +218,7 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="example-text-input" class="col-md-2 col-form-label">Payment Method</label>
+                        <label for="example-text-input" class="col-md-2 col-form-label">אמצעי תשלום</label>
                         <div class="col-md-10">
                             <select class="form-control @error('payment_method') is-invalid @enderror" value=""
                                 name="payment_method" id="payment_method">
@@ -234,21 +232,20 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="example-text-input" class="col-md-2 col-form-label">Payment Status</label>
+                        <label for="example-text-input" class="col-md-2 col-form-label">מצב תשלום</label>
                         <div class="col-md-10">
                             <select class="form-control @error('payment_status') is-invalid @enderror"
                                 name="payment_status" id="example-text-input">
-                                <option value="">Select Payment Status</option>
-                                <option value="Paid"
-                                    {{ @$event->payment_status || old('payment_status') == 'Paid' ? 'selected' : '' }}>Paid
+                                <option value="">בחר סטטוס תשלום</option>
+                                <option value="שולם"
+                                    {{ @$event->payment_status || old('payment_status') == 'שולם' ? 'selected' : '' }}>שולם
                                 </option>
-                                <option value="Not Paid"
-                                    {{ @$event->payment_status || old('payment_status') == 'Not Paid' ? 'selected' : '' }}>
-                                    Not
-                                    Paid</option>
-                                <option value="On Hold"
-                                    {{ @$event->payment_status || old('payment_status') == 'On Hold' ? 'selected' : '' }}>
-                                    On Hold
+                                <option value="לא בתשלום"
+                                    {{ @$event->payment_status || old('payment_status') == 'לא בתשלום' ? 'selected' : '' }}>
+                                    לא בתשלום</option>
+                                <option value="בהמתנה"
+                                    {{ @$event->payment_status || old('payment_status') == 'בהמתנה' ? 'selected' : '' }}>
+                                    בהמתנה
                                 </option>
                             </select>
                             @error('payment_status')
@@ -259,14 +256,14 @@
                         </div>
                     </div>
                     <div class="row mt-4">
-                        <label class="col-md-2 col-form-label">Event Color</label>
+                        <label class="col-md-2 col-form-label">צבע אירוע</label>
                         <div class="d-flex col-md-10">
                             <div class="n-chk">
                                 <div class="form-check form-check-primary form-check-inline">
                                     <input class="form-check-input danger check-light-danger" type="radio"
                                         name="event_level" value="Danger" id="modalDanger"
                                         {{ @$event->color || old('event_level') == 'Danger' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalDanger">Danger</label>
+                                    <label class="form-check-label" for="modalDanger">סַכָּנָה</label>
                                 </div>
                             </div>
                             <div class="n-chk">
@@ -274,7 +271,7 @@
                                     <input class="form-check-input success check-light-success" type="radio"
                                         name="event_level" value="Success" id="modalSuccess"
                                         {{ @$event->color || old('event_level') == 'Success' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalSuccess">Success</label>
+                                    <label class="form-check-label" for="modalSuccess">הַצלָחָה</label>
                                 </div>
                             </div>
                             <div class="n-chk">
@@ -282,7 +279,7 @@
                                     <input class="form-check-input primary check-light-primary" type="radio"
                                         name="event_level" value="Primary" id="modalPrimary"
                                         {{ @$event->color || old('event_level') == 'Primary' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalPrimary">Primary</label>
+                                    <label class="form-check-label" for="modalPrimary">יְסוֹדִי</label>
                                 </div>
                             </div>
                             <div class="n-chk">
@@ -290,7 +287,7 @@
                                     <input class="form-check-input warning check-light-warning" type="radio"
                                         name="event_level" value="Warning" id="modalWarning"
                                         {{ @$event->color || old('event_level') == 'Warning' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalWarning">Warning</label>
+                                    <label class="form-check-label" for="modalWarning">אַזהָרָה</label>
                                 </div>
                             </div>
                         </div>
@@ -302,28 +299,28 @@
                                     <input class="form-check-input primary check-light-primary repeat" type="checkbox"
                                         name="repeat" value="repeat" id="repeat"
                                         {{ old('repeat') == 'repeat' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="repeat">Repeat</label>
+                                    <label class="form-check-label" for="repeat">חזור</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="mb-3 row d-none repeat-fields">
-                        <label for="example-text-input" class="col-md-2 col-form-label">Repeat Cycle & Count</label>
+                        <label for="example-text-input" class="col-md-2 col-form-label">חזור על מחזור וספירה</label>
                         <div class="col-md-7">
                             <select class="form-control @error('repeat_cycle') is-invalid @enderror" name="repeat_cycle"
                                 id="example-text-input">
-                                <option value="">Select Repeat Cycle</option>
-                                <option value="Daily" {{ old('repeat_cycle') == 'Daily' ? 'selected' : '' }}>Daily
+                                <option value="">בחר חזור על מחזור</option>
+                                <option value="Daily" {{ old('repeat_cycle') == 'Daily' ? 'selected' : '' }}>יום יומי
                                 </option>
-                                <option value="Weekly" {{ old('repeat_cycle') == 'Weekly' ? 'selected' : '' }}>Weekly
+                                <option value="Weekly" {{ old('repeat_cycle') == 'Weekly' ? 'selected' : '' }}>שְׁבוּעִי
                                 </option>
-                                <option value="Monthly" {{ old('repeat_cycle') == 'Monthly' ? 'selected' : '' }}>Monthly
+                                <option value="Monthly" {{ old('repeat_cycle') == 'Monthly' ? 'selected' : '' }}>יַרחוֹן
                                 </option>
                             </select>
                         </div>
                         <div class="col-md-3">
                             <input type="number" class="form-control @error('repeat_count') is-invalid @enderror"
-                                name="repeat_count" id="repeat_count" placeholder="Repeat Count">
+                                name="repeat_count" id="repeat_count" placeholder="חזור על ספירה">
                         </div>
                         @error('repeat_cycle')
                             <span class="invalid-feedback" role="alert">
@@ -332,24 +329,25 @@
                         @enderror
                     </div>
                     <div class="mb-3 row d-none repeat-fields">
-                        <label for="example-text-input" class="col-md-2 col-form-label">Off Dates</label>
+                        <label for="example-text-input" class="col-md-2 col-form-label">פג תאריכים</label>
                         <div class="col-md-4">
                             <input type="text" class="form-control off-dates" name="off-dates[]">
                         </div>
                         <div class="col-md-1 d-flex align-items-center">
-                            <a href="javascript:;" class="btn-remove-row" class="text-danger"><i class="fa fa-times"></i></a>
+                            <a href="javascript:;" class="btn-remove-row" class="text-danger"><i
+                                    class="fa fa-times"></i></a>
                         </div>
                     </div>
                     <div class="more-fields"></div>
-                    <button type="button" class="btn btn-primary mt-3 add-more btn-sm d-none repeat-fields"><i class="fa fa-plus"></i>
-                        Add
-                        More</button>
+                    <button type="button" class="btn btn-primary mt-3 add-more btn-sm d-none repeat-fields"><i
+                            class="fa fa-plus"></i>
+                        הוסף עוד</button>
                     <div class="row">
                         <div class="col-lg-12 text-end mt-3">
                             <button type="submit" class="btn btn-info font-medium rounded-pill px-4 btn-submit" disabled>
                                 <div class="d-flex align-items-center">
                                     <i class="ti ti-send me-2 fs-4"></i>
-                                    Submit
+                                    שלח
                                 </div>
                             </button>
                         </div>
@@ -382,10 +380,10 @@
                     </div>`;
             $(".more-fields").append(html);
             jQuery(".off-dates").datepicker({
-            autoclose: true,
-            todayHighlight: true,
-            startDate: new Date()
-        });
+                autoclose: true,
+                todayHighlight: true,
+                startDate: new Date()
+            });
         });
         $(document).on('click', '.btn-remove-row', function() {
             $(this).closest('.row').remove();
