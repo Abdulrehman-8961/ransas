@@ -96,3 +96,4 @@ Route::post('/profile-settings/update-password', [ProfileSettings::class, 'updat
 Route::get('/Delete-image', [ProfileSettings::class, 'deleteImg']);
 
 Route::post('/fetch-data', [CalendarController::class, 'fetchData']);
+Route::post('/set-selected-pool', [App\Http\Controllers\HomeController::class, 'setSelectedPool']);

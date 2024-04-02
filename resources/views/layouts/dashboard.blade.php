@@ -153,10 +153,15 @@
                         </span>
                     </button>
 
-
+                    @php
+                        $user = DB::table('users')
+                            ->where('id', Auth::user()->id)
+                            ->first();
+                        $poolIDs = explode(', ', $user->pool_id);
+                        $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
+                    @endphp
 
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-
                         <div class="d-flex align-items-center justify-content-between">
                             <a href="javascript:void(0)"
                                 class="nav-link d-flex d-lg-none align-items-center justify-content-center"
@@ -165,6 +170,27 @@
                                 <i class="ti ti-align-justified fs-7"></i>
                             </a>
                             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
+                                @if (Auth::user()->role == 'Staff')
+                                    <li class="nav-item me-3">
+                                        @if (count($pool_option) > 1)
+                                            <select class="form-control" name="pool_select" id="pool_select">
+                                                @foreach ($pool_option as $row)
+                                                    <option value="{{ $row->id }}"
+                                                        {{ @$session['pool_select'] == $row->id ? 'selected' : '' }}>
+                                                        {{ $row->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        @else
+                                            <select class="form-control d-none" name="pool_select" id="pool_select">
+                                                @foreach ($pool_option as $row)
+                                                    <option value="{{ $row->id }}"
+                                                        {{ @$session['pool_select'] == $row->id ? 'selected' : '' }}>
+                                                        {{ $row->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        @endif
+                                    </li>
+                                @endif
 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link pe-0" href="javascript:void(0)" id="drop1"
@@ -324,6 +350,36 @@
                             confirmButton: 'btn btn-primary'
                         },
                         buttonsStyling: false
+                    });
+                </script>
+            @endif
+            @if (Auth::user()->role == 'Staff')
+                <script>
+                    $(document).ready(function() {
+                        // If session is not set for 'pool_select', trigger change event
+                        @if (!session('pool_select'))
+                            $('#pool_select').change();
+                        @endif
+
+                        $('#pool_select').change(function() {
+                            console.log("ok");
+                            var selectedPoolId = $(this).val();
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ url('set-selected-pool') }}",
+                                data: {
+                                    selected_pool_id: selectedPoolId,
+                                    _token: "{{ csrf_token() }}"
+                                },
+                                success: function(response) {
+                                    console.log(response.message);
+                                    location.reload();
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error(xhr.responseText);
+                                }
+                            });
+                        });
                     });
                 </script>
             @endif

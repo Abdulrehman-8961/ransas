@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Session;
 use Auth;
 use Redirect;
 use DB;
@@ -109,5 +110,17 @@ class HomeController extends Controller
         ]);
         return redirect()->back()->with('success', 'התשלום הצליח.');
 
+    }
+
+    public function setSelectedPool(Request $request)
+    {
+        $request->validate([
+            'selected_pool_id' => 'required',
+        ]);
+
+        $selectedPoolId = $request->input('selected_pool_id');
+        Session::put('pool_select', $selectedPoolId);
+
+        return response()->json(['message' => 'Selected pool has been set in session.']);
     }
 }

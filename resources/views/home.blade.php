@@ -112,14 +112,14 @@
                 <div class="col-lg-3 col-12">
                     <input type="text" class="form-control daterange" name="daterange" value="{{ @$_GET['daterange'] }}" />
                 </div>
-                <div class="col-md-3 col-12">
+                {{-- <div class="col-md-3 col-12">
                     <select class="form-control" name="pool_select" id="pool_select">
                         @foreach ($pool_option as $row)
                             <option value="{{ $row->id }}" {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
                                 {{ $row->name }}</option>
                         @endforeach
                     </select>
-                </div>
+                </div> --}}
                 <div class="col-md-1">
                     <button type="submit" class="btn btn-primary">לְסַנֵן</button>
                 </div>
@@ -206,17 +206,10 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <div>
-                                            <button id="prevBtn" type="button" aria-pressed="false"
-                                                class="btn btn-primary me-2"><span
-                                                    class="fc-icon fc-icon-chevron-left"></span></button><button
-                                                id="nextBtn" type="button" title="Next day" aria-pressed="false"
-                                                class="btn btn-primary btn-outline me-2"><span
-                                                    class="fc-icon fc-icon-chevron-right"></span></button>
                                             <button type="button" id="exportCsvBtn" title="Export Csv" aria-pressed="false"
                                                 class="btn btn-primary">ייצוא כ csv</button>
                                         </div>
                                     </div>
-                                    <h2 id="calendarDate" class="fc-toolbar-title" id="fc-dom-1">{{ date('M d,Y') }}</h2>
                                     <div></div>
                                 </div>
                                 <div class=" mt-3 mb-3 d-flex justify-content-between align-items-center">
@@ -225,7 +218,7 @@
                                     </div>
                                     <div class="d-flex">
                                         <div class="me-3">
-                                            <input type="checkbox" class="btn-check" name="events[]" value="Birthdays"
+                                            <input type="checkbox" class="btn-check" name="events[]" value="Birthday"
                                                 id="btn-check-2" checked autocomplete="off">
                                             <label class="btn btn-outline-info font-medium rounded-pill"
                                                 for="btn-check-2">ימי הולדת</label>
@@ -393,7 +386,7 @@
                     data: {
                         _token: csrfToken,
                         pool: pool,
-                        date: date,
+                        // date: date,
                         search: $('[name="search"]').val(),
                         events: $('[name="events[]"]:checked').map(function() {
                             return $(this).val();
@@ -529,9 +522,9 @@
             startDate: startDate,
             endDate: endDate
         });
-        @if (!isset($_GET['pool_select']))
-            $('#myForm').submit();
-        @endif
+        // @if (!isset($_GET['pool_select']))
+        //     $('#myForm').submit();
+        // @endif
         /*========Calender Js=========*/
         /*==========================*/
 
