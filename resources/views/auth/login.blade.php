@@ -44,16 +44,6 @@
         <div class="position-relative overflow-hidden radial-gradient min-vh-100">
             <div class="position-relative z-index-5">
                 <div class="row">
-                    <div class="col-xl-7 col-xxl-8">
-                        <a href="#" class="text-nowrap logo-img d-block px-4 py-9 w-100">
-                            <h4>RANSAS</h4>
-                        </a>
-                        <div class="d-none d-xl-flex align-items-center justify-content-center"
-                            style="height: calc(100vh - 80px);">
-                            <img src="{{ asset('public') }}/dist/images/backgrounds/login-security.svg" alt=""
-                                class="img-fluid" width="500">
-                        </div>
-                    </div>
                     <div class="col-xl-5 col-xxl-4">
                         <div
                             class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4">
@@ -85,8 +75,7 @@
                                         @enderror
                                     </div>
                                     <div class="d-flex align-items-center justify-content-between mb-4">
-                                        <a class="fw-medium"
-                                            href="{{ route('password.request') }}">שכחת את הסיסמא ?</a>
+                                        <a class="fw-medium" href="{{ route('password.request') }}">שכחת את הסיסמא ?</a>
                                     </div>
                                     <button type="submit" name="submit"
                                         class="btn btn-primary w-100 py-8 mb-4 rounded-2">להתחבר</button>
@@ -94,6 +83,17 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-xl-7 col-xxl-8">
+                        <a href="#" class="text-nowrap logo-img d-block px-4 py-9 w-100 text-end">
+                            <h4>RANSAS</h4>
+                        </a>
+                        <div class="d-none d-xl-flex align-items-center justify-content-center"
+                            style="height: calc(100vh - 80px);">
+                            <img src="{{ asset('public') }}/dist/images/backgrounds/login-security.svg" alt=""
+                                class="img-fluid" width="500">
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

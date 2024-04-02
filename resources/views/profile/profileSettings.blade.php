@@ -32,11 +32,12 @@
 
         <div class="card w-100 position-relative overflow-hidden">
             <div class="px-4 py-3 border-bottom d-flex justify-content-between">
-                <h5 class="card-title fw-semibold mb-0 lh-sm">לַעֲרוֹך</h5>
+                <h5 class="card-title fw-semibold mb-0 lh-sm">רעדאַגירן פּראָפיל</h5>
 
             </div>
             <div class="card-body p-4">
-                <form method="POST" class="container-fluid" action="{{ url('/profile-settings/update') }}" enctype="multipart/form-data">@csrf
+                <form method="POST" class="container-fluid" action="{{ url('/profile-settings/update') }}"
+                    enctype="multipart/form-data">@csrf
                     <div class="row">
                         <div class="col-md-4 col-12">
                             <div class="mb-3">
@@ -74,11 +75,20 @@
                         <div class="col-md-4 col-12">
                             <div class="mb-3">
                                 <label for="file" class="form-label">תמונת פרופיל</label>
-                                <input type="file" class="form-control @error('file') is-invalid @enderror" name="file">
+                                <input type="file" class="form-control @error('file') is-invalid @enderror"
+                                    name="file">
                                 @error('file')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
+                        </div>
+                        <div class="col-md-4 col-12 d-flex align-items-center">
+                            <div class="mb-3 ms-2">
+                                <img src="{{ asset('public') }}/dist/images/profile/{{ $user->image }}"
+                                    class="rounded-circle m-1" style="object-fit: cover" alt="No image" height="70" width="70">
+                            </div>
+                            <button type="button" data-url="{{ url('/Delete-image') }}" class="btn btn-light-danger text-danger remove-img ms-2"><i
+                                    class="ti ti-trash me-2"></i>להסיר תמונה</button>
                         </div>
 
                         <div class="col-md-12 mb-4">
@@ -127,13 +137,28 @@
                 </form>
             </div>
         </div>
-
-
-
-
-
-
-
-
     </div>
+@endsection
+
+@section('javascript')
+    <script>
+        $('.remove-img').on('click', function() {
+            var url = $(this).data('url');
+            console.log(url);
+            Swal.fire({
+                title: "האם אתה בטוח?",
+                text: "אתה לא תוכל להחזיר את זה!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "לְהַסִיר",
+                cancelButtonText: "לְבַטֵל",
+            }).then((result) => {
+                if (result.value) {
+                    window.location = url;
+                }
+            });
+        })
+    </script>
 @endsection

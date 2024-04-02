@@ -59,4 +59,11 @@ class ProfileSettings extends Controller
             return redirect()->back()->with('success', 'הסיסמה עודכנה');
         }
     }
+    public function deleteImg(Request $request)
+    {
+            DB::table('users')->where('id', Auth::user()->id)->update([
+                "image" => null
+            ]);
+            return redirect()->back()->with('success', 'התמונה הוסרה');
+    }
 }

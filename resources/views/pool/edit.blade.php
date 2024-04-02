@@ -74,7 +74,8 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input primary check-outline outline-primary"
                                                 type="checkbox" name="payment_options[]" id="primary3-outline-check"
-                                                value="כסף מזומן" {{ in_array('כסף מזומן', $paymentOptions) ? 'checked' : '' }}>
+                                                value="כסף מזומן"
+                                                {{ in_array('כסף מזומן', $paymentOptions) ? 'checked' : '' }}>
                                             <label class="form-check-label" for="primary3-outline-check">כסף מזומן</label>
                                         </div>
                                     </div>
@@ -96,11 +97,32 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-12"></div>
                                 <div class="col-lg-3 form-group bank-field">
-                                    <label>Account No.</label>
-                                    <input type="text" placeholder="Enter account number"
-                                        value="{{ old('account_no') }}" name="account_no"
-                                        class="form-control @error('account_no') is-invalid @enderror">
+                                    <label>שם הבנק</label>
+                                    <input type="text" placeholder="הזן את שם הבנק" value="{{ $pool_data->bank_name }}"
+                                        name="bank_name" class="form-control @error('bank_name') is-invalid @enderror">
+                                    @error('bank_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-3 form-group bank-field">
+                                    <label>מספר סניף</label>
+                                    <input type="text" placeholder="הזן מספר סניף" value="{{ $pool_data->branch_number }}"
+                                        name="branch_number"
+                                        class="form-control @error('branch_number') is-invalid @enderror">
+                                    @error('branch_number')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-3 form-group bank-field">
+                                    <label>מספר חשבון.</label>
+                                    <input type="text" placeholder="הזן מספר חשבון" value="{{ $pool_data->account_no }}"
+                                        name="account_no" class="form-control @error('account_no') is-invalid @enderror">
                                     @error('account_no')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>

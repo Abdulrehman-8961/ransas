@@ -70,8 +70,8 @@
                                     <label>תַפְקִיד</label>
                                     <select type="" placeholder="Enter Role" id="role" name="role"
                                         class="form-control @error('role') is-invalid @enderror">
-                                        <option value="Staff" {{ old('role') == 'Staff' ? 'selected' : '' }}>Staff</option>
-                                        <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                        <option value="Staff" {{ old('role') == 'Staff' ? 'selected' : '' }}>צוות</option>
+                                        <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>אדמין</option>
                                     </select>
                                     @error('role')
                                         <span class="invalid-feedback" role="alert">
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="col-lg-4 form-group">
                                     <label>הרשאות</label>
-                                    <select type="" placeholder="Enter Permission" id="permission" name="permission"
+                                    <select id="permission" name="permission"
                                         class="form-control @error('permission') is-invalid @enderror">
                                         <option value="Readonly" {{ old('permission') == 'Readonly' ? 'selected' : '' }}>
                                             לקריאה בלבד</option>
@@ -116,7 +116,7 @@
                                 </div>
                                 <div class="col-lg-4 form-group">
                                     <label>סיסמה</label>
-                                    <input type="password" placeholder="Enter Password" id="password" name="password"
+                                    <input type="password" placeholder="הזן את הסיסמה" id="password" name="password"
                                         class="form-control @error('password') is-invalid @enderror">
                                     @error('password')
                                         <span class="invalid-feedback" role="alert">
@@ -126,12 +126,12 @@
                                 </div>
                                 <div class="col-lg-4 form-group">
                                     <label>אשר סיסמה</label>
-                                    <input type="password" placeholder="Enter Confirm Password" name="confirm_password"
+                                    <input type="password" placeholder="הזן אישור סיסמה" name="confirm_password"
                                         class="form-control">
                                 </div>
                                 <div class="col-lg-12"></div>
                                 <div class="col-lg-4 mt-3">
-                                    <button class="btn btn-primary" name="submit" type="submit">להציל</button>
+                                    <button class="btn btn-primary" name="submit" type="submit">אישור</button>
                                 </div>
                             </div>
                         </form>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="rtl">
+<html lang="en" dir="rtl" lang="he">
 
 <head>
     <meta charset="utf-8">
@@ -96,8 +96,12 @@
             width: 100%
         }
 
-        .fc .fc-timegrid-col.fc-day-today{
+        .fc .fc-timegrid-col.fc-day-today {
             background-color: inherit !important;
+        }
+
+        .sidebar-nav ul .sidebar-item .sidebar-link {
+            font-size: 18px !important;
         }
     </style>
 
@@ -201,7 +205,8 @@
                                                             alt="" width="24" height="24">
                                                     </span>
                                                     <div class="w-75 d-inline-block v-middle ps-3">
-                                                        <h6 class="mb-1 bg-hover-primary fw-semibold"> הפרופיל שלי </h6>
+                                                        <h6 class="mb-1 bg-hover-primary fw-semibold"> הפרופיל שלי
+                                                        </h6>
                                                         <span class="d-block text-dark">הגדרות חשבון</span>
                                                     </div>
                                                 </a>
@@ -255,7 +260,6 @@
             <script src="{{ asset('public') }}/dist/js/forms/select2.init.js"></script>
             <script src="{{ asset('public') }}/dist/libs/owl.carousel/dist/owl.carousel.min.js"></script>
             <script src="{{ asset('public') }}/dist/libs/apexcharts/dist/apexcharts.min.js"></script>
-            <script src="{{ asset('public') }}/dist/js/dashboard.js"></script>
             <script src="{{ asset('public') }}/dist/libs/sweetalert2/dist/sweetalert2.min.js"></script>
             <script src="{{ asset('public') }}/dist/js/forms/sweet-alert.init.js"></script>
             <script src="{{ asset('public') }}/dist/libs/bootstrap-material-datetimepicker/node_modules/moment/moment.js"></script>
@@ -269,6 +273,35 @@
             <script src="{{ asset('public') }}/dist/libs/bootstrap-material-datetimepicker/node_modules/moment/moment.js"></script>
             <script src="{{ asset('public') }}/dist/libs/daterangepicker/daterangepicker.js"></script>
             <script src="{{ asset('public') }}/dist/js/plugins/datetimepicker.init.js"></script>
+            <script>
+                $(".counter-carousel").owlCarousel({
+                    loop: true,
+                    margin: 30,
+                    mouseDrag: true,
+                    autoplay: false,
+                    autoplayTimeout: 4000,
+                    autoplaySpeed: 2000,
+                    nav: false,
+                    rtl: true,
+                    responsive: {
+                        0: {
+                            items: 2,
+                        },
+                        576: {
+                            items: 2,
+                        },
+                        768: {
+                            items: 3,
+                        },
+                        1200: {
+                            items: 5,
+                        },
+                        1400: {
+                            items: 6,
+                        },
+                    },
+                });
+            </script>
             @if (Session::has('success'))
                 <script>
                     Swal.fire({

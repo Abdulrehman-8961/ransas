@@ -109,9 +109,31 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 form-group d-none bank-field">
+                            </div>
+                            <div class="row mb-3 d-none bank-field">
+                                <div class="col-lg-3 form-group">
+                                    <label>שם הבנק</label>
+                                    <input type="text" placeholder="הזן את שם הבנק" value="{{ old('bank_name') }}"
+                                        name="bank_name" class="form-control @error('bank_name') is-invalid @enderror">
+                                    @error('bank_name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-3 form-group">
+                                    <label>מספר סניף</label>
+                                    <input type="text" placeholder="הזן מספר סניף" value="{{ old('branch_number') }}"
+                                        name="branch_number" class="form-control @error('branch_number') is-invalid @enderror">
+                                    @error('branch_number')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-lg-3 form-group">
                                     <label>מספר חשבון.</label>
-                                    <input type="text" placeholder="Enter account number" value="{{ old('account_no') }}"
+                                    <input type="text" placeholder="הזן מספר חשבון" value="{{ old('account_no') }}"
                                         name="account_no" class="form-control @error('account_no') is-invalid @enderror">
                                     @error('account_no')
                                         <span class="invalid-feedback" role="alert">

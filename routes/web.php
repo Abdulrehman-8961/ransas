@@ -40,6 +40,7 @@ Route::post('/User/update/{id}', [UserController::class, 'update'])->middleware(
 Route::post('/User/update-password/{id}', [UserController::class, 'update_password'])->middleware('isAdmin');
 Route::get('/User/delete/{id}', [UserController::class, 'delete'])->middleware('isAdmin');
 
+
 // Add event
 
 Route::get('/Add-Event', [AddEventController::class, 'index'])->middleware('user')->middleware('user');
@@ -92,5 +93,6 @@ Route::get('/Pool-Setting', [SettingsController::class, 'poolView'])->middleware
 Route::get('/profile-settings', [ProfileSettings::class, 'settings']);
 Route::post('/profile-settings/update', [ProfileSettings::class, 'update_profile']);
 Route::post('/profile-settings/update-password', [ProfileSettings::class, 'update_password']);
+Route::get('/Delete-image', [ProfileSettings::class, 'deleteImg']);
 
 Route::post('/fetch-data', [CalendarController::class, 'fetchData']);

@@ -126,7 +126,7 @@
             </div>
         </form>
         <!--  Owl carousel -->
-        <div class="owl-carousel  counter-carousel owl-theme">
+        <div class="owl-carousel counter-carousel owl-theme">
             <div class="item">
                 <div class="card border-0 zoom-in bg-light-primary shadow-none">
                     <div class="card-body">

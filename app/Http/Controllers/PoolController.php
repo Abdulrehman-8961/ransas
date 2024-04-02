@@ -67,6 +67,8 @@ class PoolController extends Controller
                 "email" => $request->input('email'),
                 "phone" => $request->input('phone'),
                 'payments' => $payment_options,
+                "bank_name" => $request->input('bank_name'),
+                "branch_number" => $request->input('branch_number'),
                 "account_no" => $request->input('account_no'),
                 'messages' => $request->sms,
                 'availble_days' => ['monday' => $request->input('monday'),
@@ -111,12 +113,6 @@ class PoolController extends Controller
             "name" => ['required',Rule::unique('pool', 'name')->ignore($id)],
         ]);
         if($validated) {
-            // DB::table('users')->where('id', $id)->update([
-            //     "name" => $request->input('name'),
-            //     "email" => $request->input('email'),
-            //     "phone" => $request->input('phone'),
-            //     "updated_at" => date("Y-m-d H:i:s")
-            // ]);
 
             $start_time = date('H:i:s', strtotime($request->input('start_time')));
             $end_time = date('H:i:s', strtotime($request->input('end_time')));
@@ -129,6 +125,8 @@ class PoolController extends Controller
                 "email" => $request->input('email'),
                 "phone" => $request->input('phone'),
                 'payments' => $payment_options,
+                "bank_name" => $request->input('bank_name'),
+                "branch_number" => $request->input('branch_number'),
                 "account_no" => $request->input('account_no'),
                 'messages' => $request->sms,
                 'availble_days' => ['monday' => $request->input('monday'),
