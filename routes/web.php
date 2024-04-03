@@ -9,6 +9,7 @@ use App\Http\Controllers\LogHistoryController;
 use App\Http\Controllers\PoolController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ProfileSettings;
+use App\Http\Controllers\SupportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,3 +102,9 @@ Route::get('/Delete-image', [ProfileSettings::class, 'deleteImg']);
 
 Route::post('/fetch-data', [CalendarController::class, 'fetchData']);
 Route::post('/set-selected-pool', [App\Http\Controllers\HomeController::class, 'setSelectedPool']);
+
+Route::get('/Support', [SupportController::class, 'view'])->middleware('auth');
+Route::get('/New-Ticket', [SupportController::class, 'newTicket'])->middleware('auth');
+Route::post('/Ticket/save', [SupportController::class, 'saveTicket'])->middleware('auth');
+Route::post('/Send-message/{id}', [SupportController::class, 'sendMessage'])->middleware('auth');
+Route::get('/Ticket/{id}', [SupportController::class, 'ticket'])->middleware('auth');

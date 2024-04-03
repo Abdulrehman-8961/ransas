@@ -112,6 +112,14 @@
                         </ul>
                     </li>
                 @endif
+                <li class="sidebar-item">
+                    <a class="sidebar-link  " href="{{ url('/Support') }}" aria-expanded="false">
+                        <span>
+                            <i class="ti ti-hours-24"></i>
+                        </span>
+                        <span class="hide-menu">Support</span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
