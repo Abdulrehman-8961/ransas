@@ -25,19 +25,47 @@
         </div>
         <div class="card w-100 position-relative overflow-hidden">
             <div class="card-body">
-                <form action="{{ url('/Message-Template/Save') }}" method="post">
+                @if (!isset($_GET['temp']))
+                    @php
+                        $pool_option = DB::table('pool')->where('is_deleted', 0)->get();
+                    @endphp
+                    <form id="search-form" action="{{ url()->current() }}" method="get">
+                        <div class="row mb-3">
+                            <div class="col-md-4 col-12">
+                                <label for="">בריכות</label>
+                                <select class="form-control" name="pool_id" id="pool_id"
+                                    onchange="document.getElementById('search-form').submit();">
+                                    <option value=""></option>
+                                    @foreach ($pool_option as $row)
+                                        <option value="{{ $row->id }}"
+                                            {{ @$_GET['pool_id'] == $row->id ? 'selected' : '' }}>
+                                            {{ $row->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                @endif
+                <form action="{{ isset($_GET['temp']) ? url('/Message-Template/Save') : url('/Template/Save') }}"
+                    method="post">
                     @csrf
-                    <input type="hidden" name="template_id" value="{{ @$_GET['temp'] }}">
+                    @if (isset($_GET['temp']))
+                        <input type="hidden" name="template_id" value="{{ @$_GET['temp'] }}">
+                    @else
+                        <input type="hidden" name="template_id" value="{{ @$_GET['pool_id'] }}">
+                    @endif
                     <div class="row">
                         <div class="col-md-6 col-12 mb-3">
                             <label for="name" class="form-label">נושא</label>
-                            <input type="text" class="form-control" value="{{ @$template->subject }}" name="name" id="name">
+                            <input type="text" class="form-control" value="{{ @$template->subject }}" name="name"
+                                id="name">
                         </div>
                         <div class="col-md-6 col-12 mb-3">
                             <label for="status" class="form-label">סטָטוּס</label>
                             <select class="form-control" name="status" id="status">
-                                <option value="Send" {{ @$template->status == "Send" ? "selected" : "" }}>לִשְׁלוֹחַ</option>
-                                <option value="Stop" {{ @$template->status == "Stop" ? "selected" : "" }}>תפסיק</option>
+                                <option value="Send" {{ @$template->status == 'Send' ? 'selected' : '' }}>לִשְׁלוֹחַ
+                                </option>
+                                <option value="Stop" {{ @$template->status == 'Stop' ? 'selected' : '' }}>תפסיק</option>
                             </select>
                         </div>
                     </div>

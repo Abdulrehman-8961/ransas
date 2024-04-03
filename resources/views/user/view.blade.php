@@ -28,16 +28,18 @@
             <!-- --------------------- start Contact ---------------- -->
             <div class="card card-body">
                 <div class="row">
-                    <div class="col-md-4 col-xl-3">
+                    <div class="col-md-4 col-xl-4 d-flex">
                         <form class="position-relative" id="search-form" action="{{ url()->current() }}" method="GET">
                             <input type="text" name="search" id="search" class="form-control product-search ps-5" id="input-search"
                                 placeholder="לחפש">
                             <i
                                 class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
                         </form>
+                        <button type="button" onclick="window.location.href='{{ url()->current() }}'"
+                            class="btn btn-warning  rounded-2 ms-2">ברור</button>
                     </div>
                     <div
-                        class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
+                        class="col-md-8 col-xl-8 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
                         <div class="action-btn show-btn" style="display: none">
                             <a href="javascript:void(0)"
                                 class="delete-multiple btn-light-danger btn me-2 text-danger d-flex align-items-center font-medium">

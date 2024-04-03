@@ -86,7 +86,7 @@
                         </a>
                         <ul aria-expanded="false" class="collapse first-level">
                             <li class="sidebar-item">
-                                <a href="{{ url('/Message-Template') }}?temp=1" class="sidebar-link">
+                                <a href="{{ url('/Message-Template') }}" class="sidebar-link">
                                     <div class="round-16 d-flex align-items-center justify-content-center">
                                         <i class="ti ti-circle"></i>
                                     </div>
@@ -99,6 +99,14 @@
                                         <i class="ti ti-circle"></i>
                                     </div>
                                     <span class="hide-menu">תבנית להודעת אישור</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="{{ url('/Fav-Icon') }}" class="sidebar-link">
+                                    <div class="round-16 d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-circle"></i>
+                                    </div>
+                                    <span class="hide-menu">סמל</span>
                                 </a>
                             </li>
                         </ul>

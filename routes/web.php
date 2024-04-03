@@ -85,6 +85,10 @@ Route::get('/Back-to-Admin/{id}', [PoolController::class, 'loginToAdmin'])->midd
 // Message Template
 Route::get('/Message-Template', [SettingsController::class, 'messageView'])->middleware('auth','isAdmin');
 Route::post('/Message-Template/Save', [SettingsController::class, 'saveTemplate'])->middleware('auth','isAdmin');
+Route::post('/Template/Save', [SettingsController::class, 'savePoolTemplate'])->middleware('auth','isAdmin');
+Route::get('/Fav-Icon', [SettingsController::class, 'favicon'])->middleware('auth','isAdmin');
+Route::post('/Fav-Icon/Save', [SettingsController::class, 'saveFavIcon'])->middleware('auth','isAdmin');
+Route::get('/Fav-Icon/Delete', [SettingsController::class, 'deleteFavIcon'])->middleware('auth','isAdmin');
 
 Route::get('/Pool-Setting', [SettingsController::class, 'poolView'])->middleware('auth','isAdmin');
 

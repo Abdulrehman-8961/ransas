@@ -2,6 +2,7 @@
 
 @section('content')
     @php
+        // dd(session('pool_select'));
         if (isset($_GET['daterange'])) {
             $dateParts = explode(' - ', $_GET['daterange']);
             $startDate = date('Y-m-d', strtotime($dateParts[0]));
@@ -11,10 +12,8 @@
             $startDate = $currentDate->startOfWeek()->format('Y-m-d');
             $endDate = $currentDate->endOfWeek()->format('Y-m-d');
         }
-        if (isset($_GET['pool_select'])) {
-            $pool = DB::table('pool')
-                ->where('id', $_GET['pool_select'])
-                ->first();
+        if (session('pool_select')) {
+            $pool = DB::table('pool')->where('id', session('pool_select'))->first();
 
             $totalAvailableHours = [];
 
@@ -34,11 +33,11 @@
             }
             // Fetch booked hours from the event table for the specific date range and pool
             $bookedHours = DB::table('events')
-                ->where('pool_id', $_GET['pool_select'])
+                ->where('pool_id', session('pool_select'))
                 ->whereBetween('start_date', [$startDate, $endDate])
                 ->get();
 
-            // dd($_GET['pool_select'],$startDate,$endDate);
+            // dd(session('pool_select'),$startDate,$endDate);
 
             // Calculate the total booked hours for the date range
             $totalBookedHours = 0;
@@ -65,7 +64,7 @@
 
             // dd($totalFreeHoursAllDays);
             $swimming_hours = DB::table('events')
-                ->where('pool_id', $_GET['pool_select'])
+                ->where('pool_id', session('pool_select'))
                 ->whereBetween('start_date', [$startDate, $endDate])
                 ->where('booking_type', 'Swimming Course')
                 ->get();
@@ -80,17 +79,17 @@
             }
             $totalHours = floor(@$totalMinutes / 60);
             $birthdays = DB::Table('events')
-                ->where('pool_id', $_GET['pool_select'])
+                ->where('pool_id', session('pool_select'))
                 ->whereBetween('start_date', [$startDate, $endDate])
                 ->where('booking_type', 'Birthday')
                 ->count();
             $Swimming_courses = DB::Table('events')
-                ->where('pool_id', $_GET['pool_select'])
+                ->where('pool_id', session('pool_select'))
                 ->whereBetween('start_date', [$startDate, $endDate])
                 ->where('booking_type', 'Swimming Course')
                 ->count();
             $revenue = DB::Table('events')
-                ->where('pool_id', $_GET['pool_select'])
+                ->where('pool_id', session('pool_select'))
                 ->where('payment_status', 'Paid')
                 ->whereBetween('start_date', [$startDate, $endDate])
                 ->sum('total_payment');
@@ -115,13 +114,13 @@
                 {{-- <div class="col-md-3 col-12">
                     <select class="form-control" name="pool_select" id="pool_select">
                         @foreach ($pool_option as $row)
-                            <option value="{{ $row->id }}" {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
+                            <option value="{{ $row->id }}" {{ @session('pool_select') == $row->id ? 'selected' : '' }}>
                                 {{ $row->name }}</option>
                         @endforeach
                     </select>
                 </div> --}}
                 <div class="col-md-1">
-                    <button type="submit" class="btn btn-primary">לְסַנֵן</button>
+                    <button type="submit" class="btn btn-primary">סינון</button>
                 </div>
             </div>
         </form>
@@ -196,6 +195,40 @@
             </div>
 
         </div>
+        @if (Auth::user()->role == 'Admin')
+            @php
+                $all_events = DB::table('events')
+                    ->where('pool_id', @session('pool_select'))
+                    ->paginate(20);
+            @endphp
+            <div class="table-responsive">
+                <table class="table align-middle text-nowrap">
+                    <thead class="header-item">
+                        <tr>
+                            <th>שם הלקוח</th>
+                            <th>תאריך התחלה</th>
+                            <th>שם אירוע</th>
+                            <th>אמצעי תשלום</th>
+                            <th>עֲלוּת</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($all_events as $row)
+                            <tr>
+                                <td>{{ $row->customer_name }}</td>
+                                <td>{{ date('d.m.Y', strtotime($row->start_date)) }}</td>
+                                <td>{{ $row->booking_type }}</td>
+                                <td>{{ $row->payment_method }}</td>
+                                <td>{{ $row->total_payment }}</td>
+                            </tr>
+                        @endforeach
+                    <tfoot>
+                        <td colspan="5">{{ $all_events->links('pagination::bootstrap-5') }}</td>
+                    </tfoot>
+                    </tbody>
+                </table>
+            </div>
+        @endif
         @if (Auth::user()->role == 'Staff')
             <div class="card">
                 <div>
@@ -522,9 +555,6 @@
             startDate: startDate,
             endDate: endDate
         });
-        // @if (!isset($_GET['pool_select']))
-        //     $('#myForm').submit();
-        // @endif
         /*========Calender Js=========*/
         /*==========================*/
 
@@ -851,7 +881,7 @@
                         hour12: false
                     },
                 };
-                @if (isset($_GET['pool_select']))
+                @if (session('pool_select'))
                     calendarOptions.businessHours = [
                         @foreach ($startTimes as $day => $startTime)
                             {

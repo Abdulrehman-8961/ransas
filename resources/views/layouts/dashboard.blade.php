@@ -10,10 +10,13 @@
     <link rel="stylesheet" href="{{ asset('public') }}/dist/libs/owl.carousel/dist/assets/owl.carousel.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    @php
+        $getIcon = DB::table('fav_icon')->first();
+        $favicon = @$getIcon->image;
+    @endphp
 
     <link rel="shortcut icon" href="{{ asset('public') }}/dist/dashboard_assets/media/photos/fav.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/dist/dashboard_assets/media/photos/fav.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('public') }}/uploads/{{ @$favicon }}">
     <link rel="apple-touch-icon" sizes="180x180" href="/dist/dashboard_assets/media/photos/fav.png">
 
     <link rel="stylesheet" href="{{ asset('public') }}/dist/libs/daterangepicker/daterangepicker.css">
@@ -154,11 +157,15 @@
                     </button>
 
                     @php
-                        $user = DB::table('users')
-                            ->where('id', Auth::user()->id)
-                            ->first();
-                        $poolIDs = explode(', ', $user->pool_id);
-                        $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
+                        if (Auth::user()->role == 'Admin') {
+                            $pool_option = DB::table('pool')->where('is_deleted', 0)->get();
+                        } else {
+                            $user = DB::table('users')
+                                ->where('id', Auth::user()->id)
+                                ->first();
+                            $poolIDs = explode(', ', $user->pool_id);
+                            $pool_option = DB::table('pool')->wherein('id', $poolIDs)->where('is_deleted', 0)->get();
+                        }
                     @endphp
 
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -170,27 +177,25 @@
                                 <i class="ti ti-align-justified fs-7"></i>
                             </a>
                             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
-                                @if (Auth::user()->role == 'Staff')
-                                    <li class="nav-item me-3">
-                                        @if (count($pool_option) > 1)
-                                            <select class="form-control" name="pool_select" id="pool_select">
-                                                @foreach ($pool_option as $row)
-                                                    <option value="{{ $row->id }}"
-                                                        {{ @$session['pool_select'] == $row->id ? 'selected' : '' }}>
-                                                        {{ $row->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        @else
-                                            <select class="form-control d-none" name="pool_select" id="pool_select">
-                                                @foreach ($pool_option as $row)
-                                                    <option value="{{ $row->id }}"
-                                                        {{ @$session['pool_select'] == $row->id ? 'selected' : '' }}>
-                                                        {{ $row->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        @endif
-                                    </li>
-                                @endif
+                                <li class="nav-item me-3">
+                                    @if (count($pool_option) > 1)
+                                        <select class="form-control" name="pool_select" id="pool_select">
+                                            @foreach ($pool_option as $row)
+                                                <option value="{{ $row->id }}"
+                                                    {{ @session('pool_select') == $row->id ? 'selected' : '' }}>
+                                                    {{ $row->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                        <select class="form-control d-none" name="pool_select" id="pool_select">
+                                            @foreach ($pool_option as $row)
+                                                <option value="{{ $row->id }}"
+                                                    {{ @session('pool_select') == $row->id ? 'selected' : '' }}>
+                                                    {{ $row->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    @endif
+                                </li>
 
                                 <li class="nav-item dropdown">
                                     <a class="nav-link pe-0" href="javascript:void(0)" id="drop1"
@@ -353,36 +358,32 @@
                     });
                 </script>
             @endif
-            @if (Auth::user()->role == 'Staff')
-                <script>
-                    $(document).ready(function() {
-                        // If session is not set for 'pool_select', trigger change event
-                        @if (!session('pool_select'))
-                            $('#pool_select').change();
-                        @endif
+            <script>
+                $(document).ready(function() {
 
-                        $('#pool_select').change(function() {
-                            console.log("ok");
-                            var selectedPoolId = $(this).val();
-                            $.ajax({
-                                type: "POST",
-                                url: "{{ url('set-selected-pool') }}",
-                                data: {
-                                    selected_pool_id: selectedPoolId,
-                                    _token: "{{ csrf_token() }}"
-                                },
-                                success: function(response) {
-                                    console.log(response.message);
-                                    location.reload();
-                                },
-                                error: function(xhr, status, error) {
-                                    console.error(xhr.responseText);
-                                }
-                            });
+                    $(document).on('change', '#pool_select', function() {
+                        var selectedPoolId = $(this).val();
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ url('set-selected-pool') }}",
+                            data: {
+                                selected_pool_id: selectedPoolId,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function(response) {
+                                console.log(response.message);
+                                location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
                         });
                     });
-                </script>
-            @endif
+                    @if (!session('pool_select'))
+                        $('#pool_select').change();
+                    @endif
+                });
+            </script>
             @yield('javascript')
             <script type="text/javascript">
                 $(".daterange").daterangepicker();

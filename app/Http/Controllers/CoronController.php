@@ -19,43 +19,45 @@ class CoronController extends Controller
             ->where(DB::raw("CONCAT(start_date, ' ', start_time)"), '<=', $next24Hours)
             ->where('reminder',0)
             ->get();
-        $message_template = DB::table('message_template')->where('id',1)->first();
-        if ($message_template->status == "Send") {
-            foreach ($events as $row) {
-                $replacements = [
-                    '{customer_name}' => $row->stylist_name,
-                    '{date}' => date("d.m.Y", strtotime($row->start_date)).' - '.date("d.m.Y", strtotime($row->end_date)),
-                    '{time}' => date("h:i a",strtotime($row->start_time)).' - '.date("h:i a",strtotime($row->end_time)),
-                    '{payment_status}' => $row->payment_status,
-                    '{total_amount}' => $row->total_payment,
-                    '{booking_method}' => $row->payment_method,
-                    '{booking_type}' => $row->booking_type,
-                  ];
-                $templateContent = $message_template->content;
-                $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);
-                try {
-                    // $response = Http::withHeaders([
-                    //     'Content-Type' => 'application/json',
-                    //     'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
-                    // ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
-                    //     "Data" => [
-                    //         "Message" => $message,
-                    //         "Recipients" => [
-                    //             [
-                    //                 "Phone" => "0542165091"
-                    //             ]
-                    //         ],
-                    //         "Settings" => [
-                    //             "Sender" => "Ransas"
-                    //         ]
-                    //     ]
-                    // ]);
-                } catch (\Throwable $th) {
-                    //throw $th;
+        $message_template = DB::table('message_template')->where('pool_id',@$events->pool_id)->first();
+        if ($message_template) {
+            if ($message_template->status == "Send") {
+                foreach ($events as $row) {
+                    $replacements = [
+                        '{customer_name}' => $row->stylist_name,
+                        '{date}' => date("d.m.Y", strtotime($row->start_date)).' - '.date("d.m.Y", strtotime($row->end_date)),
+                        '{time}' => date("h:i a",strtotime($row->start_time)).' - '.date("h:i a",strtotime($row->end_time)),
+                        '{payment_status}' => $row->payment_status,
+                        '{total_amount}' => $row->total_payment,
+                        '{booking_method}' => $row->payment_method,
+                        '{booking_type}' => $row->booking_type,
+                      ];
+                    $templateContent = $message_template->content;
+                    $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);
+                    try {
+                        // $response = Http::withHeaders([
+                        //     'Content-Type' => 'application/json',
+                        //     'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
+                        // ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
+                        //     "Data" => [
+                        //         "Message" => $message,
+                        //         "Recipients" => [
+                        //             [
+                        //                 "Phone" => "0542165091"
+                        //             ]
+                        //         ],
+                        //         "Settings" => [
+                        //             "Sender" => "Ransas"
+                        //         ]
+                        //     ]
+                        // ]);
+                    } catch (\Throwable $th) {
+                        //throw $th;
+                    }
+                    DB::table('events')->where('id',$row->id)->update([
+                        'reminder' => 1
+                    ]);
                 }
-                DB::table('events')->where('id',$row->id)->update([
-                    'reminder' => 1
-                ]);
             }
         }
 

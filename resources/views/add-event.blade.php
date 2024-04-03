@@ -50,7 +50,7 @@
                                 id="pool_select">
                                 @foreach ($pool_option as $row)
                                     <option value="{{ $row->id }}"
-                                        {{ @$event->booking_type || old('pool_select') == $row->id ? 'selected' : '' }}>
+                                        {{ @$event->pool_id || session('pool_select') == $row->id ? 'selected' : '' }}>
                                         {{ $row->name }}</option>
                                 @endforeach
                             </select>

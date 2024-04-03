@@ -46,11 +46,11 @@
         @endphp
         <form id="myForm" action="{{ URL::current() }}" method="get">
             <div class="row container mb-5">
-                <div class="col-md-4 col-12">
+                <div class="col-md-4 col-12 d-none">
                     <label for="">בחר בריכה</label>
                     <select class="form-control" name="pool_select" id="pool_select_main">
                         @foreach ($pool_option as $row)
-                            <option value="{{ $row->id }}" {{ @$_GET['pool_select'] == $row->id ? 'selected' : '' }}>
+                            <option value="{{ $row->id }}" {{ @session('pool_select') == $row->id ? 'selected' : '' }}>
                                 {{ $row->name }}</option>
                         @endforeach
                     </select>
@@ -302,7 +302,7 @@
             // Submit the form when the select field changes
             document.getElementById('myForm').submit();
         });
-        @if (!isset($_GET['pool_select']))
+        @if (!session()->has('pool_select'))
             document.getElementById('myForm').submit();
         @endif
         jQuery(".mydatepicker, #datepicker, .input-group.date").datepicker();
@@ -670,7 +670,7 @@
                         hour12: false
                     }
                 }
-                @if (isset($_GET['pool_select']))
+                @if (session('pool_select'))
                     calendarOptions.businessHours = [
                         @foreach ($startTimes as $day => $startTime)
                             {
