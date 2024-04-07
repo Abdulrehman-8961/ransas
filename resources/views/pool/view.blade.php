@@ -27,80 +27,80 @@
         <div class="widget-content searchable-container list">
             <!-- --------------------- start Contact ---------------- -->
             <div class="card card-body">
-                <div class="row">
-                    <div class="col-md-4 col-xl-3 d-flex">
-                        <form class="position-relative" id="search-form" action="{{ url()->current() }}" method="GET">
+                <form class="position-relative" id="search-form" action="{{ url()->current() }}" method="GET">
+                    <div class="row">
+                        <div class="col-md-4 col-xl-3 d-flex">
                             <input type="text" name="search" id="search" class="form-control product-search ps-5"
                                 id="input-search" placeholder="חיפוש משתמשים...">
-                            <i
-                                class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+
                             <button type="button" onclick="window.location.href='{{ url()->current() }}'"
                                 class="btn btn-warning  rounded-2 ms-2">ברור</button>
-                        </form>
-                    </div>
-                    <div
-                        class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
-                        <div class="action-btn show-btn" style="display: none">
-                            <a href="javascript:void(0)"
-                                class="delete-multiple btn-light-danger btn me-2 text-danger d-flex align-items-center font-medium">
-                                <i class="ti ti-trash text-danger me-1 fs-5"></i> Delete All Row
+                        </div>
+                        <div
+                            class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
+                            <div class="action-btn show-btn" style="display: none">
+                                <a href="javascript:void(0)"
+                                    class="delete-multiple btn-light-danger btn me-2 text-danger d-flex align-items-center font-medium">
+                                    <i class="ti ti-trash text-danger me-1 fs-5"></i> Delete All Row
+                                </a>
+                            </div>
+                            <a href="{{ url('/Pool/add') }}" id="btn-add-contact"
+                                class="btn btn-info d-flex align-items-center">
+                                <i class="ti ti-users text-white me-1 fs-5"></i> הוסף בריכה
                             </a>
                         </div>
-                        <a href="{{ url('/Pool/add') }}" id="btn-add-contact"
-                            class="btn btn-info d-flex align-items-center">
-                            <i class="ti ti-users text-white me-1 fs-5"></i> הוסף בריכה
-                        </a>
                     </div>
-                </div>
+                </form>
             </div>
-            <div class="card card-body">
-                <div class="table-responsive">
-                    <table class="table search-table align-middle text-nowrap">
-                        <thead class="header-item">
-                            <tr>
-                                <th>שֵׁם</th>
-                                <th>אימייל</th>
+        </div>
+        <div class="card card-body">
+            <div class="table-responsive">
+                <table class="table search-table align-middle text-nowrap">
+                    <thead class="header-item">
+                        <tr>
+                            <th>שֵׁם</th>
+                            <th>אימייל</th>
 
-                                <th>טלפון</th>
-                                <th>פעולה</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- start row -->
-                            @foreach ($users as $row)
-                                <tr class="search-items">
-                                    <td>
-                                        <div class="d-flex align-items-center">
+                            <th>טלפון</th>
+                            <th>פעולה</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- start row -->
+                        @foreach ($users as $row)
+                            <tr class="search-items">
+                                <td>
+                                    <div class="d-flex align-items-center">
 
-                                            <div class="ms-3">
-                                                <div class="user-meta-info">
-                                                    <h6 class="user-name mb-0" data-name="Emma Adams">{{ $row->name }}
-                                                    </h6>
-                                                </div>
+                                        <div class="ms-3">
+                                            <div class="user-meta-info">
+                                                <h6 class="user-name mb-0" data-name="Emma Adams">{{ $row->name }}
+                                                </h6>
                                             </div>
                                         </div>
-                                    </td>
-                                    <td>
-                                        <span class="usr-email-addr" data-email="adams@mail.com">{{ $row->email }}</span>
-                                    </td>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="usr-email-addr" data-email="adams@mail.com">{{ $row->email }}</span>
+                                </td>
 
-                                    <td>
-                                        <span class="usr-ph-no" data-phone="+1 (070) 123-4567">{{ $row->phone }}</span>
-                                    </td>
-                                    <td>
-                                        <div class="action-btn">
-                                            <a href="{{ url('/Pool/edit/' . $row->id) }}" class="text-info edit">
-                                                <i class="ti ti-edit fs-5"></i>
-                                            </a>
-                                            <a href="{{ url('/Pool/delete/' . $row->id) }}" class="text-dark delete ms-2">
-                                                <i class="ti ti-trash fs-5"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                                <td>
+                                    <span class="usr-ph-no" data-phone="+1 (070) 123-4567">{{ $row->phone }}</span>
+                                </td>
+                                <td>
+                                    <div class="action-btn">
+                                        <a href="{{ url('/Pool/edit/' . $row->id) }}" class="text-info edit">
+                                            <i class="ti ti-edit fs-5"></i>
+                                        </a>
+                                        <a href="{{ url('/Pool/delete/' . $row->id) }}" class="text-dark delete ms-2">
+                                            <i class="ti ti-trash fs-5"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-        @endsection
+        </div>
+    @endsection

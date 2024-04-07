@@ -56,7 +56,15 @@ class PoolController extends Controller
             "email" => 'required|email',
             "payment_options" => 'required',
             "sms" => 'required',
+        ], [
+            'name.required' => 'שדה השם חובה.',
+            'name.unique' => 'השם כבר נלקח.',
+            'email.required' => 'שדה הדוא"ל נדרש.',
+            'email.email' => 'נא לספק כתובת דוא"ל חוקית.',
+            'payment_options.required' => 'אנא בחר אפשרויות תשלום.',
+            'sms.required' => 'אנא בחר אפשרויות SMS.',
         ]);
+
         if($validated) {
 
             $data = $request->input('payment_options');
@@ -110,7 +118,10 @@ class PoolController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            "name" => ['required',Rule::unique('pool', 'name')->ignore($id)],
+            "name" => ['required', Rule::unique('pool', 'name')->ignore($id)],
+        ], [
+            'name.required' => 'שדה השם חובה.',
+            'name.unique' => 'השם כבר נלקח.',
         ]);
         if($validated) {
 
@@ -166,7 +177,13 @@ class PoolController extends Controller
         $request->validate([
             "password" => 'required|min:6',
             "confirm_password" => 'required|same:password',
+        ], [
+            'password.required' => 'שדה הסיסמה נדרש.',
+            'password.min' => 'הסיסמה חייבת להיות לפחות :min תווים.',
+            'confirm_password.required' => 'שדה אישור הסיסמה נדרש.',
+            'confirm_password.same' => 'סיסמת האישור חייבת להתאים לשדה הסיסמה.',
         ]);
+
             DB::table('users')->where('id', $id)->update([
                 "password" => Hash::make($request->input('password')),
                 "updated_at" => date("Y-m-d H:i:s")

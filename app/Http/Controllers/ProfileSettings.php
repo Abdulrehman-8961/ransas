@@ -28,6 +28,11 @@ class ProfileSettings extends Controller
                 "email",
                 Rule::unique('users', 'email')->ignore(Auth::user()->id),
             ]
+        ], [
+            'name.required' => 'שדה השם חובה.',
+            'email.required' => 'שדה הדוא"ל נדרש.',
+            'email.email' => 'נא לספק כתובת דוא"ל חוקית.',
+            'email.unique' => 'המייל כבר נלקח.',
         ]);
         if($validated)
         {
@@ -51,7 +56,13 @@ class ProfileSettings extends Controller
         $validated = $request->validate([
             "password" => 'required|min:6',
             "confirm_password" => 'required|same:password',
+        ], [
+            'password.required' => 'שדה הסיסמה נדרש.',
+            'password.min' => 'הסיסמה חייבת להיות באורך של לפחות :min תווים.',
+            'confirm_password.required' => 'שדה אישור הסיסמה נדרש.',
+            'confirm_password.same' => 'סיסמת האישור חייבת להתאים לשדה הסיסמה.',
         ]);
+
         if($validated) {
             DB::table('users')->where('id', Auth::user()->id)->update([
                 "password" => Hash::make($request->input('password')),

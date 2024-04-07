@@ -48,16 +48,7 @@
                         </a>
                     </li>
                 @endif
-                @if (Auth::user()->role == 'Admin')
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="{{ url('/Log-History') }}" aria-expanded="false">
-                            <span>
-                                <i class="ti ti-history"></i>
-                            </span>
-                            <span class="hide-menu">היסטוריה </span>
-                        </a>
-                    </li>
-                @endif
+
                 @if (Auth::user()->role == 'Admin')
                     <li class="sidebar-item">
                         <a class="sidebar-link  " href="{{ url('/Pools') }}" aria-expanded="false">
@@ -112,12 +103,22 @@
                         </ul>
                     </li>
                 @endif
+                @if (Auth::user()->role == 'Admin')
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="{{ url('/Log-History') }}" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-history"></i>
+                            </span>
+                            <span class="hide-menu">היסטוריה </span>
+                        </a>
+                    </li>
+                @endif
                 <li class="sidebar-item">
                     <a class="sidebar-link  " href="{{ url('/Support') }}" aria-expanded="false">
                         <span>
                             <i class="ti ti-hours-24"></i>
                         </span>
-                        <span class="hide-menu">Support</span>
+                        <span class="hide-menu">תמיכה</span>
                     </a>
                 </li>
             </ul>

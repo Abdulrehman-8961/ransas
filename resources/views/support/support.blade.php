@@ -25,13 +25,16 @@
         </div>
         <div class="card w-100 position-relative overflow-hidden">
             <div class="card-body">
-                @if(Auth::user()->role == "Staff")
-                @php
-                    $data = DB::table('ticket')->where('user_id', Auth::user()->id)->paginate(20)
-                @endphp
+                @if (Auth::user()->role == 'Staff')
+                    @php
+                        $data = DB::table('ticket')
+                            ->where('user_id', Auth::user()->id)
+                            ->paginate(20);
+                    @endphp
                     <div class="row text-end">
                         <div class="col">
-                            <a href="{{ url('New-Ticket') }}" class="btn btn-primary btn-sm"><i class="ti ti-plus me-2"></i> Add Ticket</a>
+                            <a href="{{ url('New-Ticket') }}" class="btn btn-primary btn-sm"><i class="ti ti-plus me-2"></i>
+                                Add Ticket</a>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -46,13 +49,58 @@
                             </thead>
                             <tbody>
                                 @foreach ($data as $row)
-                                <tr style="cursor: pointer;" onclick="window.location = '{{ url('Ticket') }}/{{ $row->id }}'">
-                                    <td>{{ $row->ticket_no }}</td>
-                                    <td>{{ $row->title }}</td>
-                                    <td>{{ $row->status }}</td>
-                                    <td>{{ date('d.m.Y',strtotime($row->created_at)) }}</td>
-                                </tr>
+                                    <tr style="cursor: pointer;"
+                                        onclick="window.location = '{{ url('Ticket') }}/{{ $row->id }}'">
+                                        <td>{{ $row->ticket_no }}</td>
+                                        <td>{{ $row->title }}</td>
+                                        <td>{{ $row->status }}</td>
+                                        <td>{{ date('d.m.Y', strtotime($row->created_at)) }}</td>
+                                    </tr>
+                                @endforeach
 
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+                @if (Auth::user()->role == 'Admin')
+                    @php
+                        $data = DB::table('ticket')->paginate(20);
+                    @endphp
+                    <div class="table-responsive">
+                        <table class="table align-middle text-nowrap">
+                            <thead class="header-item">
+                                <tr>
+                                    <th style="width: 80%">Question</th>
+                                    <th>Ticket#</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($data as $row)
+                                    @php
+                                        $user = DB::table('users')
+                                            ->where('id', $row->user_id)
+                                            ->first();
+                                    @endphp
+                                    <tr style="cursor: pointer;"
+                                        onclick="window.location = '{{ url('Ticket') }}/{{ $row->id }}'">
+                                        <td>
+                                            <h5>{{ $row->title }}</h5>
+                                            <h6 class="text-muted">{{ $user->name }} on
+                                                {{ date('d.m.Y', strtotime($row->created_at)) }}</h6>
+                                        </td>
+                                        <td>{{ $row->ticket_no }}</td>
+                                        <td onclick="event.stopPropagation()">
+                                            <form id="updateStatus" action="{{ url('update/status') }}/{{ $row->id }}" method="post">
+                                                @csrf
+                                                <select name="update_status" class="form-control" id="update_status" onchange="document.getElementById('updateStatus').submit();">
+                                                    <option value="Pending" {{ $row->status == "Pending" ? 'selected' : '' }}>Pending</option>
+                                                    <option value="Open" {{ $row->status == "Open" ? 'selected' : '' }}>Open</option>
+                                                    <option value="Solved" {{ $row->status == "Solved" ? 'selected' : '' }}>Solved</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                    </tr>
                                 @endforeach
 
                             </tbody>

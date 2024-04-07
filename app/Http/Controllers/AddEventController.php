@@ -36,12 +36,33 @@ class AddEventController extends Controller
             "total_payment" => 'required',
             "payment_method" => 'required',
             "payment_status" => 'required',
+        ], [
+            "pool_select.required" => "אנא בחר בריכה.",
+            "type.required" => "אנא בחר סוג.",
+            "customer_name.required" => "נדרש שם הלקוח.",
+            "start_date.required" => "אנא בחר תאריך התחלה.",
+            "end_date.required" => "אנא בחר תאריך סיום.",
+            "start_time.required" => "אנא בחר שעת התחלה.",
+            "end_time.required" => "אנא בחר שעת סיום.",
+            "customer_phone.required" => "נדרש מספר טלפון של הלקוח.",
+            "customer_email.required" => "יש צורך באימייל ללקוח.",
+            "total_payment.required" => "נדרש תשלום כולל.",
+            "payment_method.required" => "נדרש אמצעי תשלום.",
+            "payment_status.required" => "נדרש סטטוס תשלום.",
         ]);
+
+        // If the validation fails, the script will not proceed beyond this point.
+        // If it passes, the script will continue executing.
+
         if (@$request->input('repeat')) {
             $request->validate([
                 'repeat_cycle' => 'required',
                 'repeat_count' => 'required',
+            ], [
+                'repeat_cycle.required' => 'אנא בחר מחזור חוזר.',
+                'repeat_count.required' => 'נא להזין ספירה חוזרת.',
             ]);
+
         }
         $startdate = date('Y-m-d', strtotime($request->input('start_date')));
         $enddate = date('Y-m-d', strtotime($request->input('end_date')));

@@ -41,6 +41,8 @@
                 $user = DB::table('users')
                     ->where('id', $row->from_id)
                     ->first();
+
+                    $files = DB::table('chat_attachments')->where('chat_id', $row->id)->get();
             @endphp
             <div class="card w-100 position-relative overflow-hidden">
                 <div class="card-body">
@@ -59,6 +61,9 @@
                     <p class="card-text pt-2">
                         {{ $row->description }}
                     </p>
+                    @if(count($files))
+                    <a href="{{ url('download') }}/{{ $row->id }}" class="btn btn-primary btn-sm"><i class="ti ti-download me-2"></i> Download Attachments</a>
+                    @endif
                 </div>
             </div>
         @endforeach

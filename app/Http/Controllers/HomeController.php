@@ -116,7 +116,10 @@ class HomeController extends Controller
     {
         $request->validate([
             'selected_pool_id' => 'required',
+        ], [
+            'selected_pool_id.required' => 'אנא בחר בריכה.',
         ]);
+
 
         $selectedPoolId = $request->input('selected_pool_id');
         Session::put('pool_select', $selectedPoolId);

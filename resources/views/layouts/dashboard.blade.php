@@ -177,7 +177,7 @@
                                 <i class="ti ti-align-justified fs-7"></i>
                             </a>
                             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
-                                <li class="nav-item me-3">
+                                <li class="nav-item me-3 d-flex align-items-center"><span class="text-danger me-2" style="font-size: 22px;">בריכה:</span>
                                     @if (count($pool_option) > 1)
                                         <select class="form-control" name="pool_select" id="pool_select">
                                             @foreach ($pool_option as $row)

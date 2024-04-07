@@ -28,10 +28,14 @@ class SettingsController extends Controller
 
     public function saveTemplate(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required'],
             'content' => ['required'],
+        ], [
+            'name.required' => 'שדה השם חובה.',
+            'content.required' => 'שדה התוכן נדרש.',
         ]);
+
         $template_id = $request->input('template_id');
         if (isset($template_id)) {
             DB::table('message_template')
@@ -48,10 +52,14 @@ class SettingsController extends Controller
     }
     public function savePoolTemplate(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => ['required'],
             'content' => ['required'],
+        ], [
+            'name.required' => 'שדה השם חובה.',
+            'content.required' => 'שדה התוכן נדרש.',
         ]);
+
         $template_id = $request->input('template_id');
         if (isset($template_id)) {
             $template = DB::table('message_template')->where('pool_id', $template_id)->first();
@@ -84,9 +92,12 @@ class SettingsController extends Controller
 
     public function saveFavIcon(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'file' => 'required'
+        ], [
+            'file.required' => 'נא להעלות קובץ.'
         ]);
+
         if ($request->hasFile('file')) {
             $filePath = $request->file('file')->getClientOriginalName();
             $request->file('file')->move(public_path('uploads'), $filePath);

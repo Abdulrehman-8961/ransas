@@ -19,26 +19,26 @@ class UserController extends Controller
     {
         $search = @$request->get('search');
         $users = DB::table('users')
-        ->where(function($query){
-            if (Auth::user()->role == "Admin") {
-                $query->wherein('role',['Staff','Admin'])
-                ->where('id','!=',Auth::user()->id);
-            } elseif (Auth::user()->role == "Pool") {
-                $query->where('pool_id',Auth::user()->id);
-            }
-        })
-        ->where(function ($query) use ($search) {
-            if(!empty($search)) {
-                $query->where('name', 'LIKE', '%'.$search.'%')
-                ->orWhere('email', 'LIKE', '%'.$search.'%')
-                ->orWhere('role', 'LIKE', '%'.$search.'%')
-                ->orWhere('phone', 'LIKE', '%'.$search.'%')
-                ->orWhere('permission', 'LIKE', '%'.$search.'%');
-            }
-        })
-        ->orderBy('id', 'desc')->paginate(20);
+            ->where(function ($query) {
+                if (Auth::user()->role == "Admin") {
+                    $query->wherein('role', ['Staff', 'Admin'])
+                        ->where('id', '!=', Auth::user()->id);
+                } elseif (Auth::user()->role == "Pool") {
+                    $query->where('pool_id', Auth::user()->id);
+                }
+            })
+            ->where(function ($query) use ($search) {
+                if (!empty($search)) {
+                    $query->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%')
+                        ->orWhere('role', 'LIKE', '%' . $search . '%')
+                        ->orWhere('phone', 'LIKE', '%' . $search . '%')
+                        ->orWhere('permission', 'LIKE', '%' . $search . '%');
+                }
+            })
+            ->orderBy('id', 'desc')->paginate(20);
         $users->appends([
-          "search" => $search,
+            "search" => $search,
         ]);
 
         return view("user.view", compact("users"));
@@ -50,19 +50,32 @@ class UserController extends Controller
     public function save(Request $request)
     {
         $pool_ids = '';
-        $request->validate([
+        $validated = $request->validate([
             "name" => 'required',
             "permission" => 'required',
             "email" => 'required|email|unique:users',
             "password" => 'required|min:6',
             "confirm_password" => 'required|same:password'
+        ], [
+            'name.required' => 'שדה השם חובה.',
+            'permission.required' => 'שדה ההרשאה נדרש.',
+            'email.required' => 'שדה הדוא"ל נדרש.',
+            'email.email' => 'נא לספק כתובת דוא"ל חוקית.',
+            'email.unique' => 'המייל כבר נלקח.',
+            'password.required' => 'שדה הסיסמה נדרש.',
+            'password.min' => 'הסיסמה חייבת להיות באורך של לפחות :min תווים.',
+            'confirm_password.required' => 'שדה אישור הסיסמה נדרש.',
+            'confirm_password.same' => 'סיסמת האישור חייבת להתאים לשדה הסיסמה.'
         ]);
+
         if ($request->input('role') == "Staff") {
-            $request->validate([
+            $validated = $request->validate([
                 "pool" => 'required',
+            ], [
+                'pool.required' => 'שדה הבריכה נדרש.',
             ]);
         }
-        if(@$request->input('pool')){
+        if (@$request->input('pool')) {
             $data = $request->input('pool');
             $pool_ids = implode(', ', $data);
         }
@@ -80,9 +93,9 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = DB::table('users')
-        ->where('id', $id)
-        ->first();
-            return view("user.edit", compact("user"));
+            ->where('id', $id)
+            ->first();
+        return view("user.edit", compact("user"));
     }
     public function update(Request $request, $id)
     {
@@ -91,19 +104,26 @@ class UserController extends Controller
             "email" => [
                 "required",
                 "email",
-                Rule::unique('users', 'email')->ignore($id)
+                Rule::unique('users', 'email')->ignore(Auth::user()->id),
             ]
+        ], [
+            'name.required' => 'שדה השם חובה.',
+            'email.required' => 'שדה הדוא"ל נדרש.',
+            'email.email' => 'נא לספק כתובת דוא"ל חוקית.',
+            'email.unique' => 'המייל כבר נלקח.',
         ]);
         if ($request->input('role') == "Staff") {
             $request->validate([
                 "pool" => 'required',
+            ], [
+                'pool.required' => 'שדה הבריכה נדרש.',
             ]);
         }
-        if(@$request->input('pool')){
+        if (@$request->input('pool')) {
             $data = $request->input('pool');
             $pool_ids = implode(', ', $data);
         }
-        if($validated) {
+        if ($validated) {
             DB::table('users')->where('id', $id)->update([
                 "name" => $request->input('name'),
                 "email" => $request->input('email'),
@@ -121,8 +141,13 @@ class UserController extends Controller
         $validated = $request->validate([
             "password" => 'required|min:6',
             "confirm_password" => 'required|same:password',
+        ], [
+            'password.required' => 'שדה הסיסמה נדרש.',
+            'password.min' => 'הסיסמה חייבת להיות באורך של לפחות :min תווים.',
+            'confirm_password.required' => 'שדה אישור הסיסמה נדרש.',
+            'confirm_password.same' => 'סיסמת האישור חייבת להתאים לשדה הסיסמה.',
         ]);
-        if($validated) {
+        if ($validated) {
             DB::table('users')->where('id', $id)->update([
                 "password" => Hash::make($request->input('password')),
                 "updated_at" => date("Y-m-d H:i:s")

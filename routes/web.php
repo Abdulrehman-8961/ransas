@@ -108,3 +108,5 @@ Route::get('/New-Ticket', [SupportController::class, 'newTicket'])->middleware('
 Route::post('/Ticket/save', [SupportController::class, 'saveTicket'])->middleware('auth');
 Route::post('/Send-message/{id}', [SupportController::class, 'sendMessage'])->middleware('auth');
 Route::get('/Ticket/{id}', [SupportController::class, 'ticket'])->middleware('auth');
+Route::post('/update/status/{id}', [SupportController::class, 'updateStatus'])->middleware('auth');
+Route::get('/download/{id}', [SupportController::class, 'download_files'])->middleware('auth');
