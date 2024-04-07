@@ -87,6 +87,19 @@
                         </div>
                     </div>
 
+                    <div class="mb-3 d-none other_type row">
+                        <label for="example-search-input" class="col-md-2 col-form-label">סוג אחר</label>
+                        <div class="col-md-10">
+                            <input class="form-control  @error('other_type') is-invalid @enderror" name="other_type"
+                                type="text" id="example-search-input"
+                                value="{{ $event ? $event->other_type : old('other_type') }}">
+                            @error('other_type')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
                     <div class="mb-3 row">
                         <label for="example-search-input" class="col-md-2 col-form-label">שם לקוח</label>
                         <div class="col-md-10">
@@ -635,6 +648,10 @@
                                 todayHighlight: true,
                                 startDate: new Date(),
                                 daysOfWeekDisabled: response.disabledDays
+                            }).on('changeDate', function(selected) {
+                                var startDate = new Date(selected.date.valueOf());
+                                $('.datepicker-autoclose2').datepicker('setStartDate',
+                                    startDate);
                             });
                             $(".datepicker-autoclose2").datepicker('destroy');
                             $(".datepicker-autoclose2").datepicker({
@@ -732,6 +749,11 @@
                 $('.percentage-field').removeClass('d-none');
             } else {
                 $('.percentage-field').addClass('d-none');
+            }
+            if (event_type == "Other") {
+                $('.other_type').removeClass('d-none');
+            } else {
+                $('.other_type').addClass('d-none');
             }
         })
     </script>

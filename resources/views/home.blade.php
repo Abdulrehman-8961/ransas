@@ -109,7 +109,7 @@
         <form action="{{ URL::current() }}" id="myForm">
             <div class="row mb-5">
                 <div class="col-lg-3 col-12">
-                    <input type="text" class="form-control daterange" name="daterange" value="{{ @$_GET['daterange'] }}" />
+                    <input type="text" class="form-control daterange" name="daterange" id="daterange" value="{{ @$_GET['daterange'] }}" />
                 </div>
                 {{-- <div class="col-md-3 col-12">
                     <select class="form-control" name="pool_select" id="pool_select">
@@ -410,7 +410,7 @@
             }
 
             function fetchData() {
-                var date = $('#calendarDate').text();
+                var date = $('#daterange').val();
                 var pool = $('#pool_select option:selected').val();
                 var csrfToken = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
@@ -419,7 +419,7 @@
                     data: {
                         _token: csrfToken,
                         pool: pool,
-                        // date: date,
+                        date: date,
                         search: $('[name="search"]').val(),
                         events: $('[name="events[]"]:checked').map(function() {
                             return $(this).val();
@@ -548,13 +548,16 @@
             // Initial date update
             updateDate();
         });
-
-        var startDate = moment().startOf('week');
-        var endDate = moment().endOf('week');
-        $(".daterange").daterangepicker({
-            startDate: startDate,
-            endDate: endDate
-        });
+        @if (isset($_GET['daterange']))
+            $(".daterange").daterangepicker();
+        @else
+            var startDate = moment().startOf('week');
+            var endDate = moment().endOf('week');
+            $(".daterange").daterangepicker({
+                startDate: startDate,
+                endDate: endDate
+            });
+        @endif
         /*========Calender Js=========*/
         /*==========================*/
 

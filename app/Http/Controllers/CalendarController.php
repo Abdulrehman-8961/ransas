@@ -19,7 +19,7 @@ class CalendarController extends Controller
 
     public function index(Request $request)
     {
-        $pool_data = DB::table('pool')->where('id',@$request['pool_select'])->first();
+        $pool_data = DB::table('pool')->where('id', @$request['pool_select'])->first();
         $start_times = [];
         $end_times = [];
         if ($pool_data) {
@@ -44,31 +44,32 @@ class CalendarController extends Controller
         ]);
     }
 
-    public function getEvents(Request $request) {
+    public function getEvents(Request $request)
+    {
         $start = $request->input('start');
         $end = $request->input('end');
         $pool_select = $request->input('pool_select');
         $events = DB::table('events')
-        ->where('pool_id', $pool_select)
-        ->where('is_deleted', 0)
-        ->where(function ($query) use ($start, $end) {
-            $query->whereBetween('start_date', [$start, $end])
-                ->orWhereBetween('end_date', [$start, $end])
-                ->orWhere(function ($query) use ($start, $end) {
-                    $query->where('start_date', '<', $start)
+            ->where('pool_id', $pool_select)
+            ->where('is_deleted', 0)
+            ->where(function ($query) use ($start, $end) {
+                $query->whereBetween('start_date', [$start, $end])
+                    ->orWhereBetween('end_date', [$start, $end])
+                    ->orWhere(function ($query) use ($start, $end) {
+                        $query->where('start_date', '<', $start)
                             ->where('end_date', '>', $end);
-                });
-        })
-        ->get();
+                    });
+            })
+            ->get();
 
         $formattedEvents = [];
         foreach ($events as $event) {
-            $pool = DB::table('pool')->where('id',$event->pool_id)->first();
+            $pool = DB::table('pool')->where('id', $event->pool_id)->first();
             if ($pool) {
                 $options = explode(', ', $pool->payments);
                 $html = '<option value="">Select Payment Method</option>';
                 foreach ($options as $option) {
-                        $html .= '<option value="' . $option . '">' . $option . '</option>';
+                    $html .= '<option value="' . $option . '">' . $option . '</option>';
                 }
             } else {
                 $html = '';
@@ -116,7 +117,8 @@ class CalendarController extends Controller
         return response()->json(['events' => $formattedEvents]);
     }
 
-    public function updateEvents(Request $request, $id) {
+    public function updateEvents(Request $request, $id)
+    {
         $event_title = $request->type;
         $event_color = $request->event_level;
 
@@ -129,8 +131,8 @@ class CalendarController extends Controller
 
         // dd($request);
 
-        if($event_title && $id){
-           $save = DB::table('events')->where('id',$id)->update([
+        if ($event_title && $id) {
+            $save = DB::table('events')->where('id', $id)->update([
                 'booking_type' => $event_title,
                 "customer_name" => $request->input('customer_name'),
                 "start_date" => $startdate,
@@ -145,10 +147,10 @@ class CalendarController extends Controller
                 "percentage_value" => $request->input('percentage_value'),
                 'color' => $event_color,
             ]);
-            if($save){
+            if ($save) {
                 DB::table('log_history')->insert([
                     'user_id' => Auth::user()->id,
-                    'description' => "Updated Event ".$request->input('type')." For Client: ".ucFirst($request->input('customer_name'))."",
+                    'description' => "Updated Event " . $request->input('type') . " For Client: " . ucFirst($request->input('customer_name')) . "",
                     'page' => 'Edit Event'
                 ]);
             }
@@ -157,12 +159,13 @@ class CalendarController extends Controller
         return redirect()->back()->with('error', "משהו השתבש");
     }
 
-    public function changeEventTime(Request $request){
+    public function changeEventTime(Request $request)
+    {
         $booking_id = $request->input('eventId');
         $start_time = $request->input('newStart');
         $end_time = $request->input('newEnd');
 
-        $update = DB::table('events')->where('id',$booking_id)->update([
+        $update = DB::table('events')->where('id', $booking_id)->update([
             'start_time' => $start_time,
             'end_time' => $end_time,
         ]);
@@ -173,16 +176,19 @@ class CalendarController extends Controller
     public function fetchData(Request $request)
     {
         $pool = $request->input('pool');
-        // $date = $request->input('date');
-        // $newdate = date('Y-m-d',strtotime($date));
+        $date = $request->input('date');
+        $dateParts = explode(' - ', $date);
+        $startdate = date('Y-m-d', strtotime($dateParts[0]));
+        $enddate = date('Y-m-d', strtotime($dateParts[1]));
+        // dd($startdate,$enddate,$pool);
         $search = $request->input('search');
         $events = $request->input('events');
 
 
-        $query = DB::table('events')->where('pool_id',$pool);
+        $query = DB::table('events')->where('pool_id', $pool)->where('start_date','>=',$startdate)->where('start_date','<=',$enddate);
 
         if (!empty($search)) {
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('customer_name', 'like', "%$search%");
             });
         }
@@ -194,8 +200,8 @@ class CalendarController extends Controller
 
         // dd($data);
         foreach ($data as $item) {
-            $startDateTime = new DateTime($item->start_date.' '.$item->start_time);
-            $endDateTime = new DateTime($item->end_date.' '.$item->end_time);
+            $startDateTime = new DateTime($item->start_date . ' ' . $item->start_time);
+            $endDateTime = new DateTime($item->end_date . ' ' . $item->end_time);
             $duration = $startDateTime->diff($endDateTime);
             $hours = $duration->h + ($duration->days * 24);
             $item->duration_hours = $hours;
@@ -204,5 +210,4 @@ class CalendarController extends Controller
         }
         return response()->json($data);
     }
-
 }

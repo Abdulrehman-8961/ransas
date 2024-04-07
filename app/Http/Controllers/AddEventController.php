@@ -83,6 +83,7 @@ class AddEventController extends Controller
                 $save = DB::table('events')->insert([
                     "pool_id" => $request->input('pool_select'),
                     "booking_type" => $request->input('type'),
+                    "other_type" => $request->input('other_type'),
                     "customer_name" => $request->input('customer_name'),
                     "start_date" => $startdate,
                     "start_time" => $starttime,
@@ -291,7 +292,7 @@ class AddEventController extends Controller
         $pool = DB::table('pool')->where('id', $poolID)->first();
         if ($pool) {
             $options = explode(', ', $pool->payments);
-            $html = '<option value="">Select Payment Method</option>';
+            $html = '<option value="">בחר שיטת תשלום</option>';
             foreach ($options as $option) {
                 $html .= '<option value="' . $option . '">' . $option . '</option>';
             }
