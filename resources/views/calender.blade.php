@@ -11,6 +11,10 @@
                 color: black;
                 font-weight: 600;
             }
+
+            .fc-direction-rtl .fc-scrollgrid {
+                direction: rtl;
+            }
         </style>
         <!--  Owl carousel -->
         <div class="card bg-light-info shadow-none position-relative overflow-hidden">
@@ -262,21 +266,21 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn" data-bs-dismiss="modal">
-                                סגור
-                            </button>
-                            <button type="submit" class="btn btn-success btn-update-event" data-fc-event-public-id="">
-                                עדכן שינויים
-                            </button>
-                            <a class="btn btn-primary btn-duplicate-event">
-                                אירוע כפול
-                            </a>
-                            <button type="button" class="btn btn-primary btn-add-event">
-                                הוסף אירוע
-                            </button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" data-bs-dismiss="modal">
+                            סגור
+                        </button>
+                        <button type="submit" class="btn btn-success btn-update-event" data-fc-event-public-id="">
+                            עדכן שינויים
+                        </button>
+                        <a class="btn btn-primary btn-duplicate-event">
+                            אירוע כפול
+                        </a>
+                        <button type="button" class="btn btn-primary btn-add-event">
+                            הוסף אירוע
+                        </button>
+                    </div>
                     </form>
                 </div>
                 <!-- /.modal-content -->
@@ -292,9 +296,11 @@
 
 @section('javascript')
     <script src="{{ asset('public') }}/dist/libs/fullcalendar/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core/locales/he.js"></script>
+
     <script type="text/javascript">
-    var formattedDateStart = '';
-    var formattedDateEnd = '';
+        var formattedDateStart = '';
+        var formattedDateEnd = '';
         var selectElement = document.getElementById('pool_select_main');
 
         // Add change event listener
@@ -302,6 +308,8 @@
             // Submit the form when the select field changes
             document.getElementById('myForm').submit();
         });
+        document.getElementById('calendar').classList.add('fc-direction-rtl');
+
         @if (!session()->has('pool_select'))
             document.getElementById('myForm').submit();
         @endif
@@ -490,7 +498,7 @@
                     formattedDateEnd = `${endDateParts[1]}/${endDateParts[2]}/${endDateParts[0]}`;
                     // Set the timepicker options and initialize it for the first input
                     // console.log(formattedDate,formattedDateEnd);
-                    getPoolDetails(pool,formattedDateStart,formattedDateEnd);
+                    getPoolDetails(pool, formattedDateStart, formattedDateEnd);
                     $(".pickatime-formatTime-display").pickatime({
                         format: "H:i",
                         formatLabel: "<b>H</b>:i",
@@ -514,11 +522,14 @@
             /*=====================*/
             // Active Calender
             /*=====================*/
+            var storedView = localStorage.getItem('calendarView');
             function initializeCalendar() {
+                console.log(storedView);
                 var calendarOptions = {
                     selectable: true,
                     height: checkWidowWidth() ? 900 : 1052,
-                    initialView: "timeGridDay",
+                    initialView: storedView || 'timeGridDay',
+                    locale: 'he',
                     // initialDate: `${newDate.getFullYear()}-${getDynamicMonth()}-07`,
                     headerToolbar: calendarHeaderToolbar,
                     // events: calendarEventsList,
@@ -562,6 +573,16 @@
                     editable: true,
                     eventResizableFromStart: true,
                     eventResizable: true,
+                    locale: 'he',
+                    buttonText: {
+                        today: 'היום',
+                        month: 'חודש',
+                        week: 'שבוע',
+                        day: 'יום',
+                        dayGridMonth: 'חודש', // Custom translation for month button in dayGrid view
+                        timeGridWeek: 'שבוע', // Custom translation for week button in timeGrid view
+                        timeGridDay: 'יום' // Custom translation for day button in timeGrid view
+                    },
                     customButtons: {
                         ExportCsv: {
                             text: "ייצוא csv",
@@ -575,6 +596,16 @@
                                 window.location = '{{ url('/Add-Event') }}';
                             },
                         },
+
+                        // dayGridMonth: {
+                        //     text: "חוֹדֶשׁ",
+                        // },
+                        // timeGridWeek: {
+                        //     text: "שָׁבוּעַ",
+                        // },
+                        // timeGridDay: {
+                        //     text: "יְוֹם",
+                        // },
                     },
                     eventClassNames: function({
                         event: calendarEvent
@@ -602,11 +633,20 @@
 
                             return hours + ':' + minutes + ':' + seconds;
                         };
+                        var getDate = function(date) {
+                            var year = date.getFullYear();
+                            var month = ('0' + (date.getMonth() + 1)).slice(-2);
+                            var day = ('0' + date.getDate()).slice(-2);
+
+                            return year + '-' + month + '-' + day;
+                        };
                         var newStart = getTime(event.start);
                         var newEnd = getTime(event.end);
+                        var startDate = getDate(event.start);
+                        var endDate = getDate(event.end);
                         var bokkingId = event.extendedProps.bookid;
 
-                        console.log(bokkingId, newStart, newEnd);
+                        console.log(bokkingId, newStart, newEnd, startDate, endDate);
                         $.ajax({
                             url: 'update-event-time',
                             type: 'POST',
@@ -615,6 +655,8 @@
                             },
                             data: {
                                 eventId: bokkingId,
+                                startDate: startDate,
+                                endDate: endDate,
                                 newStart: newStart,
                                 newEnd: newEnd
                             },
@@ -622,9 +664,10 @@
                                 if (response.success) {
                                     console.log('Event time updated successfully');
                                     Swal.fire({
-                                        title: 'Success!',
-                                        text: 'Event time updated successfully',
+                                        title: 'הַצלָחָה!',
+                                        text: 'זמן האירוע עודכן בהצלחה',
                                         icon: 'success',
+                                        confirmButtonText: 'בסדר',
                                         customClass: {
                                             confirmButton: 'btn btn-primary'
                                         },
@@ -633,9 +676,10 @@
                                 } else {
                                     console.error('Failed to update event time');
                                     Swal.fire({
-                                        title: 'Error!',
-                                        text: 'Failed to update event time',
+                                        title: 'שְׁגִיאָה!',
+                                        text: 'עדכון זמן האירוע נכשל',
                                         icon: 'error',
+                                        confirmButtonText: 'בסדר',
                                         customClass: {
                                             confirmButton: 'btn btn-primary'
                                         },
@@ -685,6 +729,29 @@
                 @endif
                 var calendar = new FullCalendar.Calendar(calendarEl, calendarOptions);
                 calendar.render();
+
+
+                function createTitleFilter(events) {
+                    if (!titleFilterInitialized) {
+                        var uniqueTitles = [...new Set(events.map(event => event.title))];
+                        var selectFilter = $(
+                            '<select class="form-control" style="max-width:200px; margin-right: 10px;" id="title-filter"><option value="">כל הכותרות</option><option value="Birthday">יום הולדת</option><option value="Private event">אירוע פרטי</option><option value="Swimming Course">קורס שחייה</option><option value="Other">אַחֵר</option></select>'
+                        );
+                        selectFilter.on('change', function() {
+                            var selectedTitle = $(this).val();
+                            calendar.getEvents().forEach(function(event) {
+                                if (selectedTitle === "" || event.title === selectedTitle) {
+                                    event.setProp('display', 'block');
+                                } else {
+                                    event.setProp('display', 'background');
+                                }
+                            });
+                        });
+                        var thirdDiv = $('.fc-toolbar > div:nth-child(3)');
+                        thirdDiv.addClass('d-flex').prepend(selectFilter);
+                        titleFilterInitialized = true;
+                    }
+                }
             }
             $('#pool_select').change(function() {
                 initializeCalendar();
@@ -693,27 +760,6 @@
 
             var titleFilterInitialized = false;
 
-            function createTitleFilter(events) {
-                if (!titleFilterInitialized) {
-                    var uniqueTitles = [...new Set(events.map(event => event.title))];
-                    var selectFilter = $(
-                        '<select class="form-control" style="max-width:200px; margin-right: 10px;" id="title-filter"><option value="">כל הכותרות</option><option value="יום הולדת">יום הולדת</option><option value="אירוע פרטי">אירוע פרטי</option><option value="קורס שחייה">קורס שחייה</option></select>'
-                    );
-                    selectFilter.on('change', function() {
-                        var selectedTitle = $(this).val();
-                        calendar.getEvents().forEach(function(event) {
-                            if (selectedTitle === "" || event.title === selectedTitle) {
-                                event.setProp('display', 'block');
-                            } else {
-                                event.setProp('display', 'background');
-                            }
-                        });
-                    });
-                    var thirdDiv = $('.fc-toolbar > div:nth-child(3)');
-                    thirdDiv.addClass('d-flex').prepend(selectFilter);
-                    titleFilterInitialized = true;
-                }
-            }
 
             function timeFormat(time24) {
                 var timeSplit = time24.split(':');
@@ -887,6 +933,21 @@
 
             }
         })
+        // Event listener for view buttons in the header toolbar
+        $(document).ready(function() {
+            document.querySelector('.fc-button-group').addEventListener('click', function(event) {
+                if (event.target.classList.contains('fc-button')) {
+                    var selectedView = event.target.classList.contains('fc-dayGridMonth-button') ? 'dayGridMonth' :
+                        event.target.classList.contains('fc-timeGridWeek-button') ? 'timeGridWeek' :
+                        event.target.classList.contains('fc-timeGridDay-button') ? 'timeGridDay' : null;
+
+                    if (selectedView) {
+                        localStorage.setItem('calendarView', selectedView); // Store the selected view in local storage
+                    }
+                }
+            });
+        });
+
         $(document).on('change', '.event-type', function() {
             var event_type = $('.event-type option:selected').val();
             if (event_type == "Swimming Course") {
@@ -895,8 +956,9 @@
                 $('.percentage-field').addClass('d-none');
             }
         })
-        function getPoolDetails(poolID,start_date,end_date){
-            console.log(start_date,end_date);
+
+        function getPoolDetails(poolID, start_date, end_date) {
+            console.log(start_date, end_date);
             if (poolID) {
                 $.ajax({
                     type: "GET",
@@ -946,7 +1008,7 @@
         }
         $('#pool_select').change(function() {
             var poolID = $("#pool_select option:selected").val();
-            getPoolDetails(poolID,formattedDateStart,formattedDateEnd);
+            getPoolDetails(poolID, formattedDateStart, formattedDateEnd);
         });
     </script>
 @endsection

@@ -69,7 +69,7 @@
         this.cancelButtonClasses = 'btn-default';
 
         this.locale = {
-            direction: 'ltr',
+            direction: 'rtl',
             format: moment.localeData().longDateFormat('L'),
             separator: ' - ',
             applyLabel: 'Apply',

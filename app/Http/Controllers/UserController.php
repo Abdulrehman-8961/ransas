@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Auth;
+use Illuminate\Support\Facades\App;
 
 class UserController extends Controller
 {
@@ -17,6 +18,7 @@ class UserController extends Controller
 
     public function view(Request $request)
     {
+        App::setLocale('he');
         $search = @$request->get('search');
         $users = DB::table('users')
             ->where(function ($query) {
@@ -40,7 +42,7 @@ class UserController extends Controller
         $users->appends([
             "search" => $search,
         ]);
-
+        // dd(trans('pagination.previous'));
         return view("user.view", compact("users"));
     }
     public function add()
@@ -104,7 +106,7 @@ class UserController extends Controller
             "email" => [
                 "required",
                 "email",
-                Rule::unique('users', 'email')->ignore(Auth::user()->id),
+                Rule::unique('users', 'email')->ignore($id),
             ]
         ], [
             'name.required' => 'שדה השם חובה.',

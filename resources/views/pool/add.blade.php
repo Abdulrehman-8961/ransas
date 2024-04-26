@@ -307,7 +307,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-4 mt-3">
-                                    <button class="btn btn-primary" name="submit" type="submit">להציל</button>
+                                    <button class="btn btn-primary" name="submit" type="submit">שלח</button>
                                 </div>
                             </div>
                         </form>

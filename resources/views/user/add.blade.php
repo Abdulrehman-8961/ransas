@@ -130,8 +130,8 @@
                                         class="form-control">
                                 </div>
                                 <div class="col-lg-12"></div>
-                                <div class="col-lg-4 mt-3">
-                                    <button class="btn btn-primary" name="submit" type="submit">אישור</button>
+                                <div class="col-lg-4 mt-3 אישור">
+                                    <button class="btn btn-primary" name="submit" type="submit">שלח</button>
                                 </div>
                             </div>
                         </form>

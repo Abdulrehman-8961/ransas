@@ -100,6 +100,9 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <td colspan="4">{{ $users->links('pagination::bootstrap-5') }}</td>
+                    </tfoot>
                 </table>
             </div>
         </div>

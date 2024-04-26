@@ -1,5 +1,7 @@
 @extends('layouts.dashboard')
+<style>
 
+</style>
 @section('content')
     @php
         // dd(session('pool_select'));
@@ -109,7 +111,8 @@
         <form action="{{ URL::current() }}" id="myForm">
             <div class="row mb-5">
                 <div class="col-lg-3 col-12">
-                    <input type="text" class="form-control daterange" name="daterange" id="daterange" value="{{ @$_GET['daterange'] }}" />
+                    <input type="text" class="form-control daterange" name="daterange" id="daterange"
+                        value="{{ @$_GET['daterange'] }}" />
                 </div>
                 {{-- <div class="col-md-3 col-12">
                     <select class="form-control" name="pool_select" id="pool_select">
@@ -197,7 +200,19 @@
         </div>
         @if (Auth::user()->role == 'Admin')
             @php
+                if (isset($_GET['daterange'])) {
+                    $daterange = explode(' - ', $_GET['daterange']);
+                } else {
+                    $daterange = '';
+                }
                 $all_events = DB::table('events')
+                    ->where(function ($query) use ($daterange) {
+                        if (isset($daterange) && !empty($daterange)) {
+                            $query
+                                ->where('start_date', '>=', date('Y-m-d', strtotime($daterange[0])))
+                                ->where('start_date', '<=', date('Y-m-d', strtotime($daterange[1])));
+                        }
+                    })
                     ->where('pool_id', @session('pool_select'))
                     ->paginate(20);
             @endphp
@@ -217,15 +232,27 @@
                             <tr>
                                 <td>{{ $row->customer_name }}</td>
                                 <td>{{ date('d.m.Y', strtotime($row->start_date)) }}</td>
-                                <td>{{ $row->booking_type }}</td>
+                                <td>
+                                    @if ($row->booking_type == 'Birthday')
+                                        יום הולדת
+                                    @elseif($row->booking_type == 'Swimming Course')
+                                        קורס שחייה
+                                    @elseif($row->booking_type == 'Private event')
+                                        אירוע פרטי
+                                    @elseif($row->booking_type == 'Other')
+                                        אַחֵר
+                                    @else
+                                        {{ $row->booking_type }}
+                                    @endif
+                                </td>
                                 <td>{{ $row->payment_method }}</td>
                                 <td>{{ $row->total_payment }}</td>
                             </tr>
                         @endforeach
+                    </tbody>
                     <tfoot>
                         <td colspan="5">{{ $all_events->links('pagination::bootstrap-5') }}</td>
                     </tfoot>
-                    </tbody>
                 </table>
             </div>
         @endif
@@ -247,7 +274,9 @@
                                 </div>
                                 <div class=" mt-3 mb-3 d-flex justify-content-between align-items-center">
                                     <div class="">
-                                        <input type="text" class="form-control" name="search">
+                                        <input type="text" class="form-control" name="search"><i
+                                            style="right: 160px; top:91px"
+                                            class="ti ti-search position-absolute translate-middle-y fs-6 text-dark ms-3"></i>
                                     </div>
                                     <div class="d-flex">
                                         <div class="me-3">
@@ -394,8 +423,10 @@
 
 @section('javascript')
     <script src="{{ asset('public') }}/dist/libs/fullcalendar/index.global.min.js"></script>
+
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
+
             // Get reference to the previous and next buttons
             const prevBtn = document.getElementById('prevBtn');
             const nextBtn = document.getElementById('nextBtn');
@@ -427,11 +458,23 @@
                     },
                     success: function(response) {
                         var html = '';
+                        var event_type = '';
                         $.each(response, function(index, item) {
+                            if (item.booking_type == 'Birthday') {
+                                event_type = " יום הולדת";
+                            } else if (item.booking_type == 'Swimming Course') {
+                                event_type = " קורס שחייה";
+                            } else if (item.booking_type == 'Private event') {
+                                event_type = " אירוע פרטי";
+                            } else if (item.booking_type == 'Other') {
+                                event_type = "אַחֵר";
+                            } else {
+                                event_type = item.booking_type;
+                            }
                             html += '<tr>';
                             html += '<td>' + item.customer_name + '</td>';
                             html += '<td>' + item.start_date + '</td>';
-                            html += '<td>' + item.booking_type + '</td>';
+                            html += '<td>' + event_type + '</td>';
                             html += '<td>' + item.payment_method + '</td>';
                             html += '<td>' + item.day_of_week + '</td>';
                             html += '<td>' + item.duration_hours + '</td>';
@@ -549,15 +592,34 @@
             updateDate();
         });
         @if (isset($_GET['daterange']))
-            $(".daterange").daterangepicker();
+            $(".daterange").daterangepicker({
+                locale: {
+                    direction: 'rtl',
+                    // Other locale options...
+                },
+            }, function(start, end, label) {
+                alert('ok')
+                $('.applyBtn').text('Custom Apply');
+                $('.cancelBtn').text('Custom Cancel');
+            });
         @else
             var startDate = moment().startOf('week');
             var endDate = moment().endOf('week');
             $(".daterange").daterangepicker({
+                locale: {
+                    direction: 'rtl',
+
+                },
+                direction: 'rtl',
                 startDate: startDate,
                 endDate: endDate
             });
         @endif
+        $(document).ready(function() {
+            // Update the text of apply and cancel buttons
+            $('.daterangepicker .applyBtn').text('בסדר');
+            $('.daterangepicker .cancelBtn').text('לְבַטֵל');
+        });
         /*========Calender Js=========*/
         /*==========================*/
 
@@ -748,6 +810,7 @@
                     initialView: "timeGridDay",
                     // initialDate: `${newDate.getFullYear()}-${getDynamicMonth()}`,
                     headerToolbar: calendarHeaderToolbar,
+                    locale: 'he',
                     // events: calendarEventsList,
                     events: function(info, successCallback, failureCallback) {
                         var start = info.start;

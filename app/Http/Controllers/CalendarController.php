@@ -164,10 +164,14 @@ class CalendarController extends Controller
         $booking_id = $request->input('eventId');
         $start_time = $request->input('newStart');
         $end_time = $request->input('newEnd');
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
 
         $update = DB::table('events')->where('id', $booking_id)->update([
             'start_time' => $start_time,
             'end_time' => $end_time,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
         ]);
 
         return response()->json(['success' => (bool)$update]);

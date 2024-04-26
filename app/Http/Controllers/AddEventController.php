@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Http;
 
 class AddEventController extends Controller
@@ -207,6 +208,9 @@ class AddEventController extends Controller
                     $templateContent = $message_template->content;
                     $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);
 
+                    $staff = DB::table('users')->where('id',Auth::user()->id)->first();
+                    $staff_phone = $staff->phone;
+
                     // $message = <<<EOT
                     // New event added:
                     // Type: {$request->input('type')}.
@@ -216,22 +220,22 @@ class AddEventController extends Controller
                     // EOT;
 
                     try {
-                        //  $response = Http::withHeaders([
-                        //      'Content-Type' => 'application/json',
-                        //      'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
-                        //  ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
-                        //      "Data" => [
-                        //          "Message" => $message,
-                        //          "Recipients" => [
-                        //              [
-                        //                  "Phone" => "0542165091"
-                        //              ]
-                        //          ],
-                        //          "Settings" => [
-                        //              "Sender" => "Ransas"
-                        //          ]
-                        //      ]
-                        //  ]);
+                         $response = Http::withHeaders([
+                             'Content-Type' => 'application/json',
+                             'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
+                         ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
+                             "Data" => [
+                                 "Message" => $message,
+                                 "Recipients" => [
+                                     [
+                                         "Phone" => $staff_phone
+                                     ]
+                                 ],
+                                 "Settings" => [
+                                     "Sender" => "Ransas"
+                                 ]
+                             ]
+                         ]);
                     } catch (\Throwable $th) {
                         //throw $th;
                     }

@@ -34,23 +34,24 @@ class CoronController extends Controller
                       ];
                     $templateContent = $message_template->content;
                     $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);
+                    $phone_number = $row->customer_phone;
                     try {
-                        // $response = Http::withHeaders([
-                        //     'Content-Type' => 'application/json',
-                        //     'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
-                        // ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
-                        //     "Data" => [
-                        //         "Message" => $message,
-                        //         "Recipients" => [
-                        //             [
-                        //                 "Phone" => "0542165091"
-                        //             ]
-                        //         ],
-                        //         "Settings" => [
-                        //             "Sender" => "Ransas"
-                        //         ]
-                        //     ]
-                        // ]);
+                        $response = Http::withHeaders([
+                            'Content-Type' => 'application/json',
+                            'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
+                        ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
+                            "Data" => [
+                                "Message" => $message,
+                                "Recipients" => [
+                                    [
+                                        "Phone" => $phone_number
+                                    ]
+                                ],
+                                "Settings" => [
+                                    "Sender" => "Ransas"
+                                ]
+                            ]
+                        ]);
                     } catch (\Throwable $th) {
                         //throw $th;
                     }

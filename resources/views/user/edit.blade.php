@@ -42,38 +42,63 @@
                                 <div class="col-lg-6 form-group">
                                     <label>שֵׁם</label>
                                     <input type="" placeholder="הכנס שם" value="{{ $user->name }}"
-                                        name="name" class="form-control">
+                                        name="name" class="form-control @error('name') is-invalid @enderror">
+                                        @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-6 form-group">
                                     <label>טֵלֵפוֹן</label>
                                     <input type="" placeholder="הזן מספר טלפון" value="{{ $user->phone }}"
-                                        name="phone" class="form-control">
+                                        name="phone" class="form-control @error('phone') is-invalid @enderror">
+                                        @error('phone')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-12"></div>
                                 <div class="col-lg-6 form-group">
                                     <label>אימייל</label>
                                     <input type="email" placeholder="הזן אימייל" value="{{ $user->email }}"
-                                        name="email" class="form-control">
+                                        name="email" class="form-control @error('email') is-invalid @enderror">
+                                        @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-6 form-group">
                                     <label>תַפְקִיד</label>
                                     <select type="" placeholder="Enter Role" id="role" name="role"
-                                        class="form-control">
-                                        <option value="Staff" {{ $user->role == 'Staff' ? 'selected' : '' }}>Staff</option>
-                                        <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>Admin</option>
+                                        class="form-control @error('role') is-invalid @enderror">
+                                        <option value="Staff" {{ $user->role == 'Staff' ? 'selected' : '' }}>מנהל</option>
+                                        <option value="Admin" {{ $user->role == 'Admin' ? 'selected' : '' }}>מנהל מערכת</option>
 
                                     </select>
+                                    @error('role')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-6 form-group @if ($user->role == 'Admin') d-none @endif">
                                     <label>הרשאות</label>
                                     <select type="" placeholder="Enter Role" id="permission" name="permission"
-                                        class="form-control">
+                                        class="form-control @error('permission') is-invalid @enderror">
                                         <option value="Readonly" {{ $user->permission == 'Readonly' ? 'selected' : '' }}>
                                             לקריאה בלבד
                                         </option>
                                         <option value="Edit" {{ $user->permission == 'Edit' ? 'selected' : '' }}>לַעֲרוֹך
                                         </option>
                                     </select>
+                                    @error('permission')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 @php
                                     $pool = DB::table('pool')->where('is_deleted',0)->get();
@@ -100,7 +125,7 @@
 
                                 <div class="col-lg-12"></div>
                                 <div class="col-lg-4">
-                                    <button class="btn btn-primary" name="submit" type="submit">להציל</button>
+                                    <button class="btn btn-primary" name="submit" type="submit">שלח</button>
                                 </div>
                             </div>
                         </form>

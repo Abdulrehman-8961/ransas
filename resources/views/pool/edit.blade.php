@@ -5,13 +5,13 @@
             <div class="card-body px-4 py-3">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-semibold mb-8">ערוך מאגר</h4>
+                        <h4 class="fw-semibold mb-8">עריכת בריכה</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
                                         href="{{ url('/Pools') }}">
                                         בריכות</a></li>
-                                <li class="breadcrumb-item" aria-current="page">ערוך מאגר</li>
+                                <li class="breadcrumb-item" aria-current="page">עריכת בריכה</li>
                             </ol>
                         </nav>
                     </div>
@@ -27,7 +27,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="px-4 py-3 border-bottom">
-                        <h5 class="card-title fw-semibold mb-0">ערוך מאגר</h5>
+                        <h5 class="card-title fw-semibold mb-0">עריכת בריכה</h5>
                     </div>
                     <div class="card-body">
                         <form action="{{ url('/Pool/update/' . $pool_data->id) }}" id="jquery-val-form" method="POST"
@@ -317,7 +317,7 @@
 
                                 </div>
                                 <div class="col-lg-4">
-                                    <button class="btn btn-primary" name="submit" type="submit">להציל</button>
+                                    <button class="btn btn-primary" name="submit" type="submit">שלח</button>
                                 </div>
                             </div>
                         </form>

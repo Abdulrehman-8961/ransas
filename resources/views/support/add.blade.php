@@ -29,15 +29,15 @@
                     @csrf
                     <div class="row">
                         <div class="col-12 mb-3">
-                            <label for=""> Title</label>
+                            <label for=""> סיבת הפנייה</label>
                             <input type="text" class="form-control" name="title">
                         </div>
                         <div class="col-12 mb-3">
-                            <label for=""> Description</label>
+                            <label for=""> תוכן פנייה</label>
                             <textarea rows="5" class="form-control" name="description"></textarea>
                         </div>
                         <div class="col-lg-4 mt-3">
-                            <button class="btn btn-primary" name="submit" type="submit">Submit</button>
+                            <button class="btn btn-primary" name="submit" type="submit">שלח</button>
                         </div>
                     </div>
                 </form>

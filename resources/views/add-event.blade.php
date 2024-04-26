@@ -43,7 +43,8 @@
                 <h5 class="mb-4">הוסף אירוע</h5>
                 <form class="form" action="{{ url('Event/save') }}" method="POST">
                     @csrf
-                    <div class="mb-3 row">
+                    <input type="hidden" id="pool_select" name="pool_select" value="{{ $event ? $event->pool_id : session('pool_select') }}">
+                    {{-- <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">בחר בריכה</label>
                         <div class="col-md-10">
                             <select class="form-control @error('pool_select') is-invalid @enderror" name="pool_select"
@@ -60,24 +61,23 @@
                                 </span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
                     <input type="hidden" id="parent_id" name="parent_id" value="0">
                     <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">סוּג</label>
                         <div class="col-md-10">
                             <select class="form-control @error('type') is-invalid @enderror" type="text" name="type"
                                 id="type">
-                                <option value="">Select Type</option>
+                                <option value="">בחר סוג</option>
                                 <option value="Swimming Course"
                                     {{ @$event->booking_type || old('type') == 'Swimming Course' ? 'selected' : '' }}>
-                                    Swimming Course</option>
+                                    קורס שחייה</option>
                                 <option value="Birthday"
-                                    {{ @$event->booking_type || old('type') == 'Birthday' ? 'selected' : '' }}>Birthday
+                                    {{ @$event->booking_type || old('type') == 'Birthday' ? 'selected' : '' }}>יום הולדת
                                 </option>
-                                <option value="Private event" {{ old('type') == 'Private event' ? 'selected' : '' }}>Private
-                                    event</option>
+                                <option value="Private event" {{ old('type') == 'Private event' ? 'selected' : '' }}>אירוע פרטי</option>
                                 <option value="Other"
-                                    {{ @$event->booking_type || old('type') == 'Other' ? 'selected' : '' }}>Other</option>
+                                    {{ @$event->booking_type || old('type') == 'Other' ? 'selected' : '' }}>אַחֵר</option>
                             </select>
                             @error('type')
                                 <span class="invalid-feedback" role="alert">
@@ -153,7 +153,7 @@
                         </div>
                         <div class="col-md-5">
                             <input type="text" class="form-control pickatime-formatTime-display"
-                                placeholder="Time Format" name="start_time" id="start_time"
+                                placeholder="שעת התחלה" name="start_time" id="start_time"
                                 value="{{ old('start_time') }}" @if (@$_GET['event']) @else disabled @endif />
                             @error('start_time')
                                 <span class="invalid-feedback" role="alert">
@@ -178,7 +178,7 @@
                         </div>
                         <div class="col-md-5">
                             <input type="text" class="form-control pickatime-formatTime-display2"
-                                placeholder="Time Format" value="{{ old('end_time') }}" name="end_time" id="end_time"
+                                placeholder="זמן סיום" value="{{ old('end_time') }}" name="end_time" id="end_time"
                                 @if (@$_GET['event']) @else disabled @endif />
                             @error('end_time')
                                 <span class="invalid-feedback" role="alert">
@@ -253,9 +253,9 @@
                                 <option value="שולם"
                                     {{ @$event->payment_status || old('payment_status') == 'שולם' ? 'selected' : '' }}>שולם
                                 </option>
-                                <option value="לא בתשלום"
-                                    {{ @$event->payment_status || old('payment_status') == 'לא בתשלום' ? 'selected' : '' }}>
-                                    לא בתשלום</option>
+                                <option value="לא שולם"
+                                    {{ @$event->payment_status || old('payment_status') == 'לא שולם' ? 'selected' : '' }}>
+                                    לא שולם</option>
                                 <option value="בהמתנה"
                                     {{ @$event->payment_status || old('payment_status') == 'בהמתנה' ? 'selected' : '' }}>
                                     בהמתנה
@@ -276,15 +276,15 @@
                                     <input class="form-check-input danger check-light-danger" type="radio"
                                         name="event_level" value="Danger" id="modalDanger"
                                         {{ @$event->color || old('event_level') == 'Danger' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalDanger">סַכָּנָה</label>
+                                    <label class="form-check-label" for="modalDanger">אָדוֹם</label>
                                 </div>
                             </div>
                             <div class="n-chk">
                                 <div class="form-check form-check-warning form-check-inline">
                                     <input class="form-check-input success check-light-success" type="radio"
-                                        name="event_level" value="Success" id="modalSuccess"
+                                        name="event_level" value="Success" id="modalSuccess" checked
                                         {{ @$event->color || old('event_level') == 'Success' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalSuccess">הַצלָחָה</label>
+                                    <label class="form-check-label" for="modalSuccess">ירוק</label>
                                 </div>
                             </div>
                             <div class="n-chk">
@@ -292,7 +292,7 @@
                                     <input class="form-check-input primary check-light-primary" type="radio"
                                         name="event_level" value="Primary" id="modalPrimary"
                                         {{ @$event->color || old('event_level') == 'Primary' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalPrimary">יְסוֹדִי</label>
+                                    <label class="form-check-label" for="modalPrimary">כְּחוֹל</label>
                                 </div>
                             </div>
                             <div class="n-chk">
@@ -300,7 +300,7 @@
                                     <input class="form-check-input warning check-light-warning" type="radio"
                                         name="event_level" value="Warning" id="modalWarning"
                                         {{ @$event->color || old('event_level') == 'Warning' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalWarning">אַזהָרָה</label>
+                                    <label class="form-check-label" for="modalWarning">תפוז</label>
                                 </div>
                             </div>
                         </div>
@@ -312,7 +312,7 @@
                                     <input class="form-check-input primary check-light-primary repeat" type="checkbox"
                                         name="repeat" value="repeat" id="repeat"
                                         {{ old('repeat') == 'repeat' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="repeat">חזור</label>
+                                    <label class="form-check-label" for="repeat">שכפול</label>
                                 </div>
                             </div>
                         </div>

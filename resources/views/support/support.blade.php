@@ -33,18 +33,18 @@
                     @endphp
                     <div class="row text-end">
                         <div class="col">
-                            <a href="{{ url('New-Ticket') }}" class="btn btn-primary btn-sm"><i class="ti ti-plus me-2"></i>
-                                Add Ticket</a>
+                            <a href="{{ url('New-Ticket') }}" class="btn btn-primary btn-sm">הוסף כרטיס <i class="ti ti-plus me-2"></i>
+                                </a>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table align-middle text-nowrap">
                             <thead class="header-item">
                                 <tr>
-                                    <th>Ticket#</th>
-                                    <th style="width: 100%;">Title</th>
-                                    <th>Status</th>
-                                    <th>Created at</th>
+                                    <th>כרטיסים#</th>
+                                    <th style="width: 100%;">כותרת</th>
+                                    <th>סטָטוּס</th>
+                                    <th>נוצר ב</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -70,9 +70,9 @@
                         <table class="table align-middle text-nowrap">
                             <thead class="header-item">
                                 <tr>
-                                    <th style="width: 80%">Question</th>
-                                    <th>Ticket#</th>
-                                    <th>Action</th>
+                                    <th style="width: 80%">שאלות</th>
+                                    <th>כרטיסים#</th>
+                                    <th>פעולה</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -91,12 +91,12 @@
                                         </td>
                                         <td>{{ $row->ticket_no }}</td>
                                         <td onclick="event.stopPropagation()">
-                                            <form id="updateStatus" action="{{ url('update/status') }}/{{ $row->id }}" method="post">
+                                            <form id="updateStatus_{{ $row->id }}" action="{{ url('update/status') }}/{{ $row->id }}" method="post">
                                                 @csrf
-                                                <select name="update_status" class="form-control" id="update_status" onchange="document.getElementById('updateStatus').submit();">
-                                                    <option value="Pending" {{ $row->status == "Pending" ? 'selected' : '' }}>Pending</option>
-                                                    <option value="Open" {{ $row->status == "Open" ? 'selected' : '' }}>Open</option>
-                                                    <option value="Solved" {{ $row->status == "Solved" ? 'selected' : '' }}>Solved</option>
+                                                <select name="update_status" class="form-control" id="update_status" onchange="document.getElementById('updateStatus_{{ $row->id }}').submit();">
+                                                    <option value="מחכה ל" {{ $row->status == "מחכה ל" ? 'selected' : '' }}>מחכה ל</option>
+                                                    <option value="לִפְתוֹחַ" {{ $row->status == "לִפְתוֹחַ" ? 'selected' : '' }}>לִפְתוֹחַ</option>
+                                                    <option value="נפתרה" {{ $row->status == "נפתרה" ? 'selected' : '' }}>נפתרה</option>
                                                 </select>
                                             </form>
                                         </td>

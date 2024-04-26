@@ -23,7 +23,9 @@
                 <!-- Dashboard -->
                 <!-- =================== -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ url('/Home') }}" aria-expanded="false">
+                    <a class="sidebar-link"
+                        href="{{ url('/Home') }}{{ isset($_GET['daterange']) ? '?=daterange' . $_GET['daterange'] : '' }}"
+                        aria-expanded="false">
                         <span>
                             <i class="ti ti-home"></i>
                         </span>

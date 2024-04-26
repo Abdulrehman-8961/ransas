@@ -339,6 +339,7 @@
                         title: 'הַצלָחָה!',
                         text: '{{ Session::get('success') }}',
                         icon: 'success',
+                        confirmButtonText: 'בסדר',
                         customClass: {
                             confirmButton: 'btn btn-primary'
                         },
@@ -351,6 +352,7 @@
                         title: 'שְׁגִיאָה!',
                         text: '{{ Session::get('error') }}',
                         icon: 'error',
+                        confirmButtonText: 'בסדר',
                         customClass: {
                             confirmButton: 'btn btn-primary'
                         },
