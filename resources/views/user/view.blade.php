@@ -30,8 +30,8 @@
                 <div class="row">
                     <div class="col-md-4 col-xl-4 d-flex">
                         <form class="position-relative" id="search-form" action="{{ url()->current() }}" method="GET">
-                            <input type="text" name="search" id="search" class="form-control product-search ps-5" id="input-search"
-                                placeholder="לחפש">
+                            <input type="text" name="search" id="search" class="form-control product-search ps-5"
+                                id="input-search" placeholder="לחפש">
                             <i
                                 class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
                         </form>
@@ -46,15 +46,16 @@
                                 <i class="ti ti-trash text-danger me-1 fs-5"></i> Delete All Row
                             </a>
                         </div>
-                        <a href="{{ url('/User/add') }}" id="btn-add-contact" class="btn btn-info d-flex align-items-center">
+                        <a href="{{ url('/User/add') }}" id="btn-add-contact"
+                            class="btn btn-info d-flex align-items-center">
                             <i class="ti ti-users text-white me-1 fs-5"></i> הוסף משתמשים
                         </a>
                     </div>
                 </div>
             </div>
             <!-- ---------------------
-                                end Contact
-                            ---------------- -->
+                                    end Contact
+                                ---------------- -->
             <!-- Modal -->
             <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog"
                 aria-labelledby="addContactModalTitle" aria-hidden="true">
@@ -126,6 +127,7 @@
                             <tr>
                                 <th>שֵׁם</th>
                                 <th>אימייל</th>
+                                <th>בריכה</th>
 
                                 <th>טלפון</th>
                                 <th>פעולה</th>
@@ -134,36 +136,54 @@
                         <tbody>
                             <!-- start row -->
                             @foreach ($users as $row)
-                            <tr class="search-items" style="cursor: pointer;" onclick="window.location = '{{ url('Login-to-user') }}/{{ $row->id }}'">
-                                <td>
-                                    <div class="d-flex align-items-center">
+                                @php
+                                    $poolArray = [];
+                                    $poolId = explode(', ', $row->pool_id);
+                                    // dd($poolId);
+                                    foreach ($poolId as $p) {
+                                        $pool = DB::table('pool')->where('id', $p)->first();
+                                        $poolArray[] = @$pool->name;
+                                    }
+                                    // dd($poolArray);
+                                @endphp
+                                <tr class="search-items" style="cursor: pointer;"
+                                    onclick="window.location = '{{ url('Login-to-user') }}/{{ $row->id }}'">
+                                    <td>
+                                        <div class="d-flex align-items-center">
 
-                                        <div class="ms-3">
-                                            <div class="user-meta-info">
-                                                <h6 class="user-name mb-0" data-name="Emma Adams">{{ $row->name }}</h6>
-                                                <span class="user-work fs-3" data-occupation="Admin">{{ $row->role }}</span>
+                                            <div class="ms-3">
+                                                <div class="user-meta-info">
+                                                    <h6 class="user-name mb-0" data-name="Emma Adams">{{ $row->name }}
+                                                    </h6>
+                                                    <span class="user-work fs-3"
+                                                        data-occupation="Admin">{{ $row->role }}</span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="usr-email-addr" data-email="adams@mail.com">{{ $row->email }}</span>
-                                </td>
+                                    </td>
+                                    <td>
+                                        <span class="usr-email-addr"
+                                            data-email="adams@mail.com">{{ $row->email }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="usr-email-addr"
+                                            data-email="adams@mail.com">{{ implode(' , ', @$poolArray) }}</span>
+                                    </td>
 
-                                <td>
-                                    <span class="usr-ph-no" data-phone="+1 (070) 123-4567">{{ $row->phone }}</span>
-                                </td>
-                                <td>
-                                    <div class="action-btn" onclick="event.stopPropagation()">
-                                        <a href="{{ url('/User/edit/'.$row->id) }}" class="text-info edit">
-                                            <i class="ti ti-edit fs-5"></i>
-                                        </a>
-                                        <a href="{{ url('/User/delete/'.$row->id) }}" class="text-dark delete ms-2">
-                                            <i class="ti ti-trash fs-5"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
+                                    <td>
+                                        <span class="usr-ph-no" data-phone="+1 (070) 123-4567">{{ $row->phone }}</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-btn" onclick="event.stopPropagation()">
+                                            <a href="{{ url('/User/edit/' . $row->id) }}" class="text-info edit">
+                                                <i class="ti ti-edit fs-5"></i>
+                                            </a>
+                                            <a href="{{ url('/User/delete/' . $row->id) }}" class="text-dark delete ms-2">
+                                                <i class="ti ti-trash fs-5"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                         <tfoot>

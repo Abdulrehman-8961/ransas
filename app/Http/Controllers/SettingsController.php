@@ -18,10 +18,8 @@ class SettingsController extends Controller
     {
         $pool_id = @$request->input('pool_id');
         $template = "";
-        if (@$request['temp'] == "2") {
-            $template = DB::table('message_template')->where('id', @$request['temp'])->first();
-        } elseif (!empty($pool_id)) {
-            $template = DB::table('message_template')->where('pool_id', @$pool_id)->first();
+        if (isset($request['temp']) && isset($request['pool_id'])) {
+            $template = DB::table('message_template')->where('template', @$request['temp'])->where('pool_id',@$request['pool_id'])->first();
         }
         return view('settings.messageTemplate', compact("template"));
     }
@@ -37,6 +35,7 @@ class SettingsController extends Controller
         ]);
 
         $template_id = $request->input('template_id');
+        $pool_id = $request->input('pool_id');
         if (isset($template_id)) {
             DB::table('message_template')
                 ->where('id', $template_id)
@@ -61,11 +60,13 @@ class SettingsController extends Controller
         ]);
 
         $template_id = $request->input('template_id');
-        if (isset($template_id)) {
-            $template = DB::table('message_template')->where('pool_id', $template_id)->first();
+        $pool_id = $request->input('pool_id');
+        if (isset($template_id) && isset($pool_id)) {
+            $template = DB::table('message_template')->where('pool_id', $pool_id)->where('template',$template_id)->first();
             if ($template) {
                 DB::table('message_template')
-                    ->where('pool_id', $template_id)
+                    ->where('pool_id', $pool_id)
+                    ->where('template',$template_id)
                     ->update([
                         'subject' => $request->name,
                         'content' => $request->content,
@@ -75,7 +76,8 @@ class SettingsController extends Controller
             } else {
                 DB::table('message_template')
                     ->insert([
-                        'pool_id' => $template_id,
+                        'pool_id' => $pool_id,
+                        'template' => $template_id,
                         'subject' => $request->name,
                         'content' => $request->content,
                         'status' => $request->status
@@ -103,6 +105,7 @@ class SettingsController extends Controller
             $request->file('file')->move(public_path('uploads'), $filePath);
         }
         $favIcon = DB::table('fav_icon')->first();
+        // dd($favIcon);
         if ($favIcon) {
             DB::table('fav_icon')->where('id', $favIcon->id)->update([
                 'image' => $filePath
@@ -110,6 +113,7 @@ class SettingsController extends Controller
             return redirect()->back()->with('success', 'התמונה עודכנה');
         } else {
             DB::table('fav_icon')->insert([
+                'id' => 1,
                 'image' => $filePath
             ]);
             return redirect()->back()->with('success', 'נוספה תמונה');

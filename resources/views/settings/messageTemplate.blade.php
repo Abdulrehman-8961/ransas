@@ -25,17 +25,17 @@
         </div>
         <div class="card w-100 position-relative overflow-hidden">
             <div class="card-body">
-                @if (!isset($_GET['temp']))
+                @if (isset($_GET['temp']))
                     @php
                         $pool_option = DB::table('pool')->where('is_deleted', 0)->get();
                     @endphp
                     <form id="search-form" action="{{ url()->current() }}" method="get">
+                        <input type="hidden" name="temp" value="{{ @$_GET['temp'] }}">
                         <div class="row mb-3">
                             <div class="col-md-4 col-12">
                                 <label for="">בריכות</label>
                                 <select class="form-control" name="pool_id" id="pool_id"
                                     onchange="document.getElementById('search-form').submit();">
-                                    <option value=""></option>
                                     @foreach ($pool_option as $row)
                                         <option value="{{ $row->id }}"
                                             {{ @$_GET['pool_id'] == $row->id ? 'selected' : '' }}>
@@ -46,14 +46,11 @@
                         </div>
                     </form>
                 @endif
-                <form action="{{ isset($_GET['temp']) ? url('/Message-Template/Save') : url('/Template/Save') }}"
+                <form action="{{ url('/Template/Save') }}"
                     method="post">
                     @csrf
-                    @if (isset($_GET['temp']))
-                        <input type="hidden" name="template_id" value="{{ @$_GET['temp'] }}">
-                    @else
-                        <input type="hidden" name="template_id" value="{{ @$_GET['pool_id'] }}">
-                    @endif
+                    <input type="hidden" name="template_id" value="{{ @$_GET['temp'] }}">
+                    <input type="hidden" name="pool_id" value="{{ @$_GET['pool_id'] }}">
                     <div class="row">
                         <div class="col-md-6 col-12 mb-3">
                             <label for="name" class="form-label">נושא</label>
@@ -61,11 +58,12 @@
                                 id="name">
                         </div>
                         <div class="col-md-6 col-12 mb-3">
-                            <label for="status" class="form-label">סטָטוּס</label>
+                            <label for="status" class="form-label">סטטוס</label>
                             <select class="form-control" name="status" id="status">
-                                <option value="Send" {{ @$template->status == 'Send' ? 'selected' : '' }}>לִשְׁלוֹחַ
+                                <option value="Send" {{ @$template->status == 'Send' ? 'selected' : '' }}>לשלוח
                                 </option>
-                                <option value="Stop" {{ @$template->status == 'Stop' ? 'selected' : '' }}>תפסיק</option>
+                                <option value="Stop" {{ @$template->status == 'Stop' ? 'selected' : '' }}>לא לשלוח
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -73,6 +71,7 @@
                         <label for="content" class="form-label">
                             Content
                             <ul class="text-danger mb-0 fs-2 ps-1">
+                                <li>שם הבריכה: {pool_name}</li>
                                 <li>סוג הזמנה: {booking_type}</li>
                                 <li>שם לקוח: {customer_name}</li>
                                 <li>תאריך הזמנה: {date}</li>
@@ -97,6 +96,9 @@
 
 @section('javascript')
     <script>
+        @if (!isset($_GET['pool_id']))
+            document.getElementById('search-form').submit();
+        @endif
         $(document).on('change', '#role', function() {
             var role = $('#role option:selected').val();
             if (role == 'Admin') {

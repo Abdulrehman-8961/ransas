@@ -276,7 +276,7 @@
                                     <input class="form-check-input danger check-light-danger" type="radio"
                                         name="event_level" value="Danger" id="modalDanger"
                                         {{ @$event->color || old('event_level') == 'Danger' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalDanger">אָדוֹם</label>
+                                    <label class="form-check-label" for="modalDanger">אדום</label>
                                 </div>
                             </div>
                             <div class="n-chk">
@@ -292,7 +292,7 @@
                                     <input class="form-check-input primary check-light-primary" type="radio"
                                         name="event_level" value="Primary" id="modalPrimary"
                                         {{ @$event->color || old('event_level') == 'Primary' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalPrimary">כְּחוֹל</label>
+                                    <label class="form-check-label" for="modalPrimary">כחול</label>
                                 </div>
                             </div>
                             <div class="n-chk">
@@ -300,7 +300,7 @@
                                     <input class="form-check-input warning check-light-warning" type="radio"
                                         name="event_level" value="Warning" id="modalWarning"
                                         {{ @$event->color || old('event_level') == 'Warning' ? 'checked' : '' }} />
-                                    <label class="form-check-label" for="modalWarning">תפוז</label>
+                                    <label class="form-check-label" for="modalWarning">כתום</label>
                                 </div>
                             </div>
                         </div>

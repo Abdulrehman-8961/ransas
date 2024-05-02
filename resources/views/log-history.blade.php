@@ -27,37 +27,36 @@
         <div class="widget-content searchable-container list">
             <!-- --------------------- start Contact ---------------- -->
             <div class="card card-body">
-                <div class="row">
-                    <div class="col-md-4 col-xl-3">
-                        <form class="position-relative">
+                <form class="position-relative">
+                    <div class="row">
+                        <div class="col-md-4 col-xl-3">
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control daterange">
+                                <input type="text" class="form-control daterange" name="date">
 
                                 <span class="input-group-text">
                                     <i class="ti ti-calendar fs-5"></i>
                                 </span>
                             </div>
 
-                        </form>
-                    </div>
-                    <div class="col-lg-4">
-                        <button class="btn btn-primary">לְסַנֵן</button>
-                    </div>
-                    <div
-                        class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
-                        <div class="action-btn show-btn" style="display: none">
-                            <a href="javascript:void(0)"
-                                class="delete-multiple btn-light-danger btn me-2 text-danger d-flex align-items-center font-medium">
-                                <i class="ti ti-trash text-danger me-1 fs-5"></i> Delete All Row
-                            </a>
                         </div>
-
+                        <div class="col-lg-4">
+                            <button class="btn btn-primary">לְסַנֵן</button>
+                        </div>
+                        <div
+                            class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
+                            <div class="action-btn show-btn" style="display: none">
+                                <a href="javascript:void(0)"
+                                    class="delete-multiple btn-light-danger btn me-2 text-danger d-flex align-items-center font-medium">
+                                    <i class="ti ti-trash text-danger me-1 fs-5"></i> Delete All Row
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
             <!-- ---------------------
-                                        end Contact
-                                    ---------------- -->
+                                                            end Contact
+                                                        ---------------- -->
             <!-- Modal -->
             <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog"
                 aria-labelledby="addContactModalTitle" aria-hidden="true">
@@ -136,11 +135,29 @@
                         </thead>
                         <tbody>
                             @php
-                                $history = DB::table('log_history')->get();
+                                $dateParts = '';
+                                $start_date = '';
+                                $end_date = '';
+                                if (isset($_GET['date'])) {
+                                    $dateParts = explode(' - ', $_GET['date']);
+                                    $start_date = date('Y-m-d', strtotime($dateParts[0]));
+                                    $end_date = date('Y-m-d', strtotime($dateParts[1]));
+                                    // dd($start_date);
+                                }
+                                $history = DB::table('log_history')
+                                    ->where(function ($query) use ($dateParts, $start_date, $end_date) {
+                                        if (isset($dateParts) && !empty($dateParts)) {
+                                            $query
+                                                ->where('created_at', '>=', $start_date . ' 00:00:00')
+                                                ->where('created_at', '<=', $end_date . ' 23:59:59');
+                                        }
+                                    })
+                                    ->get();
                             @endphp
                             <!-- start row -->
                             @foreach ($history as $row)
                                 @php
+
                                     $user = DB::table('users')
                                         ->where('id', $row->user_id)
                                         ->first();
@@ -157,4 +174,35 @@
                 </div>
             </div>
         </div>
+    @endsection
+    @section('javascript')
+        <script>
+            $(".daterange").daterangepicker({
+                locale: {
+                    applyLabel: "אישור",
+                    cancelLabel: "ביטול",
+                    startLabel: "תחילת תאריך",
+                    endLabel: "סיום תאריך",
+                    customRangeLabel: "בחר טווח תאריכים",
+                    daysOfWeek: ["א", "ב", "ג", "ד", "ה", "ו", "ש"],
+                    monthNames: [
+                        "ינואר",
+                        "פברואר",
+                        "מרץ",
+                        "אפריל",
+                        "מאי",
+                        "יוני",
+                        "יולי",
+                        "אוגוסט",
+                        "ספטמבר",
+                        "אוקטובר",
+                        "נובמבר",
+                        "דצמבר",
+                    ],
+                    firstDay: 0,
+                },
+                autoApply: true,
+                rtl: true
+            });
+        </script>
     @endsection

@@ -50,6 +50,7 @@ Route::get('/getAvailableDays', [AddEventController::class, 'getAvailableDays'])
 Route::get('/getAvailableTimeSlots', [AddEventController::class, 'getAvailableTimeSlots'])->middleware('user');
 Route::post('/Event/save', [AddEventController::class, 'save'])->middleware('user')->middleware('user');
 Route::get('/check-availablity', [AddEventController::class, 'checkAvailability'])->middleware('user');
+Route::get('/delete/event/{id}', [AddEventController::class, 'deleteEvent'])->middleware('user');
 
 
 

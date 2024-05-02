@@ -239,28 +239,28 @@
                                             <div class="form-check form-check-primary form-check-inline">
                                                 <input class="form-check-input" type="radio" name="event_level"
                                                     value="Danger" id="modalDanger" />
-                                                <label class="form-check-label" for="modalDanger">סַכָּנָה</label>
+                                                <label class="form-check-label" for="modalDanger">אדום</label>
                                             </div>
                                         </div>
                                         <div class="n-chk">
                                             <div class="form-check form-check-warning form-check-inline">
                                                 <input class="form-check-input" type="radio" name="event_level"
                                                     value="Success" id="modalSuccess" />
-                                                <label class="form-check-label" for="modalSuccess">הַצלָחָה</label>
+                                                <label class="form-check-label" for="modalSuccess">ירוק</label>
                                             </div>
                                         </div>
                                         <div class="n-chk">
                                             <div class="form-check form-check-success form-check-inline">
                                                 <input class="form-check-input" type="radio" name="event_level"
                                                     value="Primary" id="modalPrimary" />
-                                                <label class="form-check-label" for="modalPrimary">יְסוֹדִי</label>
+                                                <label class="form-check-label" for="modalPrimary">כחול</label>
                                             </div>
                                         </div>
                                         <div class="n-chk">
                                             <div class="form-check form-check-danger form-check-inline">
                                                 <input class="form-check-input" type="radio" name="event_level"
                                                     value="Warning" id="modalWarning" />
-                                                <label class="form-check-label" for="modalWarning">אַזהָרָה</label>
+                                                <label class="form-check-label" for="modalWarning">כתום</label>
                                             </div>
                                         </div>
                                     </div>
@@ -275,10 +275,13 @@
                             עדכן שינויים
                         </button>
                         <a class="btn btn-primary btn-duplicate-event">
-                            אירוע כפול
+                            העתקת אירוע
                         </a>
                         <button type="button" class="btn btn-primary btn-add-event">
                             הוסף אירוע
+                        </button>
+                        <button type="button" data-url="{{ url('delete/event/') }}" class="btn btn-danger btn-delete-event">
+                            לְהַסִיר
                         </button>
                     </div>
                     </form>
@@ -380,7 +383,7 @@
                 }
             };
             var calendarHeaderToolbar = {
-                left: "prev next AddEvent ExportCsv",
+                left: "next prev AddEvent ExportCsv",
                 center: "title",
                 right: "dayGridMonth,timeGridWeek,timeGridDay",
             };
@@ -492,6 +495,7 @@
                         $('.percentage-field').removeClass('d-none');
                         $('.percentage_value').val(percentage_value);
                     }
+                    $('.btn-delete-event').attr('data-id', update_id);
                     var parts = date.split('-');
                     formattedDateStart = `${parts[1]}/${parts[2]}/${parts[0]}`;
                     var endDateParts = end_date.split('-');
@@ -523,8 +527,8 @@
             // Active Calender
             /*=====================*/
             var storedView = localStorage.getItem('calendarView');
+
             function initializeCalendar() {
-                console.log(storedView);
                 var calendarOptions = {
                     selectable: true,
                     height: checkWidowWidth() ? 900 : 1052,
@@ -937,12 +941,13 @@
         $(document).ready(function() {
             document.querySelector('.fc-button-group').addEventListener('click', function(event) {
                 if (event.target.classList.contains('fc-button')) {
-                    var selectedView = event.target.classList.contains('fc-dayGridMonth-button') ? 'dayGridMonth' :
+                    var selectedView = event.target.classList.contains('fc-dayGridMonth-button') ?
+                        'dayGridMonth' :
                         event.target.classList.contains('fc-timeGridWeek-button') ? 'timeGridWeek' :
                         event.target.classList.contains('fc-timeGridDay-button') ? 'timeGridDay' : null;
 
                     if (selectedView) {
-                        localStorage.setItem('calendarView', selectedView); // Store the selected view in local storage
+                        localStorage.setItem('calendarView', selectedView);
                     }
                 }
             });
@@ -1010,5 +1015,25 @@
             var poolID = $("#pool_select option:selected").val();
             getPoolDetails(poolID, formattedDateStart, formattedDateEnd);
         });
+
+        $('.btn-delete-event').on('click', function() {
+            Swal.fire({
+                title: "האם אתה בטוח?",
+                text: "אתה לא תוכל להחזיר את זה!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "כן, מחק את זה!",
+                cancelButtonText: "לְבַטֵל",
+            }).then((result) => {
+                if (result.value) {
+                    var delete_id = $(this).data('id');
+                    var url = $(this).data('url');
+                    // Swal.fire("Deleted!", "Your file has been deleted.", "success");
+                    window.location = url + '/' + delete_id;
+                }
+            });
+        })
     </script>
 @endsection

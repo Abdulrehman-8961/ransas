@@ -94,9 +94,9 @@
                                             <form id="updateStatus_{{ $row->id }}" action="{{ url('update/status') }}/{{ $row->id }}" method="post">
                                                 @csrf
                                                 <select name="update_status" class="form-control" id="update_status" onchange="document.getElementById('updateStatus_{{ $row->id }}').submit();">
-                                                    <option value="מחכה ל" {{ $row->status == "מחכה ל" ? 'selected' : '' }}>מחכה ל</option>
-                                                    <option value="לִפְתוֹחַ" {{ $row->status == "לִפְתוֹחַ" ? 'selected' : '' }}>לִפְתוֹחַ</option>
-                                                    <option value="נפתרה" {{ $row->status == "נפתרה" ? 'selected' : '' }}>נפתרה</option>
+                                                    <option value="ממתין" {{ $row->status == "ממתין" ? 'selected' : '' }}>ממתין</option>
+                                                    <option value="בטיפול" {{ $row->status == "בטיפול" ? 'selected' : '' }}>בטיפול</option>
+                                                    <option value="סגור" {{ $row->status == "סגור" ? 'selected' : '' }}>סגור</option>
                                                 </select>
                                             </form>
                                         </td>

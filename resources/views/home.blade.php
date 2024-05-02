@@ -594,26 +594,117 @@
         @if (isset($_GET['daterange']))
             $(".daterange").daterangepicker({
                 locale: {
-                    direction: 'rtl',
-                    // Other locale options...
+                    applyLabel: "אישור",
+                    cancelLabel: "ביטול",
+                    startLabel: "תחילת תאריך",
+                    endLabel: "סיום תאריך",
+                    customRangeLabel: "בחר טווח תאריכים",
+                    daysOfWeek: ["א", "ב", "ג", "ד", "ה", "ו", "ש"],
+                    monthNames: [
+                        "ינואר",
+                        "פברואר",
+                        "מרץ",
+                        "אפריל",
+                        "מאי",
+                        "יוני",
+                        "יולי",
+                        "אוגוסט",
+                        "ספטמבר",
+                        "אוקטובר",
+                        "נובמבר",
+                        "דצמבר",
+                    ],
+                    firstDay: 0,
                 },
-            }, function(start, end, label) {
-                alert('ok')
-                $('.applyBtn').text('Custom Apply');
-                $('.cancelBtn').text('Custom Cancel');
+                autoApply: true,
+                rtl: true
             });
+            localStorage.setItem('dateRange', "{{ $_GET['daterange'] }}");
+            $('.left').addClass('order-2');
+            $('.right').addClass('order-1');
         @else
-            var startDate = moment().startOf('week');
-            var endDate = moment().endOf('week');
-            $(".daterange").daterangepicker({
-                locale: {
-                    direction: 'rtl',
+            // Function to get the start date of the current week
+            function getStartOfWeek() {
+                let today = new Date();
+                let dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+                let diff = today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Adjust to start of week
 
-                },
-                direction: 'rtl',
-                startDate: startDate,
-                endDate: endDate
-            });
+                return new Date(today.setDate(diff));
+            }
+
+            // Function to get the end date of the current week
+            function getEndOfWeek() {
+                let today = new Date();
+                let dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
+                let diff = 6 - dayOfWeek; // Days remaining in the week
+
+                return new Date(today.setDate(today.getDate() + diff));
+            }
+            var dateRange = localStorage.getItem('dateRange');
+            if (dateRange) {
+                $(".daterange").daterangepicker({
+                    locale: {
+                        applyLabel: "אישור",
+                        cancelLabel: "ביטול",
+                        startLabel: "תחילת תאריך",
+                        endLabel: "סיום תאריך",
+                        customRangeLabel: "בחר טווח תאריכים",
+                        daysOfWeek: ["א", "ב", "ג", "ד", "ה", "ו", "ש"],
+                        monthNames: [
+                            "ינואר",
+                            "פברואר",
+                            "מרץ",
+                            "אפריל",
+                            "מאי",
+                            "יוני",
+                            "יולי",
+                            "אוגוסט",
+                            "ספטמבר",
+                            "אוקטובר",
+                            "נובמבר",
+                            "דצמבר",
+                        ],
+                        firstDay: 0,
+                    },
+                    autoApply: true,
+                    rtl: true
+                });
+                $('.daterange').val(dateRange);
+            } else {
+                var startDate = getStartOfWeek();
+                var endDate = getEndOfWeek();
+                $(".daterange").daterangepicker({
+                    locale: {
+                        applyLabel: "אישור",
+                        cancelLabel: "ביטול",
+                        startLabel: "תחילת תאריך",
+                        endLabel: "סיום תאריך",
+                        customRangeLabel: "בחר טווח תאריכים",
+                        daysOfWeek: ["א", "ב", "ג", "ד", "ה", "ו", "ש"],
+                        monthNames: [
+                            "ינואר",
+                            "פברואר",
+                            "מרץ",
+                            "אפריל",
+                            "מאי",
+                            "יוני",
+                            "יולי",
+                            "אוגוסט",
+                            "ספטמבר",
+                            "אוקטובר",
+                            "נובמבר",
+                            "דצמבר",
+                        ],
+                        firstDay: 0,
+                    },
+                    autoApply: true,
+                    rtl: true,
+                    startDate: startDate,
+                    endDate: endDate
+                });
+            }
+
+            document.getElementById('myForm').submit();
         @endif
         $(document).ready(function() {
             // Update the text of apply and cancel buttons

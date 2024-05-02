@@ -194,9 +194,11 @@ class AddEventController extends Controller
                 $start_date = date('d.m.Y', strtotime($request->input('start_date')));
                 $end_date = date('d.m.Y', strtotime($request->input('end_date')));
 
-                $message_template = DB::table('message_template')->where('id', 2)->first();
+                $message_template = DB::table('message_template')->where('template', 2)->where('pool_id',$request->input('pool_select'))->first();
+                $pool_data = DB::table('pool')->where('id', $request->input('pool_select'))->first();
                 if ($message_template->status == "Send") {
                     $replacements = [
+                        '{pool_name}' => $pool_data->name || '',
                         '{customer_name}' => $request->input('customer_name'),
                         '{date}' => $start_date . ' - ' . $end_date,
                         '{time}' => date("h:i a", strtotime($starttime)) . ' - ' . date("h:i a", strtotime($endtime)),
@@ -353,5 +355,12 @@ class AddEventController extends Controller
         }
 
         return response()->json(['success' => true, 'startTime' => $timeSlot->$startTimeColumn, 'endTime' => $timeSlot->$endTimeColumn]);
+    }
+
+    public function deleteEvent($id){
+        DB::table('events')->where('id',$id)->update([
+            'is_deleted' => 1
+        ]);
+        return redirect()->back()->with('success','האירוע הוסר');
     }
 }

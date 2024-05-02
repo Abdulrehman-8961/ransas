@@ -10,28 +10,35 @@ use Auth;
 
 class CoronController extends Controller
 {
-    public function smsReminder(){
+    public function smsReminder()
+    {
         $currentDateTime = Carbon::now();
         $next24Hours = $currentDateTime->copy()->addHours(24)->toDateTimeString();
 
         $events = DB::table('events')
             ->where(DB::raw("CONCAT(start_date, ' ', start_time)"), '>=', $currentDateTime->toDateTimeString())
             ->where(DB::raw("CONCAT(start_date, ' ', start_time)"), '<=', $next24Hours)
-            ->where('reminder',0)
+            ->where('reminder', 0)
             ->get();
-        $message_template = DB::table('message_template')->where('pool_id',@$events->pool_id)->first();
-        if ($message_template) {
-            if ($message_template->status == "Send") {
-                foreach ($events as $row) {
+        // if ($message_template) {
+        //     if ($message_template->status == "Send") {
+        //     }
+        // }
+        foreach ($events as $row) {
+            $message_template = DB::table('message_template')->where('template', 1)->where('pool_id', @$row->pool_id)->first();
+            if ($message_template) {
+                if ($message_template->status == "Send") {
+                    $pool_data = DB::table('pool')->where('id', @$row->pool_id)->first();
                     $replacements = [
+                        '{pool_name}' => $pool_data->name,
                         '{customer_name}' => $row->stylist_name,
-                        '{date}' => date("d.m.Y", strtotime($row->start_date)).' - '.date("d.m.Y", strtotime($row->end_date)),
-                        '{time}' => date("h:i a",strtotime($row->start_time)).' - '.date("h:i a",strtotime($row->end_time)),
+                        '{date}' => date("d.m.Y", strtotime($row->start_date)) . ' - ' . date("d.m.Y", strtotime($row->end_date)),
+                        '{time}' => date("h:i a", strtotime($row->start_time)) . ' - ' . date("h:i a", strtotime($row->end_time)),
                         '{payment_status}' => $row->payment_status,
                         '{total_amount}' => $row->total_payment,
                         '{booking_method}' => $row->payment_method,
                         '{booking_type}' => $row->booking_type,
-                      ];
+                    ];
                     $templateContent = $message_template->content;
                     $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);
                     $phone_number = $row->customer_phone;
@@ -55,16 +62,16 @@ class CoronController extends Controller
                     } catch (\Throwable $th) {
                         //throw $th;
                     }
-                    DB::table('events')->where('id',$row->id)->update([
-                        'reminder' => 1
-                    ]);
                 }
             }
+            DB::table('events')->where('id', $row->id)->update([
+                'reminder' => 1
+            ]);
         }
-
     }
 
-    public function checkPaymentStatus(){
+    public function checkPaymentStatus()
+    {
         $events = DB::table('events')->where('payment_method', 'Card')->where('sumit_payment_id', '!=', 'null')->get();
         // dd($events);
 
@@ -79,12 +86,10 @@ class CoronController extends Controller
 
             $responseData = $response->json();
             if ($responseData['Data']['Payment']['Status'] == "000" && $responseData['Data']['Payment']['ValidPayment'] == true) {
-                DB::table('events')->where('id',$row->id)->update([
+                DB::table('events')->where('id', $row->id)->update([
                     'payment_status' => 'Paid',
                 ]);
-
             }
         }
     }
-
 }

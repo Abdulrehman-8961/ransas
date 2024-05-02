@@ -42,7 +42,6 @@ class UserController extends Controller
         $users->appends([
             "search" => $search,
         ]);
-        // dd(trans('pagination.previous'));
         return view("user.view", compact("users"));
     }
     public function add()

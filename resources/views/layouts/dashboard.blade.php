@@ -106,6 +106,14 @@
         .sidebar-nav ul .sidebar-item .sidebar-link {
             font-size: 18px !important;
         }
+
+        .drp-buttons {
+            display: none !important;
+        }
+
+        .daterangepicker {
+    direction: rtl;
+}
     </style>
 
 
@@ -177,8 +185,9 @@
                                 <i class="ti ti-align-justified fs-7"></i>
                             </a>
                             <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-center">
-                                <li class="nav-item me-3 d-flex align-items-center"><span class="text-danger me-2" style="font-size: 22px;">בריכה:</span>
-                                    @if (count($pool_option) > 1)
+                                <li class="nav-item me-3 d-flex align-items-center"><span class="text-danger me-2"
+                                        style="font-size: 22px;">בריכה:</span>
+                                    @if (count($pool_option) > 0)
                                         <select class="form-control" name="pool_select" id="pool_select">
                                             @foreach ($pool_option as $row)
                                                 <option value="{{ $row->id }}"
@@ -186,14 +195,14 @@
                                                     {{ $row->name }}</option>
                                             @endforeach
                                         </select>
-                                    @else
+                                        {{-- @else
                                         <select class="form-control d-none" name="pool_select" id="pool_select">
                                             @foreach ($pool_option as $row)
                                                 <option value="{{ $row->id }}"
                                                     {{ @session('pool_select') == $row->id ? 'selected' : '' }}>
                                                     {{ $row->name }}</option>
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                     @endif
                                 </li>
 
@@ -301,8 +310,6 @@
             <script src="{{ asset('public') }}/dist/libs/pickadate-jalaali/lib/compressed/picker.date.js"></script>
             <script src="{{ asset('public') }}/dist/libs/pickadate-jalaali/lib/compressed/picker.time.js"></script>
             <script src="{{ asset('public') }}/dist/libs/pickadate-jalaali/lib/compressed/legacy.js"></script>
-            <script src="{{ asset('public') }}/dist/libs/bootstrap-material-datetimepicker/node_modules/moment/moment.js"></script>
-            <script src="{{ asset('public') }}/dist/libs/daterangepicker/daterangepicker.js"></script>
             <script src="{{ asset('public') }}/dist/js/plugins/datetimepicker.init.js"></script>
             <script>
                 $(".counter-carousel").owlCarousel({
@@ -362,6 +369,11 @@
             @endif
             <script>
                 $(document).ready(function() {
+                    // Update the text of apply and cancel buttons
+                    $('.daterangepicker .applyBtn').text('בסדר');
+                    $('.daterangepicker .cancelBtn').text('לְבַטֵל');
+                });
+                $(document).ready(function() {
 
                     $(document).on('change', '#pool_select', function() {
                         var selectedPoolId = $(this).val();
@@ -388,7 +400,33 @@
             </script>
             @yield('javascript')
             <script type="text/javascript">
-                $(".daterange").daterangepicker();
+                $(".daterange").daterangepicker(
+                    locale: {
+                        applyLabel: "אישור",
+                        cancelLabel: "ביטול",
+                        startLabel: "תחילת תאריך",
+                        endLabel: "סיום תאריך",
+                        customRangeLabel: "בחר טווח תאריכים",
+                        daysOfWeek: ["א", "ב", "ג", "ד", "ה", "ו", "ש"],
+                        monthNames: [
+                            "ינואר",
+                            "פברואר",
+                            "מרץ",
+                            "אפריל",
+                            "מאי",
+                            "יוני",
+                            "יולי",
+                            "אוגוסט",
+                            "ספטמבר",
+                            "אוקטובר",
+                            "נובמבר",
+                            "דצמבר",
+                        ],
+                        firstDay: 0,
+                    },
+                    autoApply: true,
+                    direction: 'rtl'
+                );
             </script>
 
 </body>
