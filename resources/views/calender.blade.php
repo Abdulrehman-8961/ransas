@@ -21,14 +21,14 @@
             <div class="card-body px-4 py-3">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-semibold mb-8">לוּחַ שָׁנָה</h4>
+                        <h4 class="fw-semibold mb-8">לוח שנה</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-muted " href="{{ url('/Home') }}">לוּחַ מַחווָנִים</a>
+                                    <a class="text-muted " href="{{ url('/Home') }}">דשבורד</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">
-                                    לוּחַ שָׁנָה
+                                    לוח שנה
                                 </li>
                             </ol>
                         </nav>
@@ -739,7 +739,7 @@
                     if (!titleFilterInitialized) {
                         var uniqueTitles = [...new Set(events.map(event => event.title))];
                         var selectFilter = $(
-                            '<select class="form-control" style="max-width:200px; margin-right: 10px;" id="title-filter"><option value="">כל הכותרות</option><option value="Birthday">יום הולדת</option><option value="Private event">אירוע פרטי</option><option value="Swimming Course">קורס שחייה</option><option value="Other">אַחֵר</option></select>'
+                            '<select class="form-control" style="max-width:200px; margin-right: 10px;" id="title-filter"><option value="">כל האירועים</option><option value="Birthday">יום הולדת</option><option value="Private event">אירוע פרטי</option><option value="Swimming Course">קורס שחייה</option><option value="Other">אַחֵר</option></select>'
                         );
                         selectFilter.on('change', function() {
                             var selectedTitle = $(this).val();

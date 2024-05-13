@@ -5,12 +5,12 @@
             <div class="card-body px-4 py-3">
                 <div class="row align-items-center">
                     <div class="col-9">
-                        <h4 class="fw-semibold mb-8">הִיסטוֹרִיָה</h4>
+                        <h4 class="fw-semibold mb-8">היסטוריה</h4>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
-                                        href="{{ url('/Home') }}">לוּחַ מַחווָנִים</a></li>
-                                <li class="breadcrumb-item" aria-current="page">היסטוריה/יומנים</li>
+                                        href="{{ url('/Home') }}">דשבורד</a></li>
+                                <li class="breadcrumb-item" aria-current="page">היסטוריה</li>
                             </ol>
                         </nav>
                     </div>
@@ -40,7 +40,7 @@
 
                         </div>
                         <div class="col-lg-4">
-                            <button class="btn btn-primary">לְסַנֵן</button>
+                            <button class="btn btn-primary">שלח</button>
                         </div>
                         <div
                             class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
@@ -130,7 +130,7 @@
                                 <th>עמוד</th>
 
                                 <th>תיאור</th>
-                                <th>תַאֲרִיך</th>
+                                <th>תאריך יצירה</th>
                             </tr>
                         </thead>
                         <tbody>

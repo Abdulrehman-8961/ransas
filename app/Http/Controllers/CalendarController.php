@@ -189,7 +189,7 @@ class CalendarController extends Controller
         $events = $request->input('events');
 
 
-        $query = DB::table('events')->where('pool_id', $pool)->where('start_date','>=',$startdate)->where('start_date','<=',$enddate);
+        $query = DB::table('events')->where('pool_id', $pool)->where('start_date','>=',$startdate)->where('start_date','<=',$enddate)->where('is_deleted',0);
 
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {
@@ -202,6 +202,7 @@ class CalendarController extends Controller
 
         $data = $query->get();
 
+        // dd($data);
         // dd($data);
         foreach ($data as $item) {
             $startDateTime = new DateTime($item->start_date . ' ' . $item->start_time);

@@ -4,7 +4,7 @@ $con = new mysqli("localhost",'swim-crm','s!!!hOkK1232tchV6JE%**w5n69Zu','swim-c
 
 
  mysqli_query($con,"
- ALTER TABLE `message_template` ADD `template` INT NULL DEFAULT NULL AFTER `pool_id`;
+ UPDATE `events` SET `booking_type`='Swimming Course' WHERE id = '172';
 ");
 
  echo mysqli_error($con);

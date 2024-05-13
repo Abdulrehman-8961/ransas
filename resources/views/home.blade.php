@@ -10,6 +10,7 @@
             $startDate = date('Y-m-d', strtotime($dateParts[0]));
             $endDate = date('Y-m-d', strtotime($dateParts[1]));
         } else {
+            // dd($startDate,$endDate);
             $currentDate = \Carbon\Carbon::now();
             $startDate = $currentDate->startOfWeek()->format('Y-m-d');
             $endDate = $currentDate->endOfWeek()->format('Y-m-d');
@@ -69,6 +70,7 @@
                 ->where('pool_id', session('pool_select'))
                 ->whereBetween('start_date', [$startDate, $endDate])
                 ->where('booking_type', 'Swimming Course')
+                ->where('is_deleted',0)
                 ->get();
             $totalMinutes = 0;
             foreach ($swimming_hours as $row) {
@@ -84,16 +86,19 @@
                 ->where('pool_id', session('pool_select'))
                 ->whereBetween('start_date', [$startDate, $endDate])
                 ->where('booking_type', 'Birthday')
+                ->where('is_deleted',0)
                 ->count();
             $Swimming_courses = DB::Table('events')
                 ->where('pool_id', session('pool_select'))
                 ->whereBetween('start_date', [$startDate, $endDate])
                 ->where('booking_type', 'Swimming Course')
+                ->where('is_deleted',0)
                 ->count();
             $revenue = DB::Table('events')
                 ->where('pool_id', session('pool_select'))
                 ->where('payment_status', 'Paid')
                 ->whereBetween('start_date', [$startDate, $endDate])
+                ->where('is_deleted',0)
                 ->sum('total_payment');
             // dd($birthdays,$Swimming_courses,$revenue);
         }
@@ -123,7 +128,7 @@
                     </select>
                 </div> --}}
                 <div class="col-md-1">
-                    <button type="submit" class="btn btn-primary">סינון</button>
+                    <button type="submit" class="btn btn-primary">שלח</button>
                 </div>
             </div>
         </form>

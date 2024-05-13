@@ -63,7 +63,6 @@ class AddEventController extends Controller
                 'repeat_cycle.required' => 'אנא בחר מחזור חוזר.',
                 'repeat_count.required' => 'נא להזין ספירה חוזרת.',
             ]);
-
         }
         $startdate = date('Y-m-d', strtotime($request->input('start_date')));
         $enddate = date('Y-m-d', strtotime($request->input('end_date')));
@@ -194,7 +193,7 @@ class AddEventController extends Controller
                 $start_date = date('d.m.Y', strtotime($request->input('start_date')));
                 $end_date = date('d.m.Y', strtotime($request->input('end_date')));
 
-                $message_template = DB::table('message_template')->where('template', 2)->where('pool_id',$request->input('pool_select'))->first();
+                $message_template = DB::table('message_template')->where('template', 2)->where('pool_id', $request->input('pool_select'))->first();
                 $pool_data = DB::table('pool')->where('id', $request->input('pool_select'))->first();
                 if ($message_template->status == "Send") {
                     $replacements = [
@@ -210,7 +209,7 @@ class AddEventController extends Controller
                     $templateContent = $message_template->content;
                     $message = str_replace(array_keys($replacements), array_values($replacements), $templateContent);
 
-                    $staff = DB::table('users')->where('id',Auth::user()->id)->first();
+                    $staff = DB::table('users')->where('id', Auth::user()->id)->first();
                     $staff_phone = $staff->phone;
 
                     // $message = <<<EOT
@@ -222,22 +221,22 @@ class AddEventController extends Controller
                     // EOT;
 
                     try {
-                         $response = Http::withHeaders([
-                             'Content-Type' => 'application/json',
-                             'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
-                         ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
-                             "Data" => [
-                                 "Message" => $message,
-                                 "Recipients" => [
-                                     [
-                                         "Phone" => $staff_phone
-                                     ]
-                                 ],
-                                 "Settings" => [
-                                     "Sender" => "Ransas"
-                                 ]
-                             ]
-                         ]);
+                        $response = Http::withHeaders([
+                            'Content-Type' => 'application/json',
+                            'Authorization' => 'Basic aXN3aW0uY28uaWw6MWQzOGI2ODYtODA1OC00NDcxLWFkYjMtZWQzNDM3MDE3Njhl',
+                        ])->post('https://capi.inforu.co.il/api/v2/SMS/SendSms', [
+                            "Data" => [
+                                "Message" => $message,
+                                "Recipients" => [
+                                    [
+                                        "Phone" => $staff_phone
+                                    ]
+                                ],
+                                "Settings" => [
+                                    "Sender" => "Ransas"
+                                ]
+                            ]
+                        ]);
                     } catch (\Throwable $th) {
                         //throw $th;
                     }
@@ -258,13 +257,14 @@ class AddEventController extends Controller
         $startTime = $request->input('startTime');
         $endDate = date('Y-m-d', strtotime($request->input('endDate')));
         $endTime = $request->input('endTime');
+        $poolId = session('pool_select');
 
         $starttime = date('H:i:s', strtotime($startTime));
         $endtime = date('H:i:s', strtotime($endTime));
         // dd($starttime,$endtime,$startDate,$endDate);
 
         // Check the database for conflicting events
-        $conflictingEvents = DB::table('events')->where('pool_id', Auth::user()->id)
+        $conflictingEvents = DB::table('events')->where('pool_id', $poolId)
             ->where(function ($query) use ($startDate, $starttime, $endDate, $endtime) {
                 $query->where(function ($query) use ($startDate, $starttime, $endDate, $endtime) {
                     $query->where('start_date', '<=', $endDate)
@@ -288,6 +288,59 @@ class AddEventController extends Controller
         // dd($conflictingEvents);
 
         $available = $conflictingEvents == 0;
+
+        return response()->json(['available' => $available]);
+    }
+    public function checkAvailability_(Request $request)
+    {
+        $parent_id = $request->input('parent_id');
+        $startDate = date('Y-m-d', strtotime($request->input('startDate')));
+        $startTime = $request->input('startTime');
+        $endDate = date('Y-m-d', strtotime($request->input('endDate')));
+        $endTime = $request->input('endTime');
+        $percentage_value = $request->input('percentage_value');
+        $poolId = session('pool_select');
+        // dd($poolId);
+
+        $starttime = date('H:i:s', strtotime($startTime));
+        $endtime = date('H:i:s', strtotime($endTime));
+        // dd($starttime,$endtime,$startDate,$endDate);
+
+        // Check the database for conflicting events
+        $conflictingEvents = DB::table('events')->where('pool_id', $poolId)
+            ->where(function ($query) use ($startDate, $starttime, $endDate, $endtime) {
+                $query->where(function ($query) use ($startDate, $starttime, $endDate, $endtime) {
+                    $query->where('start_date', '<=', $endDate)
+                        ->where('end_date', '>=', $startDate)
+                        ->where('start_time', '<', $endtime)
+                        ->where('end_time', '>', $starttime);
+                })->orWhere(function ($query) use ($startDate, $starttime, $endDate, $endtime) {
+                    $query->where('start_date', '=', $startDate)
+                        ->where('start_time', '<', $endtime)
+                        ->where('end_time', '>', $starttime);
+                });
+            })
+            ->where(function ($query) use ($parent_id) {
+                if ($parent_id != "0") {
+                    $query->where('id', '!=', $parent_id);
+                }
+            })
+            ->get();
+        $totalPercent = 0;
+        // dd($conflictingEvents);
+        if (isset($conflictingEvents)) {
+            foreach ($conflictingEvents as $row) {
+                if ($row->percentage_value != null) {
+                    $totalPercent += $row->percentage_value;
+                }
+            }
+        }
+        // dd($percentage_value);
+        if(($percentage_value + $totalPercent) <= 100){
+            $available = 'available';
+        } else {
+            $available = 'not-available';
+        }
 
         return response()->json(['available' => $available]);
     }
@@ -357,10 +410,11 @@ class AddEventController extends Controller
         return response()->json(['success' => true, 'startTime' => $timeSlot->$startTimeColumn, 'endTime' => $timeSlot->$endTimeColumn]);
     }
 
-    public function deleteEvent($id){
-        DB::table('events')->where('id',$id)->update([
+    public function deleteEvent($id)
+    {
+        DB::table('events')->where('id', $id)->update([
             'is_deleted' => 1
         ]);
-        return redirect()->back()->with('success','האירוע הוסר');
+        return redirect()->back()->with('success', 'האירוע הוסר');
     }
 }

@@ -55,7 +55,7 @@
                         <div class="col-md-6 col-12 mb-3">
                             <label for="name" class="form-label">נושא</label>
                             <input type="text" class="form-control" value="{{ @$template->subject }}" name="name"
-                                id="name">
+                                id="name" required>
                         </div>
                         <div class="col-md-6 col-12 mb-3">
                             <label for="status" class="form-label">סטטוס</label>
@@ -81,7 +81,7 @@
                                 <li>סכום כולל : {total_amount}</li>
                             </ul>
                         </label>
-                        <textarea rows="6" class="form-control" name="content" id="content" rows="3">{!! @$template->content !!}</textarea>
+                        <textarea rows="6" class="form-control" name="content" id="content" rows="3" required>{!! @$template->content !!}</textarea>
                     </div>
                     <div>
                         <button type="submit" class="btn btn-primary mt-2">שמור שינויים</button>

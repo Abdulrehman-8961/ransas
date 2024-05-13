@@ -43,7 +43,8 @@
                 <h5 class="mb-4">הוסף אירוע</h5>
                 <form class="form" action="{{ url('Event/save') }}" method="POST">
                     @csrf
-                    <input type="hidden" id="pool_select" name="pool_select" value="{{ $event ? $event->pool_id : session('pool_select') }}">
+                    <input type="hidden" id="pool_select" name="pool_select"
+                        value="{{ $event ? $event->pool_id : session('pool_select') }}">
                     {{-- <div class="mb-3 row">
                         <label for="example-text-input" class="col-md-2 col-form-label">בחר בריכה</label>
                         <div class="col-md-10">
@@ -75,7 +76,8 @@
                                 <option value="Birthday"
                                     {{ @$event->booking_type || old('type') == 'Birthday' ? 'selected' : '' }}>יום הולדת
                                 </option>
-                                <option value="Private event" {{ old('type') == 'Private event' ? 'selected' : '' }}>אירוע פרטי</option>
+                                <option value="Private event" {{ old('type') == 'Private event' ? 'selected' : '' }}>אירוע
+                                    פרטי</option>
                                 <option value="Other"
                                     {{ @$event->booking_type || old('type') == 'Other' ? 'selected' : '' }}>אַחֵר</option>
                             </select>
@@ -188,10 +190,10 @@
                         </div>
                     </div>
                     <div class="mb-3 row d-none percentage-field">
-                        <label for="example-search-input" class="col-md-2 col-form-label">אחוז ערך</label>
+                        <label for="example-search-input" class="col-md-2 col-form-label">אחוז תפוסה</label>
                         <div class="col-md-10">
                             <select class="form-control" name="percentage_value" id="percentage_value">
-                                <option value="">Select value</option>
+                                <option value="">בחר ערך</option>
                                 <option value="25"
                                     {{ @$event->percentage_value || old('percentage_value') == '25' ? 'selected' : '' }}>
                                     25%
@@ -209,6 +211,8 @@
                                     100%
                                 </option>
                             </select>
+                            <span class="invalid-feedback time-slot_ d-none" role="alert"><strong>משבצת זמן זו
+                                    הוזמנה.</strong></span>
                             @error('percentage_value')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -742,7 +746,59 @@
                 });
 
             }
+            checkPer();
         })
+        $(document).on('change', '#percentage_value', function() {
+            checkPer();
+        })
+
+        function checkPer(){
+            var parent_id = $('#parent_id').val();
+            var start_date = $('#start_date').val();
+            var end_date = $('#end_date').val();
+            var start_time = $('#start_time').val();
+            var end_time = $('#end_time').val();
+            var percentage_value = $('#percentage_value option:selected').val();
+            var url = "{{ asset('') }}check-availablity_";
+            if (start_date) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        parent_id: parent_id,
+                        startDate: start_date,
+                        startTime: start_time,
+                        endTime: end_time,
+                        endDate: end_date,
+                        percentage_value: percentage_value,
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if (response.available == 'available') {
+                            console.log('Time slot is available');
+                            $('.time-slot_').addClass('d-none');
+                            $('#percentage_value').removeClass('is-invalid');
+                            $('.btn-submit').prop('disabled', false);
+
+                        } else {
+                            // Time slot is not available
+                            console.log('Time slot is not available');
+                            $('.btn-submit').prop('disabled', true);
+
+                            $('.time-slot_').removeClass('d-none');
+                            $('#percentage_value').addClass('is-invalid');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors
+                        console.error(error);
+                    }
+                });
+
+            }
+        }
+
         $(document).on('change', '#type', function() {
             var event_type = $('#type option:selected').val();
             if (event_type == "Swimming Course") {
