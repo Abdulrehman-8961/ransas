@@ -38,6 +38,11 @@
                                     <label>שֵׁם</label>
                                     <input type="" placeholder="Enter Name" value="{{ $pool_data->name }}"
                                         name="name" class="form-control">
+                                        @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-3 form-group">
                                     <label>טֵלֵפוֹן</label>
@@ -79,6 +84,11 @@
                                             <label class="form-check-label" for="primary3-outline-check">כסף מזומן</label>
                                         </div>
                                     </div>
+                                    @error('payment_options')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                                 <div class="col-lg-3 form-group">
                                     <label>הודעות</label>

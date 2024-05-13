@@ -21,17 +21,17 @@ class PoolController extends Controller
     {
         $search = @$request->get('search');
         $users = DB::table('pool')
-        ->where('is_deleted',0)
-        ->where(function ($query) use ($search) {
-            if(!empty($search)) {
-                $query->where('name', 'LIKE', '%'.$search.'%')
-                ->orWhere('email', 'LIKE', '%'.$search.'%')
-                ->orWhere('phone', 'LIKE', '%'.$search.'%');
-            }
-        })
-        ->orderBy('id', 'desc')->paginate(20);
+            ->where('is_deleted', 0)
+            ->where(function ($query) use ($search) {
+                if (!empty($search)) {
+                    $query->where('name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('email', 'LIKE', '%' . $search . '%')
+                        ->orWhere('phone', 'LIKE', '%' . $search . '%');
+                }
+            })
+            ->orderBy('id', 'desc')->paginate(20);
         $users->appends([
-          "search" => $search,
+            "search" => $search,
         ]);
 
         return view("pool.view", compact("users"));
@@ -41,7 +41,8 @@ class PoolController extends Controller
         return view("pool.add");
     }
 
-    public function dateFormat($date){
+    public function dateFormat($date)
+    {
         if ($date) {
             $value = date('H:i:s', strtotime($date));
             return $value;
@@ -65,7 +66,7 @@ class PoolController extends Controller
             'sms.required' => 'אנא בחר אפשרויות SMS.',
         ]);
 
-        if($validated) {
+        if ($validated) {
 
             $data = $request->input('payment_options');
             $payment_options = implode(', ', $data);
@@ -79,33 +80,35 @@ class PoolController extends Controller
                 "branch_number" => $request->input('branch_number'),
                 "account_no" => $request->input('account_no'),
                 'messages' => $request->sms,
-                'availble_days' => ['monday' => $request->input('monday'),
-                'tuesday' => $request->input('tuesday'),
-                'wednesday' => $request->input('wednesday'),
-                'thursday' => $request->input('thursday'),
-                'friday' => $request->input('friday'),
-                'saturday' => $request->input('saturday'),
-                'sunday' => $request->input('sunday')],
-                'mon_start_time'=> $this->dateFormat($request->input('mon_start_time')),
-                'mon_end_time'=> $this->dateFormat($request->input('mon_end_time')),
-                'tue_start_time'=> $this->dateFormat($request->input('tue_start_time')),
-                'tue_end_time'=> $this->dateFormat($request->input('tue_end_time')),
-                'wed_start_time'=> $this->dateFormat($request->input('wed_start_time')),
-                'wed_end_time'=> $this->dateFormat($request->input('wed_end_time')),
-                'thu_start_time'=> $this->dateFormat($request->input('thu_start_time')),
-                'thu_end_time'=> $this->dateFormat($request->input('thu_end_time')),
-                'fri_start_time'=> $this->dateFormat($request->input('fri_start_time')),
-                'fri_end_time'=> $this->dateFormat($request->input('fri_end_time')),
-                'sat_start_time'=> $this->dateFormat($request->input('sat_start_time')),
-                'sun_start_time'=> $this->dateFormat($request->input('sun_start_time')),
-                'sun_end_time'=> $this->dateFormat($request->input('sun_end_time')),
-                'sat_end_time'=> $this->dateFormat($request->input('sat_end_time')),
+                'availble_days' => [
+                    'monday' => $request->input('monday'),
+                    'tuesday' => $request->input('tuesday'),
+                    'wednesday' => $request->input('wednesday'),
+                    'thursday' => $request->input('thursday'),
+                    'friday' => $request->input('friday'),
+                    'saturday' => $request->input('saturday'),
+                    'sunday' => $request->input('sunday')
+                ],
+                'mon_start_time' => $this->dateFormat($request->input('mon_start_time')),
+                'mon_end_time' => $this->dateFormat($request->input('mon_end_time')),
+                'tue_start_time' => $this->dateFormat($request->input('tue_start_time')),
+                'tue_end_time' => $this->dateFormat($request->input('tue_end_time')),
+                'wed_start_time' => $this->dateFormat($request->input('wed_start_time')),
+                'wed_end_time' => $this->dateFormat($request->input('wed_end_time')),
+                'thu_start_time' => $this->dateFormat($request->input('thu_start_time')),
+                'thu_end_time' => $this->dateFormat($request->input('thu_end_time')),
+                'fri_start_time' => $this->dateFormat($request->input('fri_start_time')),
+                'fri_end_time' => $this->dateFormat($request->input('fri_end_time')),
+                'sat_start_time' => $this->dateFormat($request->input('sat_start_time')),
+                'sun_start_time' => $this->dateFormat($request->input('sun_start_time')),
+                'sun_end_time' => $this->dateFormat($request->input('sun_end_time')),
+                'sat_end_time' => $this->dateFormat($request->input('sat_end_time')),
             ];
             if (isset($insert_fields['availble_days'])) {
                 $insert_fields['availble_days'] = implode(', ', $insert_fields['availble_days']);
             }
 
-                // dd($insert_fields);
+            // dd($insert_fields);
             DB::table('pool')->insert($insert_fields);
             return redirect()->back()->with('success', "נוספה בריכה");
         }
@@ -123,13 +126,15 @@ class PoolController extends Controller
             'name.required' => 'שדה השם חובה.',
             'name.unique' => 'השם כבר נלקח.',
         ]);
-        if($validated) {
+        if ($validated) {
 
             $start_time = date('H:i:s', strtotime($request->input('start_time')));
             $end_time = date('H:i:s', strtotime($request->input('end_time')));
-
+            $payment_options = "";
             $data = $request->input('payment_options');
-            $payment_options = implode(', ', $data);
+            if (isset($data) && count($data) > 0) {
+                $payment_options = implode(', ', @$data);
+            }
 
             $insert_fields = [
                 "name" => $request->input('name'),
@@ -140,34 +145,36 @@ class PoolController extends Controller
                 "branch_number" => $request->input('branch_number'),
                 "account_no" => $request->input('account_no'),
                 'messages' => $request->sms,
-                'availble_days' => ['monday' => $request->input('monday'),
-                'tuesday' => $request->input('tuesday'),
-                'wednesday' => $request->input('wednesday'),
-                'thursday' => $request->input('thursday'),
-                'friday' => $request->input('friday'),
-                'saturday' => $request->input('saturday'),
-                'sunday' => $request->input('sunday')],
-                'mon_start_time'=> $this->dateFormat($request->input('mon_start_time')),
-                'mon_end_time'=> $this->dateFormat($request->input('mon_end_time')),
-                'tue_start_time'=> $this->dateFormat($request->input('tue_start_time')),
-                'tue_end_time'=> $this->dateFormat($request->input('tue_end_time')),
-                'wed_start_time'=> $this->dateFormat($request->input('wed_start_time')),
-                'wed_end_time'=> $this->dateFormat($request->input('wed_end_time')),
-                'thu_start_time'=> $this->dateFormat($request->input('thu_start_time')),
-                'thu_end_time'=> $this->dateFormat($request->input('thu_end_time')),
-                'fri_start_time'=> $this->dateFormat($request->input('fri_start_time')),
-                'fri_end_time'=> $this->dateFormat($request->input('fri_end_time')),
-                'sat_start_time'=> $this->dateFormat($request->input('sat_start_time')),
-                'sun_start_time'=> $this->dateFormat($request->input('sun_start_time')),
-                'sun_end_time'=> $this->dateFormat($request->input('sun_end_time')),
-                'sat_end_time'=> $this->dateFormat($request->input('sat_end_time')),
+                'availble_days' => [
+                    'monday' => $request->input('monday'),
+                    'tuesday' => $request->input('tuesday'),
+                    'wednesday' => $request->input('wednesday'),
+                    'thursday' => $request->input('thursday'),
+                    'friday' => $request->input('friday'),
+                    'saturday' => $request->input('saturday'),
+                    'sunday' => $request->input('sunday')
+                ],
+                'mon_start_time' => $this->dateFormat($request->input('mon_start_time')),
+                'mon_end_time' => $this->dateFormat($request->input('mon_end_time')),
+                'tue_start_time' => $this->dateFormat($request->input('tue_start_time')),
+                'tue_end_time' => $this->dateFormat($request->input('tue_end_time')),
+                'wed_start_time' => $this->dateFormat($request->input('wed_start_time')),
+                'wed_end_time' => $this->dateFormat($request->input('wed_end_time')),
+                'thu_start_time' => $this->dateFormat($request->input('thu_start_time')),
+                'thu_end_time' => $this->dateFormat($request->input('thu_end_time')),
+                'fri_start_time' => $this->dateFormat($request->input('fri_start_time')),
+                'fri_end_time' => $this->dateFormat($request->input('fri_end_time')),
+                'sat_start_time' => $this->dateFormat($request->input('sat_start_time')),
+                'sun_start_time' => $this->dateFormat($request->input('sun_start_time')),
+                'sun_end_time' => $this->dateFormat($request->input('sun_end_time')),
+                'sat_end_time' => $this->dateFormat($request->input('sat_end_time')),
                 "updated_at" => date("Y-m-d H:i:s")
             ];
             if (isset($insert_fields['availble_days'])) {
                 $insert_fields['availble_days'] = implode(', ', $insert_fields['availble_days']);
             }
             DB::table('pool')->where('id', $id)
-            ->update($insert_fields);
+                ->update($insert_fields);
 
             return redirect()->back()->with('success', 'פרופיל הבריכה עודכן');
         }
@@ -184,11 +191,11 @@ class PoolController extends Controller
             'confirm_password.same' => 'סיסמת האישור חייבת להתאים לשדה הסיסמה.',
         ]);
 
-            DB::table('users')->where('id', $id)->update([
-                "password" => Hash::make($request->input('password')),
-                "updated_at" => date("Y-m-d H:i:s")
-            ]);
-            return redirect()->back()->with('success', 'סיסמת הבריכה עודכנה');
+        DB::table('users')->where('id', $id)->update([
+            "password" => Hash::make($request->input('password')),
+            "updated_at" => date("Y-m-d H:i:s")
+        ]);
+        return redirect()->back()->with('success', 'סיסמת הבריכה עודכנה');
     }
     public function delete($id)
     {
@@ -196,24 +203,26 @@ class PoolController extends Controller
         return redirect()->back()->with('success', 'הבריכה נמחקה');
     }
 
-    public function loginToPool($id){
-            $user = user::find($id);
-            if($user) {
-                session(['admin' => Auth::user()->id]);
-                Auth::login($user);
-                return redirect('/Home')->with('success','מחובר כמשתמש');
-            } else {
-                return redirect()->back()->with('error','משהו השתבש');
-            }
+    public function loginToPool($id)
+    {
+        $user = user::find($id);
+        if ($user) {
+            session(['admin' => Auth::user()->id]);
+            Auth::login($user);
+            return redirect('/Home')->with('success', 'מחובר כמשתמש');
+        } else {
+            return redirect()->back()->with('error', 'משהו השתבש');
+        }
     }
-    public function loginToAdmin($id){
-            $user = user::find($id);
-            if($user) {
-                Session::forget('admin');
-                Auth::login($user);
-                return redirect('/Home')->with('success','מחובר כמנהל');
-            } else {
-                return redirect()->back()->with('error','משהו השתבש');
-            }
+    public function loginToAdmin($id)
+    {
+        $user = user::find($id);
+        if ($user) {
+            Session::forget('admin');
+            Auth::login($user);
+            return redirect('/Home')->with('success', 'מחובר כמנהל');
+        } else {
+            return redirect()->back()->with('error', 'משהו השתבש');
+        }
     }
 }
