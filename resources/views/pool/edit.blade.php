@@ -79,9 +79,9 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input primary check-outline outline-primary"
                                                 type="checkbox" name="payment_options[]" id="primary3-outline-check"
-                                                value="כסף מזומן"
-                                                {{ in_array('כסף מזומן', $paymentOptions) ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="primary3-outline-check">כסף מזומן</label>
+                                                value="מזומן"
+                                                {{ in_array('מזומן', $paymentOptions) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="primary3-outline-check">מזומן</label>
                                         </div>
                                     </div>
                                     @error('payment_options')

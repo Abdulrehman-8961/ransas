@@ -87,8 +87,8 @@
                                         <div class="form-check form-check-inline">
                                             <input class="form-check-input primary check-outline outline-primary"
                                                 type="checkbox" name="payment_options[]" id="primary3-outline-check"
-                                                value="כסף מזומן" {{ old('payment_options') == 'כסף מזומן' ? 'checked' : '' }}>
-                                            <label class="form-check-label" for="primary3-outline-check">כסף מזומן</label>
+                                                value="מזומן" {{ old('payment_options') == 'מזומן' ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="primary3-outline-check">מזומן</label>
                                         </div>
                                     </div>
                                 </div>

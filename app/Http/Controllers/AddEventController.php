@@ -184,10 +184,19 @@ class AddEventController extends Controller
                     }
                 }
                 if ($save) {
+                    if ($request->input('type') == "Swimming Course") {
+                        $event = "קורס שחייה";
+                    } else if ($request->input('type') == "Birthday") {
+                        $event = "יום הולדת";
+                    } else if ($request->input('type') == "Private event") {
+                        $event = "אירוע פרטי";
+                    } else {
+                        $event = "אַחֵר";
+                    }
                     DB::table('log_history')->insert([
                         'user_id' => Auth::user()->id,
-                        'description' => "Added New Event " . $request->input('type') . " For Client: " . ucFirst($request->input('customer_name')) . "",
-                        'page' => 'Add Event'
+                        'description' => "אירוע חדש נוסף $event ללקוח:  " . ucFirst($request->input('customer_name')) . "",
+                        'page' => 'הוסף אירוע'
                     ]);
                 }
                 $start_date = date('d.m.Y', strtotime($request->input('start_date')));
@@ -195,7 +204,7 @@ class AddEventController extends Controller
 
                 $message_template = DB::table('message_template')->where('template', 2)->where('pool_id', $request->input('pool_select'))->first();
                 $pool_data = DB::table('pool')->where('id', $request->input('pool_select'))->first();
-                if ($message_template->status == "Send") {
+                if (@$message_template->status == "Send") {
                     $replacements = [
                         '{pool_name}' => $pool_data->name || '',
                         '{customer_name}' => $request->input('customer_name'),
@@ -336,7 +345,7 @@ class AddEventController extends Controller
             }
         }
         // dd($percentage_value);
-        if(($percentage_value + $totalPercent) <= 100){
+        if (($percentage_value + $totalPercent) <= 100) {
             $available = 'available';
         } else {
             $available = 'not-available';

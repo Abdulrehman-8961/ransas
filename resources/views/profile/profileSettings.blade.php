@@ -15,7 +15,7 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a class="text-muted " href="{{ url('/Home') }}">לוּחַ מַחווָנִים</a>
+                                    <a class="text-muted " href="{{ url('/Home') }}">דשבורד</a>
                                 </li>
                                 <li class="breadcrumb-item" aria-current="page">פּרוֹפִיל</li>
                             </ol>
@@ -32,8 +32,7 @@
         </div>
         <div class="card w-100 position-relative overflow-hidden">
             <div class="px-4 py-3 border-bottom d-flex justify-content-between">
-                <h5 class="card-title fw-semibold mb-0 lh-sm">רעדאַגירן פּראָפיל</h5>
-
+                <h5 class="card-title fw-semibold mb-0 lh-sm">עריכת פרופיל</h5>
             </div>
             <div class="card-body p-4">
                 <form method="POST" class="container-fluid" action="{{ url('/profile-settings/update') }}"

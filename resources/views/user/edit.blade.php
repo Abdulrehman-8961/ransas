@@ -89,9 +89,9 @@
                                     <select type="" placeholder="Enter Role" id="permission" name="permission"
                                         class="form-control @error('permission') is-invalid @enderror">
                                         <option value="Readonly" {{ $user->permission == 'Readonly' ? 'selected' : '' }}>
-                                            לקריאה בלבד
+                                            קריאה
                                         </option>
-                                        <option value="Edit" {{ $user->permission == 'Edit' ? 'selected' : '' }}>לַעֲרוֹך
+                                        <option value="Edit" {{ $user->permission == 'Edit' ? 'selected' : '' }}>עריכה
                                         </option>
                                     </select>
                                     @error('permission')

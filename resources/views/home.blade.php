@@ -128,7 +128,7 @@
                     </select>
                 </div> --}}
                 <div class="col-md-1">
-                    <button type="submit" class="btn btn-primary">שלח</button>
+                    <button type="submit" class="btn btn-primary">אישור</button>
                 </div>
             </div>
         </form>
@@ -319,8 +319,8 @@
                                                 <th>שם אירוע</th>
                                                 <th>אמצעי תשלום</th>
                                                 <th>יְוֹם</th>
-                                                <th>סך הכל שעה</th>
-                                                <th>עֲלוּת</th>
+                                                <th>סר שעות</th>
+                                                <th>עלות</th>
                                                 <th>פעולה</th>
                                             </tr>
                                         </thead>
@@ -475,6 +475,23 @@
                                 event_type = "אַחֵר";
                             } else {
                                 event_type = item.booking_type;
+                            }
+                            if(item.day_of_week == "Sunday"){
+                                var day = "ראשון";
+                            } else if (item.day_of_week == "Monday"){
+                                var day = "שני";
+                            } else if (item.day_of_week == "Tuesday"){
+                                var day = "שלישי";
+                            } else if(item.day_of_week == "Wednesday"){
+                                var day = "רביעי";
+                            } else if (item.day_of_week == "Thursday"){
+                                var day = "חמישי";
+                            } else if (item.day_of_week == "Friday"){
+                                var day = "שישי";
+                            } else if (item.day_of_week == "Saturday"){
+                                var day = "שבת";
+                            } else {
+                                var day = item.day_of_week;
                             }
                             html += '<tr>';
                             html += '<td>' + item.customer_name + '</td>';

@@ -278,7 +278,7 @@
                             העתקת אירוע
                         </a>
                         <button type="button" class="btn btn-primary btn-add-event">
-                            הוסף אירוע
+                            הוספת אירוע
                         </button>
                         <button type="button" data-url="{{ url('delete/event/') }}" class="btn btn-danger btn-delete-event">
                             לְהַסִיר
@@ -572,7 +572,7 @@
                     },
                     select: calendarSelect,
                     unselect: function() {
-                        console.log("unselected");
+                        // console.log("unselected");
                     },
                     editable: true,
                     eventResizableFromStart: true,
@@ -595,7 +595,7 @@
                             },
                         },
                         AddEvent: {
-                            text: "הוסף אירוע",
+                            text: "הוספת אירוע",
                             click: function() {
                                 window.location = '{{ url('/Add-Event') }}';
                             },
@@ -650,7 +650,7 @@
                         var endDate = getDate(event.end);
                         var bokkingId = event.extendedProps.bookid;
 
-                        console.log(bokkingId, newStart, newEnd, startDate, endDate);
+                        // console.log(bokkingId, newStart, newEnd, startDate, endDate);
                         $.ajax({
                             url: 'update-event-time',
                             type: 'POST',
@@ -666,7 +666,7 @@
                             },
                             success: function(response) {
                                 if (response.success) {
-                                    console.log('Event time updated successfully');
+                                    // console.log('Event time updated successfully');
                                     Swal.fire({
                                         title: 'הַצלָחָה!',
                                         text: 'זמן האירוע עודכן בהצלחה',
@@ -678,7 +678,7 @@
                                         buttonsStyling: false
                                     });
                                 } else {
-                                    console.error('Failed to update event time');
+                                    // console.error('Failed to update event time');
                                     Swal.fire({
                                         title: 'שְׁגִיאָה!',
                                         text: 'עדכון זמן האירוע נכשל',
@@ -791,8 +791,7 @@
             function exportCalendarEventsToCsv(calendar) {
                 var events = calendar.getEvents();
                 var csvContent = "data:text/csv;charset=utf-8,";
-                csvContent +=
-                    "Title,Customer Name,Customer Email,Customer Phone,Start Date,Start Time,End Date,End Time,Payment Status,Payment Method,Total Amount\n";
+                csvContent += "כותרת,שם הלקוח,אימייל הלקוח,טלפון הלקוח,תאריך התחלה,שעת התחלה,תאריך סיום,שעת סיום,סטטוס תשלום,אמצעי תשלום,סכום כולל\n";
                 events.forEach(function(event) {
                     var start = event.start ? event.start.toLocaleString() : "";
                     var end = event.end ? event.end.toLocaleString() : "";
@@ -916,13 +915,13 @@
                         // console.log(response);
                         if (response.available == true) {
                             // Time slot is available
-                            console.log('Time slot is available');
+                            // console.log('Time slot is available');
                             $('#start_date_time').removeClass('is-invalid');
                             $('#end_date_time').removeClass('is-invalid');
 
                         } else {
                             // Time slot is not available
-                            console.log('Time slot is not available');
+                            // console.log('Time slot is not available');
                             $('#start_date_time').addClass('is-invalid');
                             $('#end_date_time').addClass('is-invalid').after(
                                 '<span class="invalid-feedback" role="alert"><strong>Time slot not available.</strong></span>'
@@ -963,7 +962,7 @@
         })
 
         function getPoolDetails(poolID, start_date, end_date) {
-            console.log(start_date, end_date);
+            // console.log(start_date, end_date);
             if (poolID) {
                 $.ajax({
                     type: "GET",
@@ -977,7 +976,7 @@
                             $("#payment_method").append(response.options);
                             $('.btn-submit').prop('disabled', false);
                         } else {
-                            console.log('Error:', response.message);
+                            // console.log('Error:', response.message);
                             $('.btn-submit').prop('disabled', true);
                         }
                     }
@@ -1005,7 +1004,7 @@
                                 daysOfWeekDisabled: response.disabledDays
                             }).datepicker('setDate', end_date);
                         } else {
-                            console.log('Error:', response.message);
+                            // console.log('Error:', response.message);
                         }
                     }
                 });

@@ -49,6 +49,7 @@ class SupportController extends Controller
             'user_id' => Auth::user()->id,
             'ticket_no' => $ticket_no,
             'title' => $request->input('title'),
+            'status' => "ממתין",
         ]);
 
         if ($last_id) {
@@ -104,7 +105,7 @@ class SupportController extends Controller
         DB::table('ticket')->where('id', $id)->update([
             'status' => $request->update_status
         ]);
-        return redirect()->back()->with('success', 'Status Updated');
+        return redirect()->back()->with('success', 'השינוי בוצע בהצלחה');
     }
 
     public function download_files_old($id){

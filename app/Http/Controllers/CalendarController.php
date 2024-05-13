@@ -74,6 +74,15 @@ class CalendarController extends Controller
             } else {
                 $html = '';
             }
+            if($event->booking_type == "Birthday"){
+                $event_title = "יום הולדת";
+            } else if($event->booking_type == "Swimming Course"){
+                $event_title = "קורס שחייה";
+            } else if ($event->booking_type == "Private event"){
+                $event_title = "אירוע פרטי";
+            } else {
+                $event_title = "אַחֵר";
+            }
             $start_date = $event->start_date;
             $start_time = $event->start_time;
             $end_date = $event->end_date;
@@ -104,7 +113,7 @@ class CalendarController extends Controller
                 'start_time' => $event->start_time,
                 'end_time' => $event->end_time,
                 'book_type' => $event->booking_type,
-                'title' => $event->booking_type,
+                'title' => $event_title,
                 'start' => $event->start_date,
                 'end' => $event->end_date,
                 'percentage_value' => $event->percentage_value,
@@ -148,10 +157,19 @@ class CalendarController extends Controller
                 'color' => $event_color,
             ]);
             if ($save) {
+                if ($request->input('type') == "Swimming Course") {
+                    $event = "קורס שחייה";
+                } else if ($request->input('type') == "Birthday") {
+                    $event = "יום הולדת";
+                } else if ($request->input('type') == "Private event") {
+                    $event = "אירוע פרטי";
+                } else {
+                    $event = "אַחֵר";
+                }
                 DB::table('log_history')->insert([
                     'user_id' => Auth::user()->id,
-                    'description' => "Updated Event " . $request->input('type') . " For Client: " . ucFirst($request->input('customer_name')) . "",
-                    'page' => 'Edit Event'
+                    'description' =>  "אירוע מעודכן  $event ללקוח: " . ucFirst($request->input('customer_name')) . "",
+                    'page' => 'עדכון לאירוע'
                 ]);
             }
             return redirect()->back()->with('success', "האירוע עודכן");
@@ -189,7 +207,7 @@ class CalendarController extends Controller
         $events = $request->input('events');
 
 
-        $query = DB::table('events')->where('pool_id', $pool)->where('start_date','>=',$startdate)->where('start_date','<=',$enddate)->where('is_deleted',0);
+        $query = DB::table('events')->where('pool_id', $pool)->where('start_date', '>=', $startdate)->where('start_date', '<=', $enddate)->where('is_deleted', 0);
 
         if (!empty($search)) {
             $query->where(function ($q) use ($search) {

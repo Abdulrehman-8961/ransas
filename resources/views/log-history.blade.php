@@ -152,6 +152,7 @@
                                                 ->where('created_at', '<=', $end_date . ' 23:59:59');
                                         }
                                     })
+                                    ->orderBy('id','desc')
                                     ->get();
                             @endphp
                             <!-- start row -->
@@ -164,7 +165,7 @@
                                 @endphp
                                 <tr>
                                     <td>{{ @$user->name }}</td>
-                                    <td>{{ @$row->page }}</td>
+                                    <td>{{ @$row->page == "Edit Event" ? "עדכון לאירוע" : "הוסף אירוע" }}</td>
                                     <td>{{ @$row->description }}</td>
                                     <td>{{ date('Y-m-d', strtotime(@$row->created_at)) }}</td>
                                 </tr>

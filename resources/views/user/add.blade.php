@@ -84,9 +84,8 @@
                                     <select id="permission" name="permission"
                                         class="form-control @error('permission') is-invalid @enderror">
                                         <option value="Readonly" {{ old('permission') == 'Readonly' ? 'selected' : '' }}>
-                                            לקריאה בלבד</option>
-                                        <option value="Edit" {{ old('permission') == 'Edit' ? 'selected' : '' }}>לַעֲרוֹך
-                                        </option>
+                                            קריאה</option>
+                                        <option value="Edit" {{ old('permission') == 'Edit' ? 'selected' : '' }}>עריכה</option>
 
                                     </select>
                                     @error('permission')

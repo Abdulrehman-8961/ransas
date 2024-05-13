@@ -399,6 +399,7 @@
             jQuery(".off-dates").datepicker({
                 autoclose: true,
                 todayHighlight: true,
+                language: 'he',
                 startDate: new Date()
             });
         });
@@ -408,6 +409,7 @@
         jQuery(".off-dates").datepicker({
             autoclose: true,
             todayHighlight: true,
+            language: 'he',
             startDate: new Date()
         });
         var start_date = $('#hidden_start_date').val();
@@ -424,6 +426,7 @@
             jQuery(".datepicker-autoclose").datepicker({
                 autoclose: true,
                 todayHighlight: true,
+                language: 'he',
                 startDate: new Date()
             }).datepicker('setDate', formattedDateStart).on('changeDate', function(selected) {
                 var selected_pool = $("#pool_select option:selected").val();
@@ -471,6 +474,7 @@
             jQuery(".datepicker-autoclose").datepicker({
                 autoclose: true,
                 todayHighlight: true,
+                language: 'he',
                 startDate: new Date()
             }).on('changeDate', function(selected) {
                 var selected_pool = $("#pool_select option:selected").val();
@@ -519,9 +523,11 @@
                 hiddenPrefix: "prefix__",
                 hiddenSuffix: "__suffix",
             }).pickatime('picker').set('select', '{{ date('H:i', strtotime(@$event->end_time)) }}');
+
             jQuery(".datepicker-autoclose2").datepicker({
                 autoclose: true,
                 todayHighlight: true,
+                language: 'he',
                 startDate: new Date()
             }).datepicker('setDate', formattedDateEnd).on('changeDate', function(selected) {
                 var selected_pool = $("#pool_select option:selected").val();
@@ -568,6 +574,7 @@
             jQuery(".datepicker-autoclose2").datepicker({
                 autoclose: true,
                 todayHighlight: true,
+                language: 'he',
                 startDate: new Date()
             }).on('changeDate', function(selected) {
                 var selected_pool = $("#pool_select option:selected").val();
@@ -650,6 +657,7 @@
                             $(".datepicker-autoclose").datepicker({
                                 autoclose: true,
                                 todayHighlight: true,
+                                language: 'he',
                                 startDate: new Date(),
                                 daysOfWeekDisabled: response.disabledDays
                             }).on('changeDate', function(selected) {
@@ -661,9 +669,27 @@
                             $(".datepicker-autoclose2").datepicker({
                                 autoclose: true,
                                 todayHighlight: true,
+                                language: 'he',
                                 startDate: new Date(),
                                 daysOfWeekDisabled: response.disabledDays
                             });
+                            $.fn.datetimepicker.dates['he'] = {
+                                days: ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת",
+                                    "ראשון"
+                                ],
+                                daysShort: ["א", "ב", "ג", "ד", "ה", "ו", "ש", "א"],
+                                daysMin: ["א", "ב", "ג", "ד", "ה", "ו", "ש", "א"],
+                                months: ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי",
+                                    "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר",
+                                    "דצמבר"
+                                ],
+                                monthsShort: ["ינו", "פבר", "מרץ", "אפר", "מאי", "יוני", "יולי",
+                                    "אוג", "ספט", "אוק", "נוב", "דצמ"
+                                ],
+                                today: "היום",
+                                suffix: [],
+                                meridiem: []
+                            };
                         } else {
                             console.log('Error:', response.message);
                         }
@@ -752,7 +778,7 @@
             checkPer();
         })
 
-        function checkPer(){
+        function checkPer() {
             var parent_id = $('#parent_id').val();
             var start_date = $('#start_date').val();
             var end_date = $('#end_date').val();

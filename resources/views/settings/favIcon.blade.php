@@ -10,7 +10,7 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
                                         href="{{ url('/Home') }}">
-                                        לוּחַ מַחווָנִים</a></li>
+                                        דשבורד</a></li>
                                 <li class="breadcrumb-item" aria-current="page">תבנית הודעה</li>
                             </ol>
                         </nav>
@@ -35,8 +35,8 @@
                         </div>
                     </div>
                     <div>
-                        <a href="{{ url('/Fav-Icon/Delete') }}" class="btn btn-danger mt-2">לִמְחוֹק</a>
-                        <button type="submit" class="btn btn-primary mt-2">שמור שינויים</button>
+                        <a href="{{ url('/Fav-Icon/Delete') }}" class="btn btn-danger mt-2">מחיקה</a>
+                        <button type="submit" class="btn btn-primary mt-2">שמירת שינויים</button>
                     </div>
                 </form>
             </div>

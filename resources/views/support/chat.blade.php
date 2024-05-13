@@ -15,7 +15,7 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class="text-muted text-decoration-none"
                                         href="{{ url('/Home') }}">
-                                        לוּחַ מַחווָנִים</a></li>
+                                        דשבורד </a></li>
                                 <li class="breadcrumb-item" aria-current="page">תבנית הודעה</li>
                             </ol>
                         </nav>
